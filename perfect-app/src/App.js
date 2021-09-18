@@ -7,7 +7,9 @@ import SideNav from "./Navigation/SideNav";
 import Login from "./Navigation/Login";
 import Register from "./Navigation/Register";
 import { useAuthState } from "react-firebase-hooks/auth";
+import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./firebase";
+import InsertItem from "./ActionComponents/InsertItem";
 
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -22,13 +24,15 @@ import {
 
 function App() {
   const [user, loading, error]=useAuthState(auth);
-  console.log("user console",user)
   const userIsLogged = !!user ;
   const sideBarElements = ["Estimate", "Record", "Admin", "Staff"];
   const [dd, setDD] = useState(false);
 
-  const [current, setCurrent] = useState(sideBarElements[0]);
-
+  useEffect(()=>{
+    if(!user)console.log("not yet")
+    else console.log(Object.keys(user))
+  },[user])
+  const [current, setCurrent] = useState(sideBarElements[0]); 
   return (
     <div className="App">
       <div className="main-box">
@@ -47,21 +51,27 @@ function App() {
           <div className="content-box">
           <div className="nav-bar">
             <SideNav props={sideBarElements} currentPage={setCurrent}> </SideNav>
-          </div>
-  
-          <div className="current-action-box">
-          <Router>
+            <div>
+              <div className="plain-text">
+            <h3>{user.email}</h3>
+            <h3>{currentFullDate().split('&').join(' ')}</h3>
+              </div>
+            <Router>
               <Switch>
 
-              <Route exact path="/register" component={Login} /> <Button onClick={logout} >LOGOUT BTN</Button>
+              <Route exact path="/register" component={Login} /> <Button className="logout-btn" onClick={logout} >LOGOUT</Button>
 
               </Switch>
-        </Router>
-
-                <p>{current}</p>
-                <p>another action</p>
+          </Router>
+            </div>
           </div>
-        )}
+          
+          <div className="current-action-box">
+            {current==="Estimate" &&
+            <>
+              <InsertItem/>
+            </>}
+          </div>
         </div>
         )}
       </div>

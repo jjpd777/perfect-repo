@@ -1,5 +1,5 @@
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyCDclOgGIRs5ra32jJ4mGXh520vFiTLn9o",
   authDomain: "listosoftware-826ef.firebaseapp.com",
   databaseURL: "https://listosoftware-826ef-default-rtdb.firebaseio.com",
@@ -9,4 +9,4 @@ const firebaseConfig = {
   appId: "1:735903886998:web:8f7559587bf19215c21cb7",
   measurementId: "G-KWJZJY9B4J"
 };
-export default {firebaseConfig};
+

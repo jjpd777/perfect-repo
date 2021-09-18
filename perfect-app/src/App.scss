@@ -32,6 +32,23 @@
   margin:15px;
   font-size: calc(10px + 2vmin);
   color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-redirect{
+  width:100%;
+  flex-direction: column;
+  margin: 0 auto;
+}
+.plain-text{
+  color:black;
+  padding-top:20px;
+  h3{
+    font-size:20px;
+
+
+  }
 }
 .content-box{
   background-color: #c8ccd4;
@@ -45,19 +62,22 @@
 .nav-bar{
   background-color:rgb(53, 177, 226);
   max-width:350px;
+  .logout-btn{
+    background-color:red;
+    border:0;
+    font-size:30px;
+  }
 }
 .current-action-box{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #2d9e23;
+  background-color: #8fdb88;
   width: 100%;
 } 
 
-.login-redirect{
-  
-}
+
 
 .App-link {
   color: #61dafb;

@@ -2,14 +2,44 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #2d9e23;
-    width: 100%;
+    background-color: #ffffff;
+    max-width:40%;
+    margin:30px;
+    padding:30px;
+    margin: 0 auto;
+
 }
 
+.register-content{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    max-width:60%;
+    margin:30px;
+    padding:30px;
+    margin: 0 auto;
+
+
+
+}
 .login-input-box{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #8a239e;
-    width: 100%;
+    background-color: #daf1f6;
+    max-width:100%;
+    padding:30px;
+
+}
+
+.login-input{
+    margin:10px;
+}
+.login-btn{
+    margin:10px;
+    font-size: 35px;
+}
+.plain-text{
+    color:black;
 }

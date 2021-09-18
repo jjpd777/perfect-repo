@@ -3,6 +3,13 @@ import { Link, useHistory } from "react-router-dom";
 import { auth, signInWithEmailAndPassword, signInWithGoogle } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css";
+import {
+  Button,
+  InputGroupText
+} from "shards-react";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,31 +27,30 @@ function Login() {
       <div className="login-input-box">
         <input
           type="text"
-          className="login_textBox"
+          className="login-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="E-mail Address"
         />
         <input
           type="password"
-          className="login_textBox"
+          className="login-input"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <button
-          className="login_btn"
+        <div>
+        <Button
+          className="login-btn"
           onClick={() => signInWithEmailAndPassword(email, password)}
         >
           Login
-        </button>
-        <button className="login_btn login_google" onClick={signInWithGoogle}>
-          Login with Google
-        </button>
+        </Button>
         <div>
           <Link to="/reset">Forgot Password</Link>
         </div>
-        <div>
+        </div>
+        <div className="plain-text">
           Don't have an account? <Link to="/register">Register</Link> now.
         </div>
       </div>
