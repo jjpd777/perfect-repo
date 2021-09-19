@@ -15,8 +15,8 @@ const itemModel = (x) => {
         itemName: x.itemName,
         itemPriceUnit: x.itemPriceUnit,
         itemNumSess: x.itemNumSess,
-    }
-}
+    };
+};
 
 export const readItemsFunction = () => {
     return db.ref(ITEMS_PATH);
@@ -27,4 +27,9 @@ export const createItemFunction = (data) => {
     var insertionData = data; insertionData.id = ref.key;
     return ref.set(insertionData);
 };
+
+export const updateItemFunction = (data,id)=>{
+    const target = ITEMS_PATH + id;
+    return db.ref(target).update(data);
+}
 

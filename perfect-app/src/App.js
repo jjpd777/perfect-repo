@@ -10,6 +10,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./UtilsFirebase/Authentication";
 import InsertItem from "./ActionComponents/InsertItem";
+import { createItemFunction, readItemsFunction } from "./UtilsFirebase/Database";
 
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -25,14 +26,26 @@ import {
 function App() {
   const [user, loading, error]=useAuthState(auth);
   const userIsLogged = !!user ;
-  const sideBarElements = ["Estimate", "Record", "Admin", "Staff"];
-  const [dd, setDD] = useState(false);
+  const sideBarElements = ["Estimate", "Program", "Admin", "Staff"];
+  const [fetchedItems, setFetchedItems] = useState([]);
+  const [current, setCurrent] = useState(sideBarElements[0]); 
+
 
   useEffect(()=>{
     if(!user)console.log("not yet")
     else console.log(Object.keys(user))
   },[user])
-  const [current, setCurrent] = useState(sideBarElements[0]); 
+  useEffect(() => {
+    const ref = readItemsFunction();
+    const refVal = ref.on('value', function (snapshot) {
+      const snap = snapshot.val();
+      if (!snap) return;
+      const respKeys = Object.keys(snap);
+      const items = respKeys.map((k) => snap[k]);
+      setFetchedItems(items);
+    });
+    return () => ref.off('value', refVal)
+  }, []);
   return (
     <div className="App">
       <div className="main-box">
@@ -69,7 +82,14 @@ function App() {
           <div className="current-action-box">
             {current==="Estimate" &&
             <>
-              <InsertItem/>
+              <h3>Listooo</h3>
+            </>}
+            {current==="Admin" &&
+            <>
+              <InsertItem listItems = {fetchedItems}/>
+            </>}
+            {current==="Program" &&
+            <>
             </>}
           </div>
         </div>
