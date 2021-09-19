@@ -9,15 +9,32 @@
 .insert-input-box{
     display: flex;
     flex-direction: rows;
-    padding-top:200px;
-    padding-bottom:200px;
+    padding-top:50px;
+    padding-bottom:50px;
     background-color:purple;
     align-items: center;
     justify-content: center;
-
-
 }
-
+.cat-btn{
+    margin:2px;
+    font-size: 1.5rem;
+}
+.input-radio-btn{
+    background-color:rgb(41, 41, 29);
+    margin-top:50px;
+    padding:50px;
+    h3{color:pink}
+    .radio-choices{
+        margin:50px;
+    }
+}
+.edit-dropdown{
+    margin: 0 auto;
+    background-color:white;
+}
+.dd-btn{
+    margin: 0 auto;
+}
 .insert-input{
     max-width: 350px;
     margin:5px;

@@ -8,7 +8,7 @@ import Login from "./Navigation/Login";
 import Register from "./Navigation/Register";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
-import { auth, logout} from "./firebase";
+import { auth, logout} from "./UtilsFirebase/Authentication";
 import InsertItem from "./ActionComponents/InsertItem";
 
 

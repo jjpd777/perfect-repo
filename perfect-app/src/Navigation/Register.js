@@ -4,8 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import {
   auth,
   registerWithEmailAndPassword,
-  signInWithGoogle,
-} from "../firebase";
+} from "../UtilsFirebase/Authentication";
 import "./Login.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
