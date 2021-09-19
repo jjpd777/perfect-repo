@@ -10,6 +10,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./UtilsFirebase/Authentication";
 import InsertItem from "./ActionComponents/InsertItem";
+import ProgramBuilder from "./ActionComponents/InsertItem";
+
 import { createItemFunction, readItemsFunction } from "./UtilsFirebase/Database";
 
 
@@ -90,6 +92,7 @@ function App() {
             </>}
             {current==="Program" &&
             <>
+            <ProgramBuilder listItems={fetchedItems}/>
             </>}
           </div>
         </div>
