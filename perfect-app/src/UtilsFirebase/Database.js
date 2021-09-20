@@ -3,6 +3,7 @@ import { currentFullDate } from "../Utils/DateTimeUtils";
 
 const ROOT = "perfect-dev";
 const ITEMS_PATH = ROOT + "/perect-items";
+const PROGRAMS_PATH = ROOT + "/perect-programs";
 
 
 const itemModel = (x) => {
@@ -24,6 +25,12 @@ export const readItemsFunction = () => {
 
 export const createItemFunction = (data) => {
     var ref = db.ref(ITEMS_PATH).push();
+    var insertionData = data; insertionData.id = ref.key;
+    return ref.set(insertionData);
+};
+
+export const createProgramFunction = (data) => {
+    var ref = db.ref(PROGRAMS_PATH).push();
     var insertionData = data; insertionData.id = ref.key;
     return ref.set(insertionData);
 };

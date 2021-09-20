@@ -69,3 +69,25 @@
     display: flex;
     flex-direction: row;
 }
+
+.program-item-box{
+    padding:10px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.program-item-text{
+    width:300px;
+}
+
+.item-units-edit{
+    max-width: 100px;
+}
+.program-name{
+    margin: 0 auto;
+    max-width: 50%;
+}
+
+.save-program-btn{
+    margin:10px;
+    font-size: 1.5rem;
+}
