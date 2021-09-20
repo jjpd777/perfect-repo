@@ -10,8 +10,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./UtilsFirebase/Authentication";
 import InsertItem from "./ActionComponents/InsertItem";
-import ProgramBuilder from "./ActionComponents/InsertItem";
-
+import ProgramBuilder from "./ActionComponents/ProgramBuilder";
+import StaffPrices from "./ActionComponents/StaffPrices";
 import { createItemFunction, readItemsFunction } from "./UtilsFirebase/Database";
 
 
@@ -32,11 +32,6 @@ function App() {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [current, setCurrent] = useState(sideBarElements[0]); 
 
-
-  useEffect(()=>{
-    if(!user)console.log("not yet")
-    else console.log(Object.keys(user))
-  },[user])
   useEffect(() => {
     const ref = readItemsFunction();
     const refVal = ref.on('value', function (snapshot) {
@@ -48,6 +43,7 @@ function App() {
     });
     return () => ref.off('value', refVal)
   }, []);
+
   return (
     <div className="App">
       <div className="main-box">
@@ -93,6 +89,10 @@ function App() {
             {current==="Program" &&
             <>
             <ProgramBuilder listItems={fetchedItems}/>
+            </>}
+            {current==="Staff" &&
+            <>
+            <StaffPrices listItems={fetchedItems}/>
             </>}
           </div>
         </div>

@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../Utils/MoneyFormat";
-
+import ProgramItems from "../ActionComponents/ProgramItems";
 import "./InsertItem.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import { currentFullDate } from "../Utils/DateTimeUtils";
 import { createItemFunction, readItemsFunction } from "../UtilsFirebase/Database";
 import {
-  FormInput, Button, FormRadio, Container, Row, Col
+  FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
+  DropdownMenu, DropdownItem
 } from "shards-react";
+import { program } from "@babel/types";
 
-function ProgramBuilder({listItems}) {
+function ProgramBuilder({ listItems }) {
   const [itemType, setItemType] = useState("treatment");
   const [itemCategory, setItemCategory] = useState("laser");
   const [itemName, setItemName] = useState("");
-  const [priceUnit, setPriceUnit] = useState(0);
+  const [itemPriceUnit, setPriceUnit] = useState(0);
   const [itemUnits, setItemUnits] = useState(1);
   const [rCategories, setReadCateg] = useState([]);
   const [editItems, setEditItems] = useState([]);
-  
+  const [programItems, setProgramItems] = useState([]);
+  const [toggle, setToggle] = useState(false);
+
   useEffect(() => {
     var tmp = [];
     var tmpEditItems = [];
@@ -47,7 +51,7 @@ function ProgramBuilder({listItems}) {
       itemType: itemType,
       itemCategory: itemCategory,
       itemName: itemName,
-      itemPriceUnit: itemUnits,
+      itemPriceUnit: itemPriceUnit,
       itemNumSess: itemUnits,
     };
     try {
@@ -57,7 +61,7 @@ function ProgramBuilder({listItems}) {
     }
   };
 
-
+  console.log(programItems)
 
   return (
     <div className="action-content">
@@ -92,14 +96,33 @@ function ProgramBuilder({listItems}) {
         >
           <h3>staff</h3>
         </FormRadio>
-        <div>
-          {rCategories.map(x =>
-            <Button className="cat-btn" onClick={() => setItemCategory(x)}>
-              {x}
-            </Button>)}
+        <div className="dd-option">
+          <Dropdown open={toggle} toggle={()=>setToggle(!toggle)}>
+            <DropdownToggle split className="dd-btn" >{itemCategory}  </DropdownToggle>
+            <DropdownMenu >
+              {rCategories.map(x =>
+                <DropdownItem
+                onClick={()=>{setItemCategory(x)}}
+                >{x}</DropdownItem>
+              )}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <div className="item-name-btn">
+          {editItems.map(x=><Button className="cat-btn"
+            onClick={()=>{setProgramItems([
+              ...programItems,
+              ...[{itemId:x.id, itemName:x.itemName, itemNumSess: x.itemNumSess}]
+            ])}}
+          >{x.itemName}</Button>)}
         </div>
       </div>
+          <ProgramItems props={programItems} fn={setProgramItems}/>
     </div>
   );
-}
+};
+
+{/* <Button className="cat-btn" onClick={() => setItemCategory(x)}>
+{x}
+</Button> */}
 export default ProgramBuilder;

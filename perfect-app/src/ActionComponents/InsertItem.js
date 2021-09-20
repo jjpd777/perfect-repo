@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../Utils/MoneyFormat";
-
 import "./InsertItem.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import { currentFullDate } from "../Utils/DateTimeUtils";
 import { createItemFunction, readItemsFunction } from "../UtilsFirebase/Database";
 import {
-  FormInput, Button, FormRadio, Container, Row, Col
+  FormInput, Button, FormRadio, Container, Row, Col,
+  Dropdown, DropdownToggle,
+  DropdownMenu, DropdownItem
 } from "shards-react";
 
 function InsertItem({listItems}) {
   const [itemType, setItemType] = useState("treatment");
   const [itemCategory, setItemCategory] = useState("laser");
   const [itemName, setItemName] = useState("");
-  const [priceUnit, setPriceUnit] = useState(0);
+  const [itemPriceUnit, setPriceUnit] = useState(0);
   const [itemUnits, setItemUnits] = useState(1);
   const [rCategories, setReadCateg] = useState([]);
   const [editItems, setEditItems] = useState([]);
+  const [toggle, setToggle] = useState(false);
+
+
+
   
   useEffect(() => {
     var tmp = [];
@@ -47,7 +52,7 @@ function InsertItem({listItems}) {
       itemType: itemType,
       itemCategory: itemCategory,
       itemName: itemName,
-      itemPriceUnit: itemUnits,
+      itemPriceUnit: itemPriceUnit,
       itemNumSess: itemUnits,
     };
     try {
@@ -92,11 +97,17 @@ function InsertItem({listItems}) {
         >
           <h3>staff</h3>
         </FormRadio>
-        <div>
-          {rCategories.map(x =>
-            <Button className="cat-btn" onClick={() => setItemCategory(x)}>
-              {x}
-            </Button>)}
+        <div className="dd-option">
+          <Dropdown open={toggle} toggle={()=>setToggle(!toggle)}>
+            <DropdownToggle split className="dd-btn" >{itemCategory}  </DropdownToggle>
+            <DropdownMenu >
+              {rCategories.map(x =>
+                <DropdownItem
+                onClick={()=>{setItemCategory(x)}}
+                >{x}</DropdownItem>
+              )}
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
       <div className="insert-input-box">
@@ -135,7 +146,7 @@ function InsertItem({listItems}) {
               <FormInput
                 type="number"
                 className="insert-input"
-                value={priceUnit}
+                value={itemPriceUnit}
                 onChange={(e) => setPriceUnit(e.target.value)}
                 placeholder="Price / unit"
               />
