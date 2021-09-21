@@ -1,8 +1,7 @@
 .action-content{
     height:100%;
-    width:100%;
-    background-color:rgb(207, 24, 54);
-    margin: 0 auto;
+    min-width:100%;
+    background-color:rgb(184, 214, 219);
     display: flex;
     flex-direction: column;
     
@@ -14,7 +13,7 @@
     flex-direction: rows;
     padding-top:50px;
     padding-bottom:50px;
-    background-color:purple;
+    background-color:rgb(220, 222, 235);
     align-items: center;
     justify-content: center;
 }
@@ -27,7 +26,7 @@
     flex-direction: rows;
     padding-top:50px;
     padding-bottom:50px;
-    background-color:rgb(155, 99, 155);
+    background-color:rgb(55, 139, 179);
     align-items: center;
     justify-content: center;
 }
@@ -36,11 +35,11 @@
     margin:10px;
     font-size: 1.5rem;
 }
-.input-radio-btn{
-    background-color:rgb(41, 41, 29);
+.input-radio-box{
+    background-color:rgb(231, 231, 219);
     margin-top:50px;
     padding:50px;
-    h3{color:pink}
+    h3{color:rgb(80, 70, 72)}
     .radio-choices{
         margin:50px;
     }
@@ -60,6 +59,11 @@
     background-color:rgb(80, 166, 236);
     font-size: 50px;
 }
+.dd-estimate-btn{
+    min-width: 150px;
+    background-color:rgb(236, 80, 127);
+    font-size: 25px;
+}
 
 .dd-option{
     margin: 0 auto;
@@ -76,7 +80,7 @@
     margin: 0 auto;
 }
 .program-item-text{
-    width:300px;
+    width:350px;
 }
 
 .item-units-edit{
@@ -90,4 +94,8 @@
 .save-program-btn{
     margin:10px;
     font-size: 1.5rem;
+}
+
+.cycles-box{
+    background-color:white;
 }

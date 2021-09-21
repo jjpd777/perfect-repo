@@ -9,8 +9,11 @@ import Register from "./Navigation/Register";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./UtilsFirebase/Authentication";
-import InsertItem from "./ActionComponents/InsertItem";
-import ProgramBuilder from "./ActionComponents/ProgramBuilder";
+import InsertItem from "./ActionComponents/NewItemProgram/InsertItem";
+import AdminNav from "./ActionComponents/NavComponents/AdminNav";
+import EstimateNav from "./ActionComponents/NavComponents/EstimateNav";
+
+import ProgramBuilder from "./ActionComponents/NewItemProgram/ProgramBuilder";
 import StaffPrices from "./ActionComponents/StaffPrices";
 import { createItemFunction, readItemsFunction } from "./UtilsFirebase/Database";
 
@@ -32,6 +35,7 @@ function App() {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [current, setCurrent] = useState(sideBarElements[0]); 
 
+  
   useEffect(() => {
     const ref = readItemsFunction();
     const refVal = ref.on('value', function (snapshot) {
@@ -39,6 +43,7 @@ function App() {
       if (!snap) return;
       const respKeys = Object.keys(snap);
       const items = respKeys.map((k) => snap[k]);
+      console.log(items)
       setFetchedItems(items);
     });
     return () => ref.off('value', refVal)
@@ -80,15 +85,11 @@ function App() {
           <div className="current-action-box">
             {current==="Estimate" &&
             <>
-              <h3>Listooo</h3>
+              <EstimateNav listItems={fetchedItems}/>
             </>}
             {current==="Admin" &&
             <>
-              <InsertItem listItems = {fetchedItems}/>
-            </>}
-            {current==="Program" &&
-            <>
-            <ProgramBuilder listItems={fetchedItems}/>
+              <AdminNav listItems = {fetchedItems}/>
             </>}
             {current==="Staff" &&
             <>
@@ -98,8 +99,6 @@ function App() {
         </div>
         )}
       </div>
-      
-
     </div>
   );
 }

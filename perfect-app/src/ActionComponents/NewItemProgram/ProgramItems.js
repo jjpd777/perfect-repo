@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { moneyFormatter } from "../Utils/MoneyFormat";
-import "./InsertItem.scss";
+import { moneyFormatter } from "../../Utils/MoneyFormat";
+import "../NewItemProgram.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
-import { currentFullDate } from "../Utils/DateTimeUtils";
-import { createItemFunction, readItemsFunction } from "../UtilsFirebase/Database";
+import { currentFullDate } from "../../Utils/DateTimeUtils";
+import { createItemFunction, readItemsFunction } from "../../UtilsFirebase/Database";
 import {
     FormInput, Button, FormRadio, Container, Row, Col,
     Dropdown, DropdownToggle,

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { moneyFormatter } from "../Utils/MoneyFormat";
-import ProgramItems from "../ActionComponents/ProgramItems";
-import "./InsertItem.scss";
+import { moneyFormatter } from "../../Utils/MoneyFormat";
+import ProgramItems from "./ProgramItems";
+import "../NewItemProgram.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
-import { currentFullDate } from "../Utils/DateTimeUtils";
-import { createProgramFunction } from "../UtilsFirebase/Database";
+import { currentFullDate } from "../../Utils/DateTimeUtils";
+import { createProgramFunction } from "../../UtilsFirebase/Database";
 import {
   FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
   DropdownMenu, DropdownItem
@@ -74,7 +74,7 @@ function ProgramBuilder({ listItems }) {
 
   return (
     <div className="action-content">
-      <div className="input-radio-btn">
+      <div className="input-radio-box">
         <FormRadio
           inline
           className="radio-choices"
