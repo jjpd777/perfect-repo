@@ -5,6 +5,7 @@ const ROOT = "perfect-dev";
 const ITEMS_PATH = ROOT + "/perect-items";
 const PROGRAMS_PATH = ROOT + "/perect-programs";
 const CUSTOMER_PATH = ROOT + "/perfect-customers";
+const ESTIMATE_PATH = ROOT + "/perfect-estimates";
 
 
 const itemModel = (x) => {
@@ -27,17 +28,20 @@ const generateEntry =(data,path)=>{
 export const readItemsFunction = () => {
     return db.ref(ITEMS_PATH);
 };
+export const readCustomersFunction = () => {
+    return db.ref(CUSTOMER_PATH);
+};
 
 export const createItemFunction = (data) => {
-    var ref = db.ref(ITEMS_PATH).push();
-    var insertionData = data; insertionData.id = ref.key;
-    return ref.set(insertionData);
+    return generateEntry(data, ITEMS_PATH);
 };
 
 export const createProgramFunction = (data) => {
-    var ref = db.ref(PROGRAMS_PATH).push();
-    var insertionData = data; insertionData.id = ref.key;
-    return ref.set(insertionData);
+    return generateEntry(data, PROGRAMS_PATH);
+};
+
+export const createEstimateFunction = (data) => {
+    return generateEntry(data, ESTIMATE_PATH);
 };
 
 export const updateItemFunction = (data,id)=>{

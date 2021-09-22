@@ -7,14 +7,14 @@
     max-width: 100%;
     margin: 0 auto;
     padding:30px;
-    background-color:black;
+    background-color:transparent;
 }
 .search-user-1{
     display: flex;
     margin: 0 auto;
     min-width: 100%;
     flex-direction: row;
-    background-color:red;
+    background-color:transparent;
     padding:20px;
 }
 
@@ -37,6 +37,32 @@
     margin: 0 auto;
     min-width: 100%;
     flex-direction: row;
-    background-color:rgb(0, 255, 106);
+    background-color:rgb(226, 243, 233);
     padding:20px;
+}
+
+.searched-options{
+    background-color:transparent;
+    display: flex;
+    margin: 0 auto;
+    min-width: 100%;
+}
+
+.current-customer-box{
+    display: flex;
+    margin: 0 auto;
+    flex-direction: row;
+    background-color: rgb(240, 240, 247);
+    max-height: 150px;
+}
+
+.current-customer-input{
+    margin-right:50px;
+    color:black;
+}
+
+.customer-options{
+    margin-top:20px;
+    margin-right:20px;
+    font-size:1.5rem;
 }

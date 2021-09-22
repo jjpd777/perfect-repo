@@ -7,7 +7,7 @@ import "../NewItemProgram.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import { currentFullDate } from "../../Utils/DateTimeUtils";
-import { createProgramFunction } from "../../UtilsFirebase/Database";
+import { createEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
     DropdownMenu, DropdownItem
@@ -18,18 +18,17 @@ import { program } from "@babel/types";
 function NewEstimate({ listItems }) {
     const [itemType, setItemType] = useState("treatment");
     const [itemCategory, setItemCategory] = useState("laser");
-    const [itemName, setItemName] = useState("");
-    const [itemPriceUnit, setPriceUnit] = useState(0);
-    const [itemUnits, setItemUnits] = useState(1);
     const [rCategories, setReadCateg] = useState([]);
     const [editItems, setEditItems] = useState([]);
     const [programItems, setProgramItems] = useState([]);
     const [toggle, setToggle] = useState(false);
-    const [programName, setProgramName] = useState("")
     const typesEstimate = ["Financing Estimate", "Normal Estimate", "Open Estimate"];
     const [typeE, setTypeE] = useState(typesEstimate[0]);
     const [estimateToggle, setEsToggle] = useState(false);
     const [paymentCycles, setPaymentCycles] = useState([]);
+    const [customerObject, setCustomerObj] = useState({});
+    const [isNewCustomer, setIsNewCustomer] = useState(true);
+
     useEffect(() => {
         var tmp = [];
         var tmpEditItems = [];
@@ -43,11 +42,6 @@ function NewEstimate({ listItems }) {
         })
         setReadCateg(tmp); setEditItems(tmpEditItems);
     }, [listItems, itemType, itemCategory]);
-
-    const resetInputs = () => {
-        ; setItemName("");
-        setPriceUnit(0); setItemUnits(1)
-    };
 
     const programObjectBuilder = () => {
         var rsp = {}; var total = 0;
@@ -64,12 +58,18 @@ function NewEstimate({ listItems }) {
             timestamp: currentFullDate(),
             itemDelted: false,
             createdBy: "x.createdBy",
-            programName: programName,
             programItems: programObject,
             programTotal: total,
+            customerObject: customerObject,
+            paymentsCycles: paymentCycles
         };
         try {
-            createProgramFunction(item).then(() => { resetInputs() })
+            createEstimateFunction(item).then(()=>{
+                setProgramItems([]);
+            });
+            createCustomerFunction(customerObject).then(()=>{
+                setCustomerObj({});
+            })
         } catch (e) {
             console.log(e)
         }
@@ -116,12 +116,12 @@ function NewEstimate({ listItems }) {
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
 
-
+    console.log(customerObject,"The customer");
 
     return (
         <div className="action-content">
             <div>
-                <SearchCustomer/>
+                <SearchCustomer fn={setCustomerObj} fnNewCustomer={setIsNewCustomer}/>
                 <div className="dd-option">
                     <Dropdown open={estimateToggle} toggle={() => setEsToggle(!estimateToggle)}>
                         <DropdownToggle split className="dd-btn" >{typeE}  </DropdownToggle>
