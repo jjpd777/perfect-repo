@@ -13,6 +13,7 @@ import {
     DropdownMenu, DropdownItem
 } from "shards-react";
 import { program } from "@babel/types";
+import PrintLayout from "../PrintComponent/PrintLayout";
 
 
 function NewEstimate({ listItems }) {
@@ -120,6 +121,12 @@ function NewEstimate({ listItems }) {
 
     return (
         <div className="action-content">
+            <div className="mega-lol">
+                <h3>
+                    megaloool
+                </h3>
+            </div>
+            <PrintLayout/>
             <div>
                 <SearchCustomer fn={setCustomerObj} fnNewCustomer={setIsNewCustomer}/>
                 <div className="dd-option">
