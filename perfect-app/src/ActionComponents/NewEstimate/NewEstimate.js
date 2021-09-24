@@ -121,12 +121,9 @@ function NewEstimate({ listItems }) {
 
     return (
         <div className="action-content">
-            <div className="mega-lol">
-                <h3>
-                    megaloool
-                </h3>
-            </div>
+            {/* <div className="mega-lol">
             <PrintLayout/>
+            </div> */}
             <div>
                 <SearchCustomer fn={setCustomerObj} fnNewCustomer={setIsNewCustomer}/>
                 <div className="dd-option">

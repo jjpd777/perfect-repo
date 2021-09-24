@@ -11,26 +11,30 @@ const thStyle = {
   fontWeight: "normal",
   fontStyle: "normal"
 };
-
+const array7=["a","b","c","d","e"];
 class ComponentToPrint extends React.Component {
   render() {
     return (
     <div className="main-print-box">
-        <Button>Yesyss lool</Button>
-        <Button>LOOLyeyssf</Button>
+        {array7.map(x=><Button>{x}</Button>)}
       </div>
     );
   }
 }
 
+
 class Example extends React.Component {
   render() {
     return (
       <div>
-        <ReactToPrint
+           <ReactToPrint
           trigger={() => <button>Print this out!</button>}
           content={() => this.componentRef}
         />
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
         <ComponentToPrint ref={(el) => (this.componentRef = el)} />
       </div>
     );
