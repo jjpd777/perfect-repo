@@ -1,6 +1,6 @@
 const DateUtil = () => {
     const unixTime = ()=>{
-      return Math.round((new Date()).getTime() / 1000);
+      return Math.floor(Date.now() / 1000)
     };
     const newMHDMY = () => {
       var today = new Date();
@@ -11,7 +11,6 @@ const DateUtil = () => {
       var yyyy = today.getFullYear();
       return hr + ":" + min + "&" + dd + '-' + mm + '-' + yyyy;
     };
-  
     return { newMHDMY, unixTime }
   }
 
@@ -19,5 +18,17 @@ const DateUtil = () => {
 export const currentFullDate = ()=>{
     const {newMHDMY} = DateUtil();
     return newMHDMY();
+};
 
+export const currentUnixDate = ()=>{
+  const {unixTime} = DateUtil();
+  return unixTime();
+};
+
+export const formatUnixDate = (x)=>{
+      const today = new Date(x*1000);
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0');
+      var yyyy = today.getFullYear();
+      return dd + '-' + mm + '-' + yyyy;
 }

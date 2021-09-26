@@ -6,11 +6,11 @@ import SearchCustomer from "../SearchCustomer/SearchCustomer";
 import "../NewItemProgram.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
-import { currentFullDate } from "../../Utils/DateTimeUtils";
+import { currentFullDate, formatUnixDate, currentUnixDate } from "../../Utils/DateTimeUtils";
 import { createEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
-    DropdownMenu, DropdownItem
+    DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader
 } from "shards-react";
 import { program } from "@babel/types";
 
@@ -56,6 +56,7 @@ function NewEstimate({ listItems }) {
         const [programObject, total] = programObjectBuilder();
         const item = {
             timestamp: currentFullDate(),
+            unix: currentUnixDate(),
             itemDelted: false,
             createdBy: "x.createdBy",
             programItems: programObject,
@@ -79,16 +80,16 @@ function NewEstimate({ listItems }) {
         const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
         const ds = x.discount ===0 ? 1 : 1-Number(x.discount)/100;
         return (Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds)/ Number(ft);
-    }
+    };
 
     useEffect(() => {
         const cyclesTmp = {};
-        programItems.map(item => {
+        programItems.map((item,index) => {
             if (!(cyclesTmp[item.financeTerms])) {
                 cyclesTmp[item.financeTerms] = {
                     monthly: computeSubTotal(item),
                     firstPayment: currentFullDate(),
-                    nextPayment: currentFullDate(),
+                    nextPayment: currentFullDate()
                 };
             } else {
                 const t = cyclesTmp[item.financeTerms];
@@ -102,15 +103,17 @@ function NewEstimate({ listItems }) {
         const cycleKeys = Object.keys(cyclesTmp);
         var cyclesCollection =[];
         var li = cycleKeys.length;
-
         cycleKeys.map((k,kIndex)=>{
             var tt={
                 numberTerms:k,
-                monthly:0
-            }
+                monthly:0,
+                firstPayment: kIndex ===0 ? currentUnixDate()+ 2592000 : currentUnixDate()+ 2592000*(Number(cycleKeys[kIndex-1])+1),
+                lastPayment: currentUnixDate()+ 2592000*(Number(cycleKeys[kIndex]))
+            };
+            console.log("current plus",Number(cycleKeys[kIndex])+1)
             for(let i=kIndex; i<li;i++){
-                tt.monthly+= cyclesTmp[cycleKeys[i]].monthly
-            }
+                tt.monthly+= cyclesTmp[cycleKeys[i]].monthly;
+            };
             cyclesCollection.push(tt);
         })
         setPaymentCycles(cyclesCollection);
@@ -196,8 +199,21 @@ function NewEstimate({ listItems }) {
             <div className="cycles-box">
                 {paymentCycles.map((x,i)=>
                 <>
-                <h3><b>Cycle #{i+1}</b></h3>
-                <h3>Monthly: {moneyFormatter.format(x.monthly)}</h3>
+                <Card className="cycles-card">
+                    <CardBody>
+                        <CardHeader className="cycles-header">Cycle #{i+1}</CardHeader>
+                        <CardTitle className="cycles-title">Monthly: {moneyFormatter.format(x.monthly)}</CardTitle>
+                        <CardSubtitle className="cycles-subtitle">
+                        First payment: {formatUnixDate(x.firstPayment)}
+                        </CardSubtitle>
+                        <CardSubtitle  className="cycles-subtitle">
+                        Last payment: {formatUnixDate(x.lastPayment)} 
+                        </CardSubtitle>
+                    </CardBody>
+                </Card>
+                <h3><b></b></h3>
+                <h3></h3>
+                             
                 </>)}
             </div>
             <div className="save-program-box">

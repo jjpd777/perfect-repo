@@ -97,5 +97,28 @@
 }
 
 .cycles-box{
-    background-color:white;
+    background-color:transparent;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+}
+.cycles-card{
+    max-width: 100%;
+    margin:5px;
+    background-color:rgb(62, 173, 218);
+}
+
+.card-header{
+    color:rgb(46, 82, 93);
+    padding:10px;
+    background-color: white;
+}
+
+.cycles-title{
+    margin-top:40px;
+}
+.cycles-subtitle{
+    padding:20px;
+    margin-top:20px;
+    color:white;
 }
