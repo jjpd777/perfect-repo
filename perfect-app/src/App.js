@@ -12,7 +12,7 @@ import { auth, logout} from "./UtilsFirebase/Authentication";
 import InsertItem from "./ActionComponents/NewItemProgram/InsertItem";
 import AdminNav from "./ActionComponents/NavComponents/AdminNav";
 import EstimateNav from "./ActionComponents/NavComponents/EstimateNav";
-
+import PrintMain from "./ActionComponents/PrintComponent/PrintMain";
 import ProgramBuilder from "./ActionComponents/NewItemProgram/ProgramBuilder";
 import StaffPrices from "./ActionComponents/StaffPrices";
 import { createItemFunction, readItemsFunction } from "./UtilsFirebase/Database";
@@ -57,9 +57,7 @@ function App() {
         <Router>
               <Switch>
                 <Route exact path="/" component={Login}/>
-
-                <Route exact path="/register" component={Register} />
-
+                  <Route exact path="/register" component={Register} />
               </Switch>
         </Router>
           </div>  
@@ -81,7 +79,9 @@ function App() {
           </Router>
             </div>
           </div>
-          
+          <div>
+            <PrintMain/>
+          </div>
           <div className="current-action-box">
             {current==="Estimate" &&
             <>
