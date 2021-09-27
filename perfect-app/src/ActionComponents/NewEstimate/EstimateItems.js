@@ -48,19 +48,21 @@ function EstimateItems({ props, fn }) {
     };
 
     return (
-        <>
-            <Container>
-                <Row>
-                    <Col /> Name
-                            <Col /> Terms
-                            <Col /> Price per Sess
-                            <Col /> Sessions
-                            <Col /> Discount
-                        </Row>
-                {props.map(x =>
-                    <div className="program-item-box">
+        <div className="estimate-items-box">
+            <Container >
+                {props.map((x,ix )=>
+                        <>
+                        {ix ===0 &&(
+                            <Row className="estimate-row">
+                             <Col/>
 
-                        <Row>
+                             <Col className="item-units-edit"/> Terms
+                             <Col className="item-units-edit"/> $ / Sess
+                             <Col className="item-units-edit"/> Sess.
+                             <Col className="item-units-edit"/> Disc.
+                            </Row>
+                        )}
+                        <Row className="estimate-row">
                             <Col /><div className="program-item-text">{x.itemName}</div>
                             <Col>
                                 <div className="dd-option">
@@ -84,10 +86,10 @@ function EstimateItems({ props, fn }) {
                                 onChange={(e) => { lookForDiscountUpdate(x, e.target.value) }} />
                             <Col /><h4 onClick={() => { removeItem(x) }}>X</h4>
                         </Row>
-                    </div>
+                        </>
                 )}
             </Container>
-        </>
+        </div>
     )
 };
 

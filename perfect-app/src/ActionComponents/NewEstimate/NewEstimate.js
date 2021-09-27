@@ -3,6 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../../Utils/MoneyFormat";
 import EstimateItems from "./EstimateItems";
 import SearchCustomer from "../SearchCustomer/SearchCustomer";
+import PrintMain from "./PrintComponent/PrintMain";
 import "../NewItemProgram.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
@@ -107,10 +108,9 @@ function NewEstimate({ listItems }) {
             var tt={
                 numberTerms:k,
                 monthly:0,
-                firstPayment: kIndex ===0 ? currentUnixDate()+ 2592000 : currentUnixDate()+ 2592000*(Number(cycleKeys[kIndex-1])+1),
-                lastPayment: currentUnixDate()+ 2592000*(Number(cycleKeys[kIndex]))
+                firstPayment: kIndex ===0 ? currentUnixDate()+ ( k==="0"? 0:2592000 ): currentUnixDate()+ 2592000*(Number(cycleKeys[kIndex-1])+1),
+                lastPayment: currentUnixDate()+( k==="0"? 0:2592000 )*(Number(cycleKeys[kIndex]))
             };
-            console.log("current plus",Number(cycleKeys[kIndex])+1)
             for(let i=kIndex; i<li;i++){
                 tt.monthly+= cyclesTmp[cycleKeys[i]].monthly;
             };
@@ -171,7 +171,7 @@ function NewEstimate({ listItems }) {
                         </DropdownMenu>
                     </Dropdown>
                 </div>
-                <div className="item-name-btn">
+                <div className="item-name-box">
                     {editItems.map(x => <Button className="cat-btn"
                         onClick={() => {
                             if (programItems.find(c => x.itemName === c.itemName)) {
@@ -193,7 +193,7 @@ function NewEstimate({ listItems }) {
                     <br></br>
                 </div>
             </div>
-            <div>
+            <div className="estimates-box">
                 <EstimateItems props={programItems} fn={setProgramItems} />
             </div>
             <div className="cycles-box">
@@ -204,10 +204,8 @@ function NewEstimate({ listItems }) {
                         <CardHeader className="cycles-header">Cycle #{i+1}</CardHeader>
                         <CardTitle className="cycles-title">Monthly: {moneyFormatter.format(x.monthly)}</CardTitle>
                         <CardSubtitle className="cycles-subtitle">
-                        First payment: {formatUnixDate(x.firstPayment)}
-                        </CardSubtitle>
-                        <CardSubtitle  className="cycles-subtitle">
-                        Last payment: {formatUnixDate(x.lastPayment)} 
+                        <h3>First payment: {formatUnixDate(x.firstPayment)}</h3>
+                        <h3>Last payment: {formatUnixDate(x.lastPayment)} </h3>
                         </CardSubtitle>
                     </CardBody>
                 </Card>
@@ -217,7 +215,11 @@ function NewEstimate({ listItems }) {
                 </>)}
             </div>
             <div className="save-program-box">
-                <Button className="cat-btn" onClick={() => { insertProgram() }}>Save estimate</Button>
+            <Button className="cat-btn" onClick={() => { insertProgram() }}>Print estimate</Button>
+            <Button className="cat-btn" onClick={() => { insertProgram() }}>Save as Invoice & Print</Button>               
+            </div>
+            <div className="print-box-bb">
+            <PrintMain/>
             </div>
         </div>
     );

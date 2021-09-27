@@ -44,8 +44,7 @@ function SearchUser({fn, fnNewCustomer}){
     return(
     <>
     <div className="search-user-box">
-        <Button onClick={()=>{setNewCustomer(!newCustomer)}}>{newCustomer ? "Find user" : "New user"}</Button>
-       { newCustomer ? (<div className="search-user-1">
+       { newCustomer ? (<div className="search-user-2">
             <FormInput className="search-user-input"
                 onChange={(e)=>setUser(e.target.value)}
                 value={user}
@@ -58,9 +57,7 @@ function SearchUser({fn, fnNewCustomer}){
                  onChange={(e)=>setPhoneNum(e.target.value)}
                  value={phone}
             />
-            <Button className="save-user-btn" onClick={()=>{
-                createCustomerFunction({customerName:user, customerEmail:email, customerPhone: phone});
-                }}> Save</Button>
+                    <Button className="switch-user-btn" onClick={()=>{setNewCustomer(!newCustomer)}}>{newCustomer ? "Find user" : "New user"}</Button>
         </div>)
         :(<>
         <div className="search-user-2">
@@ -75,6 +72,7 @@ function SearchUser({fn, fnNewCustomer}){
             <div className="current-customer-input">{currentCustomer.customerEmail}</div>
             <div className="current-customer-input">{currentCustomer.customerPhone}</div>
             </div>
+                                <Button className="switch-user-btn" onClick={()=>{setNewCustomer(!newCustomer)}}>{newCustomer ? "Find user" : "New user"}</Button>
         </div>
         
         <div className="searched-options">
