@@ -14,6 +14,7 @@ import {
     DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader
 } from "shards-react";
 import { program } from "@babel/types";
+import { set } from "date-fns";
 
 
 function NewEstimate({ listItems }) {
@@ -31,6 +32,7 @@ function NewEstimate({ listItems }) {
     const [isNewCustomer, setIsNewCustomer] = useState(true);
     const [saveBool, setSaveBool]= useState(false);
     const [paymentBreakdown, setPaymentBreakdown] = useState({});
+    const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
 
 
     useEffect(() => {
@@ -66,7 +68,9 @@ function NewEstimate({ listItems }) {
             programItems: programObject,
             programTotal: total,
             customerObject: customerObject,
-            paymentsCycles: paymentCycles
+            paymentsCycles: paymentCycles,
+            paymentBreakdown: paymentBreakdown,
+            estimateType: invoiceEstimate
         };
         try {
             createEstimateFunction(item).then(()=>{
@@ -83,49 +87,39 @@ function NewEstimate({ listItems }) {
     const computeSubTotal = (x)=>{
         const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
         const ds = x.discount ===0 ? 1 : 1-Number(x.discount)/100;
-        return (Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds)/ Number(ft);
+        const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds;
+        const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 : 0.3);
+        const downP = tot * conversionFactor; const remBal = tot *(1-conversionFactor);
+        const monthly = remBal/ Number(ft);
+        return [downP, monthly];
     };
 
-
-    const computePaymentBreakdown = (item)=>{
-        var downPayment = 0; var remainingBalance = 0;
-            if(item.financeTerms ==="0"){
-                downPayment+= computeSubTotal(item);
-                remainingBalance+= computeSubTotal(item);
-            }else if(item.financeTerms ==="1"){
-                downPayment+= computeSubTotal(item)*0.5;
-                remainingBalance+= computeSubTotal(item) *0.5;
-            }
-            else if(item.financeTerms ==="2"){
-                downPayment+= computeSubTotal(item)*0.33;
-                remainingBalance+= computeSubTotal(item) *0.67;
-            }else{
-                downPayment+= computeSubTotal(item)*0.3;
-                remainingBalance+= computeSubTotal(item) *0.7;
-            };
-        return [downPayment, remainingBalance];
-    }
 
    
     useEffect(() => {
         const cyclesTmp = {};
-        var downPayment = 0; var remainingBalance =0;
-        programItems.map((item,index) => {
+        var downPayGlobal = 0; var remainingBalGlobal =0;
+        programItems.map((item) => {
+            const [downPayment, remainingBalance] = computeSubTotal(item);
+            downPayGlobal+=downPayment; remainingBalGlobal+=remainingBalance;
+
             if (!(cyclesTmp[item.financeTerms])) {
                 cyclesTmp[item.financeTerms] = {
-                    monthly: computeSubTotal(item),
+                    monthly: remainingBalance,
                     firstPayment: currentFullDate(),
                     nextPayment: currentFullDate()
                 };
             } else {
                 const t = cyclesTmp[item.financeTerms];
                 cyclesTmp[item.financeTerms] = {
-                    monthly: t.monthly + computeSubTotal(item),
+                    monthly: t.monthly + remainingBalance,
                     firstPayment: currentFullDate(),
                     nextPayment: currentFullDate(),
                 };
             }
         });
+
+        setPaymentBreakdown({downPayment: downPayGlobal, remainingBalance:remainingBalGlobal});
         const cycleKeys = Object.keys(cyclesTmp);
         var cyclesCollection =[];
         var li = cycleKeys.length;
@@ -143,11 +137,6 @@ function NewEstimate({ listItems }) {
         })
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
-
-
-
-
-    console.log(customerObject,"The customer");
 
     return (
         <div className="action-content">
@@ -228,16 +217,19 @@ function NewEstimate({ listItems }) {
             <div className="temp-save-box">
                 <Button className="temporary-save" onClick={()=>setSaveBool(!saveBool)}>{ !saveBool ? "Save selection" : "Edit Selection"}</Button>
             </div>
+            
             <div className="estimates-box">
                 {!saveBool ?(<EstimateItems props={programItems} fn={setProgramItems} />):(<></>)}
             </div>
+            { saveBool &&
+            <>
             <div className="summary-box">
                 <Card className="summary-card">
                     <CardBody>
                         <CardHeader className="summary-header">{customerObject.customerName}</CardHeader>
-                        <CardTitle className="summary-title"><b>Down payment:</b> {moneyFormatter.format(0.3*programObjectBuilder()[1])}  <b>Total payment:</b> {moneyFormatter.format(programObjectBuilder()[1])}</CardTitle>
+                        <CardTitle className="summary-title"><b>Down payment:</b> {moneyFormatter.format(paymentBreakdown.downPayment)}  <b>Total payment:</b> {moneyFormatter.format(programObjectBuilder()[1])}</CardTitle>
                         <CardSubtitle className="summary-items-list">
-                            {programItems.map(item=><h5>{item.itemName} with {item.financeTerms} financing terms </h5>)}
+                            {programItems.map(item=><h5>{item.itemName} with {item.financeTerms} financing {item.financeTerms===1 ? "term":"terms"} </h5>)}
                         </CardSubtitle>
                     </CardBody>
                 </Card>
@@ -255,18 +247,34 @@ function NewEstimate({ listItems }) {
                         </CardSubtitle>
                     </CardBody>
                 </Card>
-                <h3><b></b></h3>
-                <h3></h3>
-                             
                 </>)}
             </div>
-            {saveBool && <div className="save-program-box">
-                <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Print estimate</Button>
-                <Button className="cat-btn" onClick={() => { }}>Save as Invoice & Print</Button>               
-            </div>}
-            {/* <div className="print-box-bb">
-            <PrintMain/>
-            </div> */}
+            <div className="input-radio-box">
+             <FormRadio
+                    inline
+                    className="radio-choices"
+                    checked={invoiceEstimate === "estimate"}
+                    onChange={() => {
+                        setInvoiceEstimate("estimate");
+                    }}
+                >
+                    <h3>estimate</h3>
+                </FormRadio>
+                <FormRadio
+                    inline
+                    className="radio-choices"
+                    checked={invoiceEstimate === "invoice"}
+                    onChange={() => {
+                        setInvoiceEstimate("invoice");
+                    }}
+                >
+                    <h3>invoice</h3>
+                </FormRadio>
+            </div>
+            <div className="save-program-box">
+                <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save a & Print</Button>             
+            </div>
+           </>}
         </div>
     );
 };
