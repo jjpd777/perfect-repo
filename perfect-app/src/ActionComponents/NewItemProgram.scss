@@ -4,7 +4,7 @@
     background-color:rgb(184, 214, 219);
     display: flex;
     flex-direction: column;
-    
+    margin: 0 auto;
 
 }
 
@@ -125,22 +125,53 @@
     margin: 0 auto;
     max-width: 50%;
 }
-
+.save-program-box{
+    padding-bottom: 150px;
+}
 .save-program-btn{
     margin:10px;
     font-size: 1.5rem;
 }
 
 .cycles-box{
-    background-color:transparent;
-    margin: 0 auto;
     display: flex;
     flex-direction: row;
+    margin: 0 auto;
+    width:60%;
+    padding-bottom:150px;
+
 }
 .cycles-card{
-    max-width: 100%;
-    margin:5px;
     background-color:rgb(62, 173, 218);
+    margin: 0 auto;
+}
+.summary-box{
+    padding:60px;
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    min-width:80%;
+}
+.summary-card{
+    min-width: 50%;
+    margin: 0 auto;
+    background-color: red;
+    background-color:rgb(238, 238, 245);
+}
+
+.summary-header{
+    color:turquoise;
+}
+
+.summary-items-box{
+    margin-top:50px;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.summary-items-list{
+    padding:20px;
 }
 
 .card-header{
@@ -151,6 +182,9 @@
 
 .cycles-title{
     margin-top:40px;
+}
+.summary-title{
+    margin-top:10px;
 }
 .cycles-subtitle{
     padding:20px;
@@ -163,6 +197,18 @@
 }
 
 .print-box-bb{
-    transform:rotate(90deg);
     height:1500px;
+}
+.temp-save-box{
+    background-color: red;
+    position:relative;
+}
+
+.temporary-save{
+    margin:15px;
+    position:absolute;
+    right:10px;
+    top:10px;
+    border:0;
+    background-color:green;
 }

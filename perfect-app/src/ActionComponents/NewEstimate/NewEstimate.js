@@ -29,6 +29,9 @@ function NewEstimate({ listItems }) {
     const [paymentCycles, setPaymentCycles] = useState([]);
     const [customerObject, setCustomerObj] = useState({});
     const [isNewCustomer, setIsNewCustomer] = useState(true);
+    const [saveBool, setSaveBool]= useState(false);
+    const [paymentBreakdown, setPaymentBreakdown] = useState({});
+
 
     useEffect(() => {
         var tmp = [];
@@ -53,7 +56,7 @@ function NewEstimate({ listItems }) {
         return [rsp, total];
     }
 
-    const insertProgram = () => {
+    const insertProgramEstimate = () => {
         const [programObject, total] = programObjectBuilder();
         const item = {
             timestamp: currentFullDate(),
@@ -83,8 +86,30 @@ function NewEstimate({ listItems }) {
         return (Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds)/ Number(ft);
     };
 
+
+    const computePaymentBreakdown = (item)=>{
+        var downPayment = 0; var remainingBalance = 0;
+            if(item.financeTerms ==="0"){
+                downPayment+= computeSubTotal(item);
+                remainingBalance+= computeSubTotal(item);
+            }else if(item.financeTerms ==="1"){
+                downPayment+= computeSubTotal(item)*0.5;
+                remainingBalance+= computeSubTotal(item) *0.5;
+            }
+            else if(item.financeTerms ==="2"){
+                downPayment+= computeSubTotal(item)*0.33;
+                remainingBalance+= computeSubTotal(item) *0.67;
+            }else{
+                downPayment+= computeSubTotal(item)*0.3;
+                remainingBalance+= computeSubTotal(item) *0.7;
+            };
+        return [downPayment, remainingBalance];
+    }
+
+   
     useEffect(() => {
         const cyclesTmp = {};
+        var downPayment = 0; var remainingBalance =0;
         programItems.map((item,index) => {
             if (!(cyclesTmp[item.financeTerms])) {
                 cyclesTmp[item.financeTerms] = {
@@ -119,13 +144,19 @@ function NewEstimate({ listItems }) {
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
 
+
+
+
     console.log(customerObject,"The customer");
 
     return (
         <div className="action-content">
-            <div>
+               <div>
                 <SearchCustomer fn={setCustomerObj} fnNewCustomer={setIsNewCustomer}/>
-                <div className="dd-option">
+            </div>
+           { !saveBool && 
+           <>
+           <div className="dd-option">
                     <Dropdown open={estimateToggle} toggle={() => setEsToggle(!estimateToggle)}>
                         <DropdownToggle split className="dd-btn" >{typeE}  </DropdownToggle>
                         <DropdownMenu >
@@ -137,8 +168,7 @@ function NewEstimate({ listItems }) {
                         </DropdownMenu>
                     </Dropdown>
                 </div>
-            </div>
-            <div className="input-radio-box">
+           <div className="input-radio-box">
                 <FormRadio
                     inline
                     className="radio-choices"
@@ -193,8 +223,24 @@ function NewEstimate({ listItems }) {
                     <br></br>
                 </div>
             </div>
+        </>
+        }
+            <div className="temp-save-box">
+                <Button className="temporary-save" onClick={()=>setSaveBool(!saveBool)}>{ !saveBool ? "Save selection" : "Edit Selection"}</Button>
+            </div>
             <div className="estimates-box">
-                <EstimateItems props={programItems} fn={setProgramItems} />
+                {!saveBool ?(<EstimateItems props={programItems} fn={setProgramItems} />):(<></>)}
+            </div>
+            <div className="summary-box">
+                <Card className="summary-card">
+                    <CardBody>
+                        <CardHeader className="summary-header">{customerObject.customerName}</CardHeader>
+                        <CardTitle className="summary-title"><b>Down payment:</b> {moneyFormatter.format(0.3*programObjectBuilder()[1])}  <b>Total payment:</b> {moneyFormatter.format(programObjectBuilder()[1])}</CardTitle>
+                        <CardSubtitle className="summary-items-list">
+                            {programItems.map(item=><h5>{item.itemName} with {item.financeTerms} financing terms </h5>)}
+                        </CardSubtitle>
+                    </CardBody>
+                </Card>
             </div>
             <div className="cycles-box">
                 {paymentCycles.map((x,i)=>
@@ -214,13 +260,13 @@ function NewEstimate({ listItems }) {
                              
                 </>)}
             </div>
-            <div className="save-program-box">
-            <Button className="cat-btn" onClick={() => { insertProgram() }}>Print estimate</Button>
-            <Button className="cat-btn" onClick={() => { insertProgram() }}>Save as Invoice & Print</Button>               
-            </div>
-            <div className="print-box-bb">
+            {saveBool && <div className="save-program-box">
+                <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Print estimate</Button>
+                <Button className="cat-btn" onClick={() => { }}>Save as Invoice & Print</Button>               
+            </div>}
+            {/* <div className="print-box-bb">
             <PrintMain/>
-            </div>
+            </div> */}
         </div>
     );
 };

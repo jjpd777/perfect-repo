@@ -56,10 +56,10 @@ function EstimateItems({ props, fn }) {
                             <Row className="estimate-row">
                              <Col/>
 
-                             <Col className="item-units-edit"/> Terms
-                             <Col className="item-units-edit"/> $ / Sess
-                             <Col className="item-units-edit"/> Sess.
-                             <Col className="item-units-edit"/> Disc.
+                             <Col className="item-units-edit"/>
+                             <Col className="item-units-edit"/>
+                             <Col className="item-units-edit"/> 
+                             <Col className="item-units-edit"/> 
                             </Row>
                         )}
                         <Row className="estimate-row">
@@ -67,12 +67,12 @@ function EstimateItems({ props, fn }) {
                             <Col>
                                 <div className="dd-option">
                                     <Dropdown open={x.currentToggle} toggle={() => lookForToggle(x)}>
-                                        <DropdownToggle split className="dd-estimate-btn" >{x.financeTerms}  </DropdownToggle>
+                                        <DropdownToggle split className="dd-estimate-btn" >{x.financeTerms }   </DropdownToggle>
                                         <DropdownMenu >
                                             {terms.map(t =>
                                                 <DropdownItem
                                                     onClick={() => { lookForTermsUpdate(x, t) }}
-                                                >{t}</DropdownItem>
+                                                >{t} {" terms"}</DropdownItem>
                                             )}
                                         </DropdownMenu>
                                     </Dropdown>
