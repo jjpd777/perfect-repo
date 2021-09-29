@@ -78,6 +78,7 @@ function NewEstimate({ listItems }) {
             paymentsCycles: paymentCycles,
             paymentBreakdown: paymentBreakdown,
             estimateType: invoiceEstimate,
+            voided: false,
         };
         try {
            
