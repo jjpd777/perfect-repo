@@ -95,7 +95,7 @@ function NewEstimate({ listItems }) {
         const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
         const ds = x.discount ===0 ? 1 : 1-(Number(x.discount)/100);
         const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds;
-        const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 : 0.3);
+        const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 :(x.financeTerms===2? 0.33 : 0.3));
         const downP = tot * conversionFactor; const remBal = tot *(1-conversionFactor);
         const monthly = remBal/ Number(ft);
         return [downP, monthly, tot];

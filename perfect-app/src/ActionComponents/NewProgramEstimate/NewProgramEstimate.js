@@ -100,12 +100,15 @@ function NewProgramEstimate({ listItems }) {
         }
     };
 
-    const discTable1 = {
+    const complexDiscountTable = {
         "laser":{
             "range" :[[1,0.99],[2,0.98],[3,0.97],[4,0.96]],
         },
-        "body" : {
-            "range" : [0,1,2,3,4,5,6,7,8,9],
+        "facial":{
+            "range" :[[1,0.99],[2,0.98],[3,0.97],[4,0.96]],
+        },
+        "product" : {
+            "range" : [[1,0.98],[2,0.98],[3,0.98],[4,0.98],[5,0.98],[6,0.98],[7,0.98],[8,0.98],[9,0.98],[10,0.98]],
         }
     };
 
@@ -129,19 +132,21 @@ function NewProgramEstimate({ listItems }) {
 
     const chooseComplexDiscount =(s)=>{
         const countedCategories = countCategoriesDiscount();
-        const units = countedCategories[s]-1;
-        return discTable1[s].range.find(x=> x[0]>units);
+        const units = countedCategories[s];
+        return complexDiscountTable[s].range.find(x=> x[0]===units);
 
     }
-    console.log("babyyy",chooseComplexDiscount("laser"));
 
-    console.log(chooseCategoriesDiscount(), "yeah");
 
     const computeBalanceTotal = (x)=>{
+        const discAdjust = x.itemType === 'product' ? "product" : x.itemCategory;
+        const complexDiscount = chooseComplexDiscount(discAdjust)[1];
+
         const financialterms = x.financeTerms ===0 ? 1 : Number(programVariables.terms);
         const discount = programVariables.terms ==="0" ? 1 : 1-(Number(programVariables.discount)/100);
 
-        const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * discount;
+        const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * discount * complexDiscount;
+        console.log("current item total"+x.itemName, tot);
 
         const dPayment = programVariables.downPayment ==="0" ? 1 : Number(programVariables.downPayment)/100;
         const downP = tot * dPayment; const remBal = tot *(1-dPayment);

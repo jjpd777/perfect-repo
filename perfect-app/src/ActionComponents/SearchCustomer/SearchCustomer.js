@@ -46,18 +46,22 @@ function SearchUser({fn, fnNewCustomer, optionsFlag}){
     <>
     <div className="search-user-box">
        {( newCustomer && optionsFlag )? (<div className="search-user-2">
+           <h3>Name *</h3>
             <FormInput className="search-user-input"
                 onChange={(e)=>setUser(e.target.value)}
                 value={user}
             />
-            <FormInput className="search-user-input" 
-                onChange={(e)=>setEmail(e.target.value)}
-                value={email}
-            />
+                      <h3>Phone *</h3>
             <FormInput className="search-user-input"
                  onChange={(e)=>setPhoneNum(e.target.value)}
                  value={phone}
             />
+            <h3>Email</h3>
+            <FormInput className="search-user-input" 
+                onChange={(e)=>setEmail(e.target.value)}
+                value={email}
+            />
+             
                     <Button className="switch-user-btn" onClick={()=>{setNewCustomer(!newCustomer)}}>{newCustomer ? "Find user" : "New user"}</Button>
         </div>)
         :(<>
