@@ -5,7 +5,7 @@ import {
 import {createCustomerFunction, readCustomersFunction} from "../../UtilsFirebase/Database";
 import "./SearchUser.scss";
 
-function SearchUser({fn, fnNewCustomer}){
+function SearchUser({fn, fnNewCustomer, optionsFlag}){
     const [user, setUser] = useState("");
     const [email, setEmail] = useState("--");
     const [phone, setPhoneNum] = useState("--");
@@ -27,16 +27,17 @@ function SearchUser({fn, fnNewCustomer}){
       }, []);
 
     var searched = searchInput === "" ?[]:fetchedUsers.filter(u=>{
-        return u.customerName.includes(searchInput);
+        return u.customerName.toLowerCase().includes(searchInput.toLocaleLowerCase());
     });
 
     useEffect(()=>{
         fnNewCustomer(newCustomer)
-        if(!newCustomer){
-            fn(currentCustomer);
-        }else{
+        if(newCustomer){
             fn({customerName:user, customerEmail:email, customerPhone: phone})
+        }else{
+            fn(currentCustomer);
         };
+        if(!optionsFlag) fn(currentCustomer);
     },[newCustomer,user,email,phone, currentCustomer])
 
 
@@ -44,7 +45,7 @@ function SearchUser({fn, fnNewCustomer}){
     return(
     <>
     <div className="search-user-box">
-       { newCustomer ? (<div className="search-user-2">
+       {( newCustomer && optionsFlag )? (<div className="search-user-2">
             <FormInput className="search-user-input"
                 onChange={(e)=>setUser(e.target.value)}
                 value={user}
@@ -72,7 +73,7 @@ function SearchUser({fn, fnNewCustomer}){
             <div className="current-customer-input">{currentCustomer.customerEmail}</div>
             <div className="current-customer-input">{currentCustomer.customerPhone}</div>
             </div>
-                                <Button className="switch-user-btn" onClick={()=>{setNewCustomer(!newCustomer)}}>{newCustomer ? "Find user" : "New user"}</Button>
+                {optionsFlag && <Button className="switch-user-btn" onClick={()=>{setNewCustomer(!newCustomer)}}>{newCustomer ? "Find user" : "New user"}</Button>}
         </div>
         
         <div className="searched-options">

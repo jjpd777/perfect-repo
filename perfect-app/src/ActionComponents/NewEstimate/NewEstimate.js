@@ -7,6 +7,8 @@ import PrintMain from "./PrintComponent/PrintMain";
 import "../NewItemProgram.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
+import { auth, logout} from "../../UtilsFirebase/Authentication";
+import {parseForFirebase} from "../../Utils/FirebaseParser";
 import { currentFullDate, formatUnixDate, currentUnixDate } from "../../Utils/DateTimeUtils";
 import { createEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 import {
@@ -24,7 +26,7 @@ function NewEstimate({ listItems }) {
     const [editItems, setEditItems] = useState([]);
     const [programItems, setProgramItems] = useState([]);
     const [toggle, setToggle] = useState(false);
-    const typesEstimate = ["Financing Estimate", "Normal Estimate", "Open Estimate"];
+    const typesEstimate = ["Financing Estimate", "Normal Estimate"];
     const [typeE, setTypeE] = useState(typesEstimate[0]);
     const [estimateToggle, setEsToggle] = useState(false);
     const [paymentCycles, setPaymentCycles] = useState([]);
@@ -33,6 +35,7 @@ function NewEstimate({ listItems }) {
     const [saveBool, setSaveBool]= useState(false);
     const [paymentBreakdown, setPaymentBreakdown] = useState({});
     const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
+    const [user, loading, error]=useAuthState(auth);
 
 
     useEffect(() => {
@@ -50,33 +53,36 @@ function NewEstimate({ listItems }) {
     }, [listItems, itemType, itemCategory]);
 
     const programObjectBuilder = () => {
-        var rsp = {}; var total = 0;
+        var rsp = {};
         programItems.map((item, ix) => {
             rsp["item-" + String(ix + 1)] = item;
-            total += Number(item.itemNumSess * item.itemPriceUnit);
         });
-        return [rsp, total];
+        return rsp;
     }
 
     const insertProgramEstimate = () => {
-        const [programObject, total] = programObjectBuilder();
+        const customerFirebase = {
+            customerName: customerObject.customerName,
+            customerEmail: parseForFirebase(customerObject.customerEmail),
+            customerPhone: parseForFirebase(customerObject.customerPhone),
+        };
+
         const item = {
             timestamp: currentFullDate(),
             unix: currentUnixDate(),
             itemDelted: false,
-            createdBy: "x.createdBy",
-            programItems: programObject,
-            programTotal: total,
-            customerObject: customerObject,
+            createdBy: user.email,
+            programItems: programObjectBuilder(),
+            programTotal: paymentBreakdown.total,
+            customerObject: customerFirebase,
             paymentsCycles: paymentCycles,
             paymentBreakdown: paymentBreakdown,
-            estimateType: invoiceEstimate
+            estimateType: invoiceEstimate,
         };
         try {
-            createEstimateFunction(item).then(()=>{
-                setProgramItems([]);
-            });
-            createCustomerFunction(customerObject).then(()=>{
+           
+            createEstimateFunction(item, parseForFirebase(customerObject.customerPhone)).then(()=>{setProgramItems([]);})
+            if(isNewCustomer)createCustomerFunction(customerFirebase).then(()=>{
                 setCustomerObj({});
             })
         } catch (e) {
@@ -84,25 +90,29 @@ function NewEstimate({ listItems }) {
         }
     };
 
-    const computeSubTotal = (x)=>{
+    const computeBalanceTotal = (x)=>{
         const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
         const ds = x.discount ===0 ? 1 : 1-Number(x.discount)/100;
         const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds;
         const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 : 0.3);
         const downP = tot * conversionFactor; const remBal = tot *(1-conversionFactor);
         const monthly = remBal/ Number(ft);
-        return [downP, monthly];
+        return [downP, monthly, tot];
     };
+
+
 
 
    
     useEffect(() => {
         const cyclesTmp = {};
         var downPayGlobal = 0; var remainingBalGlobal =0;
-        programItems.map((item) => {
-            const [downPayment, remainingBalance] = computeSubTotal(item);
-            downPayGlobal+=downPayment; remainingBalGlobal+=remainingBalance;
+        var totalSale = 0;
 
+        programItems.map((item) => {
+            const [downPayment, remainingBalance, localTotal] = computeBalanceTotal(item);
+            downPayGlobal+=downPayment; remainingBalGlobal+=remainingBalance;
+            totalSale += localTotal;
             if (!(cyclesTmp[item.financeTerms])) {
                 cyclesTmp[item.financeTerms] = {
                     monthly: remainingBalance,
@@ -119,7 +129,10 @@ function NewEstimate({ listItems }) {
             }
         });
 
-        setPaymentBreakdown({downPayment: downPayGlobal, remainingBalance:remainingBalGlobal});
+        setPaymentBreakdown({
+            downPayment: downPayGlobal, 
+            remainingBalance:remainingBalGlobal
+            , total: totalSale});
         const cycleKeys = Object.keys(cyclesTmp);
         var cyclesCollection =[];
         var li = cycleKeys.length;
@@ -141,7 +154,7 @@ function NewEstimate({ listItems }) {
     return (
         <div className="action-content">
                <div>
-                <SearchCustomer fn={setCustomerObj} fnNewCustomer={setIsNewCustomer}/>
+                <SearchCustomer fn={setCustomerObj} fnNewCustomer={setIsNewCustomer} optionsFlag={true}/>
             </div>
            { !saveBool && 
            <>
@@ -227,7 +240,7 @@ function NewEstimate({ listItems }) {
                 <Card className="summary-card">
                     <CardBody>
                         <CardHeader className="summary-header">{customerObject.customerName}</CardHeader>
-                        <CardTitle className="summary-title"><b>Down payment:</b> {moneyFormatter.format(paymentBreakdown.downPayment)}  <b>Total payment:</b> {moneyFormatter.format(programObjectBuilder()[1])}</CardTitle>
+                        <CardTitle className="summary-title"><b>Down payment:</b> {moneyFormatter.format(paymentBreakdown.downPayment)}  <b>Total payment:</b> {moneyFormatter.format(paymentBreakdown.total)}</CardTitle>
                         <CardSubtitle className="summary-items-list">
                             {programItems.map(item=><h5>{item.itemName} with {item.financeTerms} financing {item.financeTerms===1 ? "term":"terms"} </h5>)}
                         </CardSubtitle>

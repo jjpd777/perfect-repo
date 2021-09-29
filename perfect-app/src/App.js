@@ -16,7 +16,7 @@ import PrintMain from "./ActionComponents/PrintComponent/PrintMain";
 import ProgramBuilder from "./ActionComponents/NewItemProgram/ProgramBuilder";
 import StaffPrices from "./ActionComponents/StaffPrices";
 import { createItemFunction, readItemsFunction } from "./UtilsFirebase/Database";
-
+import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -31,7 +31,7 @@ import {
 function App() {
   const [user, loading, error]=useAuthState(auth);
   const userIsLogged = !!user ;
-  const sideBarElements = ["Estimate", "Program", "Admin", "Staff"];
+  const sideBarElements = ["Estimate", "Program", "Record", "Admin", "Staff"];
   const [fetchedItems, setFetchedItems] = useState([]);
   const [current, setCurrent] = useState(sideBarElements[0]); 
 
@@ -86,6 +86,10 @@ function App() {
             {current==="Estimate" &&
             <>
               <EstimateNav listItems={fetchedItems}/>
+            </>}
+            {current==="Record" &&
+            <>
+              <RecordEstimates listItems={fetchedItems}/>
             </>}
             {current==="Admin" &&
             <>

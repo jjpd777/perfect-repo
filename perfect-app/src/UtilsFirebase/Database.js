@@ -31,6 +31,10 @@ export const readItemsFunction = () => {
 export const readCustomersFunction = () => {
     return db.ref(CUSTOMER_PATH);
 };
+export const readCustomerEstimatesFunction = (uniqueID) => {
+    console.log("THE PATH",ESTIMATE_PATH+"/"+uniqueID )
+    return db.ref(ESTIMATE_PATH+"/"+uniqueID);
+};
 
 export const createItemFunction = (data) => {
     return generateEntry(data, ITEMS_PATH);
@@ -40,9 +44,10 @@ export const createProgramFunction = (data) => {
     return generateEntry(data, PROGRAMS_PATH);
 };
 
-export const createEstimateFunction = (data) => {
-    return generateEntry(data, ESTIMATE_PATH);
+export const createEstimateFunction = (data, customerPhone) => {
+    return generateEntry(data, ESTIMATE_PATH+"/"+customerPhone+"/");
 };
+
 
 export const updateItemFunction = (data,id)=>{
     const target = ITEMS_PATH + id;
