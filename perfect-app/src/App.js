@@ -9,13 +9,10 @@ import Register from "./Navigation/Register";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./UtilsFirebase/Authentication";
-import InsertItem from "./ActionComponents/NewItemProgram/InsertItem";
 import AdminNav from "./ActionComponents/NavComponents/AdminNav";
-import EstimateNav from "./ActionComponents/NavComponents/EstimateNav";
-import PrintMain from "./ActionComponents/PrintComponent/PrintMain";
-import ProgramBuilder from "./ActionComponents/NewItemProgram/ProgramBuilder";
+import NewProgramEstimate from "./ActionComponents/NewProgramEstimate/NewProgramEstimate"
 import StaffPrices from "./ActionComponents/StaffPrices";
-import { createItemFunction, readItemsFunction } from "./UtilsFirebase/Database";
+import {readItemsFunction } from "./UtilsFirebase/Database";
 import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -27,6 +24,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from "shards-react";
+import NewEstimate from './ActionComponents/NewEstimate/NewEstimate';
 
 function App() {
   const [user, loading, error]=useAuthState(auth);
@@ -85,7 +83,7 @@ function App() {
           <div className="current-action-box">
             {current==="Estimate" &&
             <>
-              <EstimateNav listItems={fetchedItems}/>
+              <NewEstimate listItems={fetchedItems}/>
             </>}
             {current==="Record" &&
             <>
@@ -93,7 +91,7 @@ function App() {
             </>}
             {current==="Program" &&
             <>
-              <h3>Program builder</h3>
+              <NewProgramEstimate listItems={fetchedItems}/>
             </>}
             {current==="Admin" &&
             <>

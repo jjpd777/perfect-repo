@@ -211,3 +211,18 @@
     border:0;
     background-color:green;
 }
+
+//////// New Program Items
+
+.program-variables-box{
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    max-width: 70%;
+}
+
+.program-variables-input{
+    margin: 0 auto;
+    max-width:100px;
+}
+

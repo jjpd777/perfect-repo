@@ -13,7 +13,7 @@ import {
 } from "shards-react";
 
 
-function ProgramBuilder({ listItems }) {
+function NewProgramBuilder({ listItems }) {
   const [itemType, setItemType] = useState("treatment");
   const [itemCategory, setItemCategory] = useState("laser");
   const [itemName, setItemName] = useState("");
@@ -144,4 +144,4 @@ function ProgramBuilder({ listItems }) {
 {/* <Button className="cat-btn" onClick={() => setItemCategory(x)}>
 {x}
 </Button> */}
-export default ProgramBuilder;
+export default NewProgramBuilder;

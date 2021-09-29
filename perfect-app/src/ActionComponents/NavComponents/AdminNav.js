@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import InsertItem from "../NewItemProgram/InsertItem";
-import ProgramBuilder from "../NewItemProgram/ProgramBuilder";
+import InsertItem from "./InsertItem";
+import NewProgramBuilder from "./NewProgramBuilder";
 import {
     FormInput, Button
   } from "shards-react";
@@ -20,7 +20,7 @@ function AdminNav({listItems}){
             </>}
             {(!itemProgram )&&
             <>
-            <ProgramBuilder listItems={listItems}/>
+            <NewProgramBuilder listItems={listItems}/>
             </>}
         </>
     )

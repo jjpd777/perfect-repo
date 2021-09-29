@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../../Utils/MoneyFormat";
-import EstimateItems from "./EstimateItems";
+import ProgramEstimateItems from "./ProgramEstimateItems";
 import SearchCustomer from "../SearchCustomer/SearchCustomer";
 import PrintMain from "./PrintComponent/PrintMain";
+import {discountTable} from "../DiscountConditions";
 import "../NewItemProgram.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
@@ -19,7 +20,7 @@ import { program } from "@babel/types";
 import { set } from "date-fns";
 
 
-function NewEstimate({ listItems }) {
+function NewProgramEstimate({ listItems }) {
     const [itemType, setItemType] = useState("treatment");
     const [itemCategory, setItemCategory] = useState("laser");
     const [rCategories, setReadCateg] = useState([]);
@@ -36,6 +37,14 @@ function NewEstimate({ listItems }) {
     const [paymentBreakdown, setPaymentBreakdown] = useState({});
     const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
     const [user, loading, error]=useAuthState(auth);
+
+    const initialState = {
+        downPayment: "30",
+        discount: 0,
+        terms:6,
+    };
+
+    const [programVariables, setProgramVariables] = useState(initialState);
 
 
     useEffect(() => {
@@ -91,16 +100,30 @@ function NewEstimate({ listItems }) {
         }
     };
 
+    const discTable1 = {
+        "laser":{
+            "range" :[(1,5),(6,10),(11,15),(16,20)],
+            "discount" : [0.99, 0.98, 0.97, 0.96]
+        },
+        "body" : {
+            "range" : [(1,5),(6,10),(11,15),(16,20)],
+            "discount" : [0.99, 0.98, 0.97, 0.96]
+        }
+    };
+
     const computeBalanceTotal = (x)=>{
-        const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
-        const ds = x.discount ===0 ? 1 : 1-(Number(x.discount)/100);
-        const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds;
-        const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 : 0.3);
-        const downP = tot * conversionFactor; const remBal = tot *(1-conversionFactor);
-        const monthly = remBal/ Number(ft);
+        const financialterms = x.financeTerms ===0 ? 1 : Number(programVariables.terms);
+        const discount = programVariables.terms ==="0" ? 1 : 1-(Number(programVariables.discount)/100);
+
+        const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * discount;
+
+        const dPayment = programVariables.downPayment ==="0" ? 1 : Number(programVariables.downPayment)/100;
+        const downP = tot * dPayment; const remBal = tot *(1-dPayment);
+        const monthly = remBal/ Number(financialterms);
         return [downP, monthly, tot];
     };
 
+   
 
 
 
@@ -109,7 +132,13 @@ function NewEstimate({ listItems }) {
         const cyclesTmp = {};
         var downPayGlobal = 0; var remainingBalGlobal =0;
         var totalSale = 0;
-
+        var cycleInfo = {};
+        cycleInfo[programVariables.terms] = {
+            monthly: 0,
+            firstPayment: currentFullDate(),
+            nextPayment: currentFullDate()
+        };
+        
         programItems.map((item) => {
             const [downPayment, remainingBalance, localTotal] = computeBalanceTotal(item);
             downPayGlobal+=downPayment; remainingBalGlobal+=remainingBalance;
@@ -151,6 +180,8 @@ function NewEstimate({ listItems }) {
         })
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
+
+    console.log(programVariables)
 
     return (
         <div className="action-content">
@@ -216,7 +247,7 @@ function NewEstimate({ listItems }) {
                                         itemId: x.id, itemName: x.itemName,
                                         itemNumSess: x.itemNumSess, itemType: x.itemType,
                                         itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
-                                        financeTerms: 0, discount: 0, currentToggle: false
+                                        financeTerms: programVariables.terms, discount: 0, currentToggle: false
                                     }]
                                 ])
                             }
@@ -224,6 +255,18 @@ function NewEstimate({ listItems }) {
                     >{x.itemName}</Button>)}
                     <br></br>
                     <br></br>
+                </div>
+                <div className="program-variables-box">
+                    <h3>Down payment</h3>
+                    <FormInput className="program-variables-input" value={programVariables.downPayment}
+                        onChange={(e) => { setProgramVariables({...programVariables, downPayment:e.target.value}) }} />
+                    <h3>Discount</h3>
+                    <FormInput className="program-variables-input" 
+                               value={programVariables.discount}
+                               onChange={(e) => { setProgramVariables({...programVariables, discount:e.target.value}) }} />
+                    <h3>Terms</h3>
+                    <FormInput className="program-variables-input" value={programVariables.terms}
+                        onChange={(e) => { setProgramVariables({...programVariables, terms:e.target.value}) }} />
                 </div>
             </div>
         </>
@@ -233,7 +276,7 @@ function NewEstimate({ listItems }) {
             </div>
             
             <div className="estimates-box">
-                {!saveBool ?(<EstimateItems props={programItems} fn={setProgramItems} />):(<></>)}
+                {!saveBool ?(<ProgramEstimateItems props={programItems} fn={setProgramItems} />):(<></>)}
             </div>
             { saveBool &&
             <>
@@ -296,4 +339,4 @@ function NewEstimate({ listItems }) {
 {/* <Button className="cat-btn" onClick={() => setItemCategory(x)}>
 {x}
 </Button> */}
-export default NewEstimate;
+export default NewProgramEstimate;
