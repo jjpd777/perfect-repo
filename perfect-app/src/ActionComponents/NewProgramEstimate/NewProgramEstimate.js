@@ -102,14 +102,40 @@ function NewProgramEstimate({ listItems }) {
 
     const discTable1 = {
         "laser":{
-            "range" :[(1,5),(6,10),(11,15),(16,20)],
-            "discount" : [0.99, 0.98, 0.97, 0.96]
+            "range" :[[1,0.99],[2,0.98],[3,0.97],[4,0.96]],
         },
         "body" : {
-            "range" : [(1,5),(6,10),(11,15),(16,20)],
-            "discount" : [0.99, 0.98, 0.97, 0.96]
+            "range" : [0,1,2,3,4,5,6,7,8,9],
         }
     };
+
+    const discountPerCategory = [1,0.99,0.98,0.97,0.96];
+
+    const chooseCategoriesDiscount =()=>{ 
+        const nCat = new Set(programItems.map(x=> x.itemCategory));
+        return discountPerCategory[nCat.size];
+    };
+    const countCategoriesDiscount = ()=>{
+        var d ={}; 
+        programItems.map(x=> {
+            if(x.itemType ==="product"){
+                d[x.itemType] =1;
+        }else{
+           d[x.itemCategory] ? d[x.itemCategory]+=1 : d[x.itemCategory]=1;
+        }
+    })
+        return d;
+    };
+
+    const chooseComplexDiscount =(s)=>{
+        const countedCategories = countCategoriesDiscount();
+        const units = countedCategories[s]-1;
+        return discTable1[s].range.find(x=> x[0]>units);
+
+    }
+    console.log("babyyy",chooseComplexDiscount("laser"));
+
+    console.log(chooseCategoriesDiscount(), "yeah");
 
     const computeBalanceTotal = (x)=>{
         const financialterms = x.financeTerms ===0 ? 1 : Number(programVariables.terms);
@@ -122,50 +148,33 @@ function NewProgramEstimate({ listItems }) {
         const monthly = remBal/ Number(financialterms);
         return [downP, monthly, tot];
     };
-
-   
-
-
-
    
     useEffect(() => {
-        const cyclesTmp = {};
         var downPayGlobal = 0; var remainingBalGlobal =0;
         var totalSale = 0;
         var cycleInfo = {};
         cycleInfo[programVariables.terms] = {
             monthly: 0,
-            firstPayment: currentFullDate(),
-            nextPayment: currentFullDate()
         };
-        
+        console.log("8444", cycleInfo)
+
         programItems.map((item) => {
             const [downPayment, remainingBalance, localTotal] = computeBalanceTotal(item);
             downPayGlobal+=downPayment; remainingBalGlobal+=remainingBalance;
             totalSale += localTotal;
-            if (!(cyclesTmp[item.financeTerms])) {
-                cyclesTmp[item.financeTerms] = {
-                    monthly: remainingBalance,
-                    firstPayment: currentFullDate(),
-                    nextPayment: currentFullDate()
-                };
-            } else {
-                const t = cyclesTmp[item.financeTerms];
-                cyclesTmp[item.financeTerms] = {
-                    monthly: t.monthly + remainingBalance,
-                    firstPayment: currentFullDate(),
-                    nextPayment: currentFullDate(),
-                };
+            cycleInfo[programVariables.terms] = {
+                monthly: cycleInfo[programVariables.terms].monthly + remainingBalance,
             }
         });
 
         setPaymentBreakdown({
-            downPayment: downPayGlobal, 
-            remainingBalance:remainingBalGlobal
-            , total: totalSale});
-        const cycleKeys = Object.keys(cyclesTmp);
+            downPayment: downPayGlobal*chooseCategoriesDiscount(), 
+            remainingBalance:remainingBalGlobal*chooseCategoriesDiscount(),
+            total: totalSale*chooseCategoriesDiscount()});
+        const cycleKeys = Object.keys(cycleInfo);
         var cyclesCollection =[];
         var li = cycleKeys.length;
+
         cycleKeys.map((k,kIndex)=>{
             var tt={
                 numberTerms:k,
@@ -174,7 +183,8 @@ function NewProgramEstimate({ listItems }) {
                 lastPayment: currentUnixDate()+( k==="0"? 0:2592000 )*(Number(cycleKeys[kIndex]))
             };
             for(let i=kIndex; i<li;i++){
-                tt.monthly+= cyclesTmp[cycleKeys[i]].monthly;
+                tt.monthly+= cycleInfo[cycleKeys[i]].monthly;
+                console.log(cycleInfo[cycleKeys[i]].monthly)
             };
             cyclesCollection.push(tt);
         })
