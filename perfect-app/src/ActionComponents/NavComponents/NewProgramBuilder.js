@@ -39,6 +39,8 @@ function NewProgramBuilder({ listItems }) {
     setReadCateg(tmp); setEditItems(tmpEditItems);
   }, [listItems, itemType, itemCategory]);
 
+  
+
   const resetInputs = () => {
     ; setItemName("");
     setPriceUnit(0); setItemUnits(1)

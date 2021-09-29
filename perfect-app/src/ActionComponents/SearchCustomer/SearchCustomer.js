@@ -8,11 +8,16 @@ import "./SearchUser.scss";
 function SearchUser({fn, fnNewCustomer, optionsFlag}){
     const [user, setUser] = useState("");
     const [email, setEmail] = useState("--");
-    const [phone, setPhoneNum] = useState("--");
+    const [phone, setPhoneNum] = useState("+1");
     const [searchInput, setSearchInput] = useState("");
     const [newCustomer, setNewCustomer] = useState(true);
     const [fetchedUsers, setFetchedUsers] = useState([]);
     const [currentCustomer, setCurrentCustomer] = useState({});
+
+    function validatePhone(phone) {
+        var regex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+        return regex.test(phone);
+    }
 
     useEffect(() => {
         const ref = readCustomersFunction();
@@ -27,7 +32,7 @@ function SearchUser({fn, fnNewCustomer, optionsFlag}){
       }, []);
 
     var searched = searchInput === "" ?[]:fetchedUsers.filter(u=>{
-        return u.customerName.toLowerCase().includes(searchInput.toLocaleLowerCase());
+        return (u.customerName.toLowerCase().includes(searchInput.toLocaleLowerCase()) || u.customerPhone.includes(searchInput));
     });
 
     useEffect(()=>{
@@ -38,7 +43,9 @@ function SearchUser({fn, fnNewCustomer, optionsFlag}){
             fn(currentCustomer);
         };
         if(!optionsFlag) fn(currentCustomer);
-    },[newCustomer,user,email,phone, currentCustomer])
+    },[newCustomer,user,email,phone, currentCustomer]);
+
+    
 
 
 
@@ -48,12 +55,15 @@ function SearchUser({fn, fnNewCustomer, optionsFlag}){
        {( newCustomer && optionsFlag )? (<div className="search-user-2">
            <h3>Name *</h3>
             <FormInput className="search-user-input"
+                invalid={!user.length}
                 onChange={(e)=>setUser(e.target.value)}
                 value={user}
             />
                       <h3>Phone *</h3>
             <FormInput className="search-user-input"
                  onChange={(e)=>setPhoneNum(e.target.value)}
+                 valid={validatePhone(phone)}
+                 invalid={!validatePhone(phone)}
                  value={phone}
             />
             <h3>Email</h3>

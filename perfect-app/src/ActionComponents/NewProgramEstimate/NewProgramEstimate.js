@@ -27,15 +27,12 @@ function NewProgramEstimate({ listItems }) {
     const [editItems, setEditItems] = useState([]);
     const [programItems, setProgramItems] = useState([]);
     const [toggle, setToggle] = useState(false);
-    const typesEstimate = ["Financing Estimate", "Normal Estimate"];
-    const [typeE, setTypeE] = useState(typesEstimate[0]);
-    const [estimateToggle, setEsToggle] = useState(false);
     const [paymentCycles, setPaymentCycles] = useState([]);
     const [customerObject, setCustomerObj] = useState({});
     const [isNewCustomer, setIsNewCustomer] = useState(true);
     const [saveBool, setSaveBool]= useState(false);
     const [paymentBreakdown, setPaymentBreakdown] = useState({});
-    const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
+    const [invoiceEstimate, setInvoiceEstimate] = useState("program estimate");
     const [user, loading, error]=useAuthState(auth);
 
     const initialState = {
@@ -50,6 +47,7 @@ function NewProgramEstimate({ listItems }) {
     useEffect(() => {
         var tmp = [];
         var tmpEditItems = [];
+       
         listItems.map(x => {
             if (!(tmp.includes(x.itemCategory)) && (itemType === x.itemType)) {
                 tmp.push(x.itemCategory);
@@ -59,7 +57,13 @@ function NewProgramEstimate({ listItems }) {
             }
         })
         setReadCateg(tmp); setEditItems(tmpEditItems);
-    }, [listItems, itemType, itemCategory]);
+
+    }, [listItems,itemType, itemCategory]);
+
+    useEffect(()=>{
+        if(!listItems.length) return;
+        setItemCategory(listItems.find(x=> x.itemType===itemType).itemCategory);
+    },[itemType]);
 
     const programObjectBuilder = () => {
         var rsp = {};
@@ -88,13 +92,13 @@ function NewProgramEstimate({ listItems }) {
             paymentBreakdown: paymentBreakdown,
             estimateType: invoiceEstimate,
             voided: false,
+            programV: programVariables
         };
         try {
            
             createEstimateFunction(item, parseForFirebase(customerObject.customerPhone)).then(()=>{setProgramItems([]);})
-            if(isNewCustomer)createCustomerFunction(customerFirebase).then(()=>{
-                setCustomerObj({});
-            })
+            if(isNewCustomer)createCustomerFunction(customerFirebase).then(()=>{});
+            setCustomerObj({});
         } catch (e) {
             console.log(e)
         }
@@ -146,7 +150,6 @@ function NewProgramEstimate({ listItems }) {
         const discount = programVariables.terms ==="0" ? 1 : 1-(Number(programVariables.discount)/100);
 
         const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * discount * complexDiscount;
-        console.log("current item total"+x.itemName, tot);
 
         const dPayment = programVariables.downPayment ==="0" ? 1 : Number(programVariables.downPayment)/100;
         const downP = tot * dPayment; const remBal = tot *(1-dPayment);
@@ -189,7 +192,6 @@ function NewProgramEstimate({ listItems }) {
             };
             for(let i=kIndex; i<li;i++){
                 tt.monthly+= cycleInfo[cycleKeys[i]].monthly;
-                console.log(cycleInfo[cycleKeys[i]].monthly)
             };
             cyclesCollection.push(tt);
         })
@@ -201,21 +203,12 @@ function NewProgramEstimate({ listItems }) {
     return (
         <div className="action-content">
                <div>
-                <SearchCustomer fn={setCustomerObj} fnNewCustomer={setIsNewCustomer} optionsFlag={true}/>
+                <SearchCustomer fn={setCustomerObj} fnNewCustomer={setIsNewCustomer} optionsFlag={true} />
             </div>
            { !saveBool && 
            <>
            <div className="dd-option">
-                    <Dropdown open={estimateToggle} toggle={() => setEsToggle(!estimateToggle)}>
-                        <DropdownToggle split className="dd-btn" >{typeE}  </DropdownToggle>
-                        <DropdownMenu >
-                            {typesEstimate.map(x =>
-                                <DropdownItem
-                                    onClick={() => { setTypeE(x) }}
-                                >{x}</DropdownItem>
-                            )}
-                        </DropdownMenu>
-                    </Dropdown>
+                    <h2>Program Estimate</h2>
                 </div>
            <div className="input-radio-box">
                 <FormRadio
@@ -262,7 +255,7 @@ function NewProgramEstimate({ listItems }) {
                                         itemId: x.id, itemName: x.itemName,
                                         itemNumSess: x.itemNumSess, itemType: x.itemType,
                                         itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
-                                        financeTerms: programVariables.terms, discount: 0, currentToggle: false
+                                        financeTerms: programVariables.terms, discount: programVariables.discount, currentToggle: false
                                     }]
                                 ])
                             }
@@ -325,33 +318,33 @@ function NewProgramEstimate({ listItems }) {
              <FormRadio
                     inline
                     className="radio-choices"
-                    checked={invoiceEstimate === "estimate"}
+                    checked={invoiceEstimate === "program estimate"}
                     onChange={() => {
-                        setInvoiceEstimate("estimate");
+                        setInvoiceEstimate("program estimate");
                     }}
                 >
-                    <h3>estimate</h3>
+                    <h3>program estimate</h3>
                 </FormRadio>
                 <FormRadio
                     inline
                     className="radio-choices"
-                    checked={invoiceEstimate === "invoice"}
+                    checked={invoiceEstimate === "program invoice"}
                     onChange={() => {
-                        setInvoiceEstimate("invoice");
+                        setInvoiceEstimate("program invoice");
                     }}
                 >
-                    <h3>invoice</h3>
+                    <h3>program invoice</h3>
                 </FormRadio>
             </div>
             <div className="save-program-box">
-                <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save a & Print</Button>             
+                <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save & Print</Button>             
+            </div>
+            <div className="program-print-box">
+                <PrintMain/>
             </div>
            </>}
         </div>
     );
 };
 
-{/* <Button className="cat-btn" onClick={() => setItemCategory(x)}>
-{x}
-</Button> */}
 export default NewProgramEstimate;

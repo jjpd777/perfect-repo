@@ -52,6 +52,11 @@ function NewEstimate({ listItems }) {
         setReadCateg(tmp); setEditItems(tmpEditItems);
     }, [listItems, itemType, itemCategory]);
 
+    useEffect(()=>{
+        if(!listItems.length) return;
+        setItemCategory(listItems.find(x=> x.itemType===itemType).itemCategory);
+    },[itemType]);
+
     const programObjectBuilder = () => {
         var rsp = {};
         programItems.map((item, ix) => {
