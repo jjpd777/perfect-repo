@@ -16,6 +16,7 @@ import {readItemsFunction } from "./UtilsFirebase/Database";
 import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ItemSelection from "./Components/ItemSelection/ItemSelection";
 
 import {
   Button,
@@ -77,10 +78,10 @@ function App() {
           </Router>
             </div>
           </div>
-          {/* <div>
-            <PrintMain/>
-          </div> */}
-          <div className="current-action-box">
+          <div className="item-selection-box">
+            <ItemSelection listItems={fetchedItems} staff={false}/>
+          </div>
+          {/* <div className="current-action-box">
             {current==="Estimate" &&
             <>
               <NewEstimate listItems={fetchedItems}/>
@@ -101,7 +102,7 @@ function App() {
             <>
             <StaffPrices listItems={fetchedItems}/>
             </>}
-          </div>
+          </div> */}
         </div>
         )}
       </div>
