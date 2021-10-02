@@ -1,6 +1,9 @@
 $standard-button: 200px;
 $standard-large-font: 25px; 
 $standard-nav-btn: rgb(25, 87, 87);
+$secondary-color: rgb(33, 163, 163);
+
+/// Item Selection ///
 
 .item-selection-div{
     display: flex;
@@ -51,6 +54,62 @@ $standard-nav-btn: rgb(25, 87, 87);
     }
     
 }
+
+//////
+
+/// Customer Search ///
+
+.customer-box{
+    padding:100px;
+    background-color:white;
+}
+
+.search-user-2{
+    background-color: white;
+}
+.switch-box{
+    display: flex;
+    flex-direction: row;
+
+    position:relative;
+    height:70px;
+    align-content: flex-end;
+    white-space: nowrap;
+    overflow: hidden;
+
+    .switch-to-search{
+        right:10px;
+        top:10px;
+        margin-right:10px;
+        position:absolute;
+        font-size: $standard-large-font;
+        background-color:$secondary-color;
+        border:0;
+    }
+}
+.customer-current-box{
+    display: flex;
+    flex-direction: row;
+    padding:25px;
+    color: $standard-nav-btn;
+    h4{
+        padding-right:100px;
+    }
+    
+}
+.save-btn{
+    min-width: $standard-button;
+    margin-right:25px;
+    background-color: $secondary-color;
+    font-size: $standard-large-font;
+    border:0;
+}
+
+.customer-options{
+    background-color: $standard-nav-btn;
+    border:0;
+}
+
 
 
 

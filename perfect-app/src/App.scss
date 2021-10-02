@@ -24,7 +24,7 @@
   color: white;
 }
 .main-box{
-  background-color: #454a55;
+  background-color: white;
   min-height: 100vh;
   max-width: 100%;
   display: flex;
@@ -51,7 +51,7 @@
   }
 }
 .content-box{
-  background-color: #c8ccd4;
+  background-color: white;
   width:100%;
   min-height: 100vh;
   display: flex;
@@ -60,7 +60,7 @@
   color: white;
 }
 .nav-bar{
-  background-color:rgb(53, 177, 226);
+
   max-width:350px;
   .logout-btn{
     background-color:red;

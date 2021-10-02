@@ -17,7 +17,7 @@ import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates"
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ItemSelection from "./Components/ItemSelection/ItemSelection";
-
+import CustomerSearch from "./Components/CustomerSearch/CustomerSearch";
 import {
   Button,
   Dropdown,
@@ -33,6 +33,8 @@ function App() {
   const sideBarElements = ["Estimate", "Program", "Record", "Admin", "Staff"];
   const [fetchedItems, setFetchedItems] = useState([]);
   const [current, setCurrent] = useState(sideBarElements[0]); 
+  const [validCustomer, setValidCustomer] = useState({});
+  console.log(validCustomer, "here it is");
 
   
   useEffect(() => {
@@ -79,8 +81,10 @@ function App() {
             </div>
           </div>
           <div className="item-selection-box">
+            <CustomerSearch fnSetCustomer={setValidCustomer} record={false} />
             <ItemSelection listItems={fetchedItems} staff={false}/>
           </div>
+        
           {/* <div className="current-action-box">
             {current==="Estimate" &&
             <>
