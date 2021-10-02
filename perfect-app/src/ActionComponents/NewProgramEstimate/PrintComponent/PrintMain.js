@@ -18,7 +18,7 @@ const thStyle = {
 const listThings = ["one","two","three","four"];
 const programItems = [
   { itemType:"treatment", itemCategory: "laser",
-    itemName: "Xeomin: Glabellar, Forehead & Crow's Feet (Add on)",
+    itemName: "Xeomin: Glabellar, Forehead & Crow's Feet",
     itemPriceUnit: "500",
     itemNumSess: "3",
     financeTerms: "1",
@@ -95,23 +95,30 @@ class ComponentToPrint extends React.Component {
           <div className="header-detail">
           <h3> Perfect B Med Spa</h3>
           <h5>perfectb.com</h5>
+          <h5>(786)502-2260</h5>
+          <h5>IG: @perfectbmedspa</h5>
+          </div>
+          <div className="customer-details">
+          <h5>Client: Juan Jose</h5>
+          <h5>Effective date: May 29, 2021</h5>
+          <h5>Valid until: Jun 5, 2022</h5>
           </div>
         </div>
-        <div>
+        <div className="recommendations">
           <h3>The following recommendations are created by Perfect B in order to Achieve
-            client's desired goals in the most efficient manner.
+            client's desired goals in the most efficient manner. All recommendations are made
+            considering the best technology available in the market and following local, state
+            and federal health regulations.
           </h3>
         </div>
         <div className="center-table">
         <Container className="sub-table">
           <Row>
           <Col className="item-name"><h4>Treatments</h4></Col>
-          <Col><h4>Sessions</h4></Col>
-          <Col><h4>$ / sess</h4></Col>
+          <Col><h4>Price/Session</h4></Col>
+          <Col><h4>Quanity</h4></Col>
           <Col><h4>Discount</h4></Col>
           <Col><h4>Final Price</h4></Col>
-          <Col><h4>Down Payment</h4></Col>
-          <Col><h4>Monthly Payment</h4></Col>
           <Col><h4>Terms</h4></Col>
           </Row>
           {programItems.map(x=> x.itemType==="treatment" &&
@@ -122,21 +129,17 @@ class ComponentToPrint extends React.Component {
             <Col><h5>{x.itemNumSess}</h5></Col>
             <Col><h5>{x.itemPriceUnit}</h5></Col>
             <Col><h5>{x.discount}</h5></Col>
-            <Col><h5>{x.financeTerms}</h5></Col>
-            <Col><h5>{x.itemPriceUnit}</h5></Col>
             <Col><h5>{x.discount}</h5></Col>
             <Col><h5>{x.financeTerms}</h5></Col>
           </Row>)}
         </Container>
         <Container className="sub-table">
         <Row>
-        <Col className="item-name"><h4>Products</h4></Col>
-          <Col><h4>Sessions</h4></Col>
-          <Col><h4>$ / sess</h4></Col>
+          <Col className="item-name"><h4>Product</h4></Col>
+          <Col><h4>Price/Session</h4></Col>
+          <Col><h4>Quanity</h4></Col>
           <Col><h4>Discount</h4></Col>
           <Col><h4>Final Price</h4></Col>
-          <Col><h4>Down Payment</h4></Col>
-          <Col><h4>Monthly Payment</h4></Col>
           <Col><h4>Terms</h4></Col>
           </Row>
           {programItems.map(x=> x.itemType==="product" &&
@@ -146,8 +149,6 @@ class ComponentToPrint extends React.Component {
              </Col>
             <Col><h5>{x.itemNumSess}</h5></Col>
             <Col><h5>{x.itemPriceUnit}</h5></Col>
-            <Col><h5>{x.discount}</h5></Col>
-            <Col><h5>{x.financeTerms}</h5></Col>
             <Col><h5>{x.itemPriceUnit}</h5></Col>
             <Col><h5>{x.discount}</h5></Col>
             <Col><h5>{x.financeTerms}</h5></Col>
@@ -156,16 +157,21 @@ class ComponentToPrint extends React.Component {
         </div>
         <div className="cycles-container">
         <div className="cycles-box">
-                <h2>Pay today</h2>
-               <h4>Amount: {moneyFormatter.format(paymentBreakdown.downPayment)}</h4>
+                <h4>Down payment</h4>
+               <h5>Amount: {moneyFormatter.format(paymentBreakdown.downPayment)}</h5>
             </div>
           {cyclesList(paymentCycles).map((x,i)=>
             <div className="cycles-box">
-                <h2>Cycle {i+1}</h2>
-               <h4>Monthly payment: {moneyFormatter.format(x.monthly)}</h4>
-               <h3>{formatUnixDate(x.firstPayment)}</h3>
+                <h4>Cycle {i+1}</h4>
+               <h5>Monthly payment: {moneyFormatter.format(x.monthly)}</h5>
+               <h5>First payment: {formatUnixDate(x.firstPayment)}</h5>
+               <h5>Last payment: {formatUnixDate(x.firstPayment)}</h5>
             </div>
             )}
+        </div>
+        <div className="additional-notes">
+          <h4>Additional terms:</h4>
+            <h3>This is a field for the additional terms for this estimate./</h3>
         </div>
       </div>
     );

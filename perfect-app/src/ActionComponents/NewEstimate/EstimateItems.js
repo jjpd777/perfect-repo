@@ -54,16 +54,22 @@ function EstimateItems({ props, fn }) {
                         <>
                         {ix ===0 &&(
                             <Row className="estimate-row">
-                             <Col/>
-
-                             <Col className="item-units-edit"/>
-                             <Col className="item-units-edit"/>
-                             <Col className="item-units-edit"/> 
-                             <Col className="item-units-edit"/> 
+                             <Col>
+                                Treatment
+                             </Col>
+                             <Col>
+                                Terms
+                             </Col>
+                             <Col>
+                                Price/Session
+                             </Col>
+                             <Col>
+                                Discount
+                             </Col>
                             </Row>
                         )}
                         <Row className="estimate-row">
-                            <Col /><div className="program-item-text">{x.itemName}</div>
+                            <Col>{x.itemName}</Col>
                             <Col>
                                 <div className="dd-option">
                                     <Dropdown open={x.currentToggle} toggle={() => lookForToggle(x)}>

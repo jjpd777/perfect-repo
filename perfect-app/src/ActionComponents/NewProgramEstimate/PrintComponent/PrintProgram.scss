@@ -24,7 +24,8 @@
     display: flex;
     flex-direction: row;
     margin-top:50px;
-    align-items: flex-start;
+
+
 }
 
 .center-table{
@@ -32,19 +33,35 @@
     flex-direction: column;
     margin: 0 auto;
     background-color: rgb(165, 179, 197);
-    max-width: 80%;
+    margin:20px;
 }
 .sub-table{
     min-width: 100%;
     h4{
-        color:rgb(107, 22, 37);
-        font-size: 14px;
+        color:rgb(92, 107, 22);
+        font-size: 12px;
+        font-weight: 500;
     }
 }
 
 .header-detail{
     display: flex;
     flex-direction: column;
+}
+
+.customer-details{
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    margin-left:1000px;
+    min-width:500px;
+}
+.recommendations{
+    margin: 0 auto;
+    max-width: 900px;
+    h3{
+        font-size:16px;
+    }
 }
 .print-btn{
     margin-top:30px;
@@ -62,22 +79,28 @@
     padding:20px;
     align-content: center;
     justify-content: center;
-    background-color: aquamarine;
+    background-color: rgb(218, 221, 220);
 }
 
 .cycles-box{
+    background-color: aqua;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
     align-content: center;
-    justify-content: center;
+    padding:10px;
+}
+
+.additional-notes{
+    background-color: red;
 }
 
 .item-name{
-    min-width: 30%;
+    min-width: 25%;
+   
     h5{
         color:rgb(226, 211, 211);
-        font-size:15px;
+        font-size:12px;
     }
 }
 
