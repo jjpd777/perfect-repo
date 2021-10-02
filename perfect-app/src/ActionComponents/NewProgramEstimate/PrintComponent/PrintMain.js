@@ -105,36 +105,52 @@ class ComponentToPrint extends React.Component {
         <div className="center-table">
         <Container className="sub-table">
           <Row>
-          <Col><h4>Treatments</h4></Col>
+          <Col className="item-name"><h4>Treatments</h4></Col>
           <Col><h4>Sessions</h4></Col>
-          <Col><h4>Price / Sess</h4></Col>
+          <Col><h4>$ / sess</h4></Col>
           <Col><h4>Discount</h4></Col>
+          <Col><h4>Final Price</h4></Col>
+          <Col><h4>Down Payment</h4></Col>
+          <Col><h4>Monthly Payment</h4></Col>
           <Col><h4>Terms</h4></Col>
           </Row>
           {programItems.map(x=> x.itemType==="treatment" &&
           <Row>
-             <Col>{x.itemName}</Col>
-            <Col>{x.itemNumSess}</Col>
-            <Col>{x.itemPriceUnit}</Col>
-            <Col>{x.discount}</Col>
-            <Col>{x.financeTerms}</Col>
+             <Col className="item-name">
+               <h5>{x.itemName}</h5>
+             </Col>
+            <Col><h5>{x.itemNumSess}</h5></Col>
+            <Col><h5>{x.itemPriceUnit}</h5></Col>
+            <Col><h5>{x.discount}</h5></Col>
+            <Col><h5>{x.financeTerms}</h5></Col>
+            <Col><h5>{x.itemPriceUnit}</h5></Col>
+            <Col><h5>{x.discount}</h5></Col>
+            <Col><h5>{x.financeTerms}</h5></Col>
           </Row>)}
         </Container>
         <Container className="sub-table">
         <Row>
-          <Col><h4>Products</h4></Col>
-          <Col><h4>Quantity</h4></Col>
-          <Col><h4>Unit price</h4></Col>
+        <Col className="item-name"><h4>Products</h4></Col>
+          <Col><h4>Sessions</h4></Col>
+          <Col><h4>$ / sess</h4></Col>
           <Col><h4>Discount</h4></Col>
+          <Col><h4>Final Price</h4></Col>
+          <Col><h4>Down Payment</h4></Col>
+          <Col><h4>Monthly Payment</h4></Col>
           <Col><h4>Terms</h4></Col>
           </Row>
           {programItems.map(x=> x.itemType==="product" &&
           <Row>
-            <Col>{x.itemName}</Col>
-            <Col>{x.itemNumSess}</Col>
-            <Col>{x.itemPriceUnit}</Col>
-            <Col>{x.discount}</Col>
-            <Col>{x.financeTerms}</Col>
+             <Col className="item-name">
+               <h5>{x.itemName}</h5>
+             </Col>
+            <Col><h5>{x.itemNumSess}</h5></Col>
+            <Col><h5>{x.itemPriceUnit}</h5></Col>
+            <Col><h5>{x.discount}</h5></Col>
+            <Col><h5>{x.financeTerms}</h5></Col>
+            <Col><h5>{x.itemPriceUnit}</h5></Col>
+            <Col><h5>{x.discount}</h5></Col>
+            <Col><h5>{x.financeTerms}</h5></Col>
           </Row>)}
         </Container>
         </div>

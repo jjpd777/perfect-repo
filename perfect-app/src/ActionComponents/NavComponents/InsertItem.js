@@ -5,6 +5,7 @@ import "../NewItemProgram.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import { currentFullDate } from "../../Utils/DateTimeUtils";
+import PopUpEdit from "./PopUpEdit";
 import { createItemFunction, readItemsFunction } from "../../UtilsFirebase/Database";
 import {
   FormInput, Button, FormRadio, Container, Row, Col,
@@ -21,7 +22,8 @@ function InsertItem({listItems}) {
   const [rCategories, setReadCateg] = useState([]);
   const [editItems, setEditItems] = useState([]);
   const [toggle, setToggle] = useState(false);
-
+  const [editModal, setEditModal] = useState(false);
+  const [itemToModal, setItemToModal] = useState({});
 
 
   
@@ -66,6 +68,8 @@ function InsertItem({listItems}) {
 
   return (
     <div className="action-content">
+      <PopUpEdit editItem={itemToModal} fnModal={setEditModal} editModal={editModal}/>
+      <Button onClick={()=>{setEditModal(!editModal)}}> here</Button>
       <div className="input-radio-box">
         <FormRadio
           inline
@@ -173,7 +177,7 @@ function InsertItem({listItems}) {
           <Col> <b>Units</b></Col>
         </Row>
         {editItems.map(x =>
-          <Row>
+          <Row onClick={()=>{setItemToModal(x);setEditModal(!editModal)}}>
             <Col>{x.itemName}</Col>
             <Col>{moneyFormatter.format(x.itemPriceUnit)}</Col>
             <Col>{x.itemNumSess}</Col>

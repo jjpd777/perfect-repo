@@ -18,10 +18,6 @@ function AdminNav({listItems}){
             <>
               <InsertItem listItems = {listItems}/>
             </>}
-            {(!itemProgram )&&
-            <>
-            <NewProgramBuilder listItems={listItems}/>
-            </>}
         </>
     )
 };

@@ -14,7 +14,8 @@ import { currentFullDate, formatUnixDate, currentUnixDate } from "../../Utils/Da
 import { createEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
-    DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader
+    DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader,
+    Modal, ModalHeader, ModalBody,ModalFooter
 } from "shards-react";
 import { program } from "@babel/types";
 import { set } from "date-fns";
@@ -34,6 +35,7 @@ function NewProgramEstimate({ listItems }) {
     const [paymentBreakdown, setPaymentBreakdown] = useState({});
     const [invoiceEstimate, setInvoiceEstimate] = useState("program estimate");
     const [user, loading, error]=useAuthState(auth);
+    const [modalB, setModalB] = useState(false);
 
     const initialState = {
         downPayment: "30",

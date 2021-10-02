@@ -161,7 +161,27 @@
 .summary-header{
     color:turquoise;
 }
+.modal-box{
+    min-width: 300px;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-self:center;
 
+}
+
+.modal-card{
+    background-color: black;
+    min-width: 1400px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top:300px;
+    align-self:center;
+    justify-content: center;
+}
 .summary-items-box{
     margin-top:50px;
     display: flex;
