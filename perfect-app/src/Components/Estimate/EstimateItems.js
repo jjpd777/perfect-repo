@@ -15,6 +15,12 @@ function EstimateItems({ props, fn }) {
         return x.split("$").join("").split(",").join("");
     }
 
+    const discountObject = {
+        discountType: 'percent',
+        discountPercent: 0.05,
+        discountAmount: 0,
+    }
+
     const lookForSessUpdate = (x, val) => {
         fn(prevState => (
             prevState.map(prevX =>
@@ -33,6 +39,29 @@ function EstimateItems({ props, fn }) {
             prevState.map(prevX =>
                 prevX.itemId === x.itemId ? { ...prevX, financeTerms: val } : prevX)));
     };
+
+    const updateDiscount = (val, percent)=>{
+        const perc = {
+            discountType: 'percent',
+            discountPercent: val,
+            discountAmount: 0,
+         };
+
+        const dollar = {
+            discountType: 'amount',
+            discountPercent: 0,
+            discountAmount: val,
+        };
+        return percent ? perc : dollar;
+       
+    };
+
+
+    const lookDynamicDiscount = (x, val, percentFlag)=>{
+        fn(prevState => (
+            prevState.map(prevX =>
+                prevX.itemId === x.itemId ? { ...prevX, discObject: updateDiscount(val, percentFlag) } : prevX)));
+    }
 
     const lookForDiscountUpdate = (x, val) => {
         fn(prevState => (
@@ -67,7 +96,10 @@ function EstimateItems({ props, fn }) {
                              <b> Units</b>
                              </Col>
                              <Col className="estimate-col">
-                             <b> Discount</b>
+                             <b> Discount%</b>
+                             </Col>
+                             <Col className="estimate-col">
+                             <b> Discount$</b>
                              </Col>
                              <Col className="estimate-col">
                               <b></b>
@@ -95,11 +127,14 @@ function EstimateItems({ props, fn }) {
                                 <FormInput className="units-edit" value={moneyFormatter.format(x.itemPriceUnit)}
                                 onChange={(e) => { lookForPriceUpdate(x, e.target.value) }} />
                             </Col>
-                            <Col className="col-name"><FormInput className="units-edit" value={x.itemNumSess}
+                            <Col className="col-name"><FormInput type="number" className="units-edit" value={x.itemNumSess}
                                 onChange={(e) => { lookForSessUpdate(x, e.target.value) }} />
                             </Col>
-                            <Col className="col-name" ><FormInput className="units-edit" value={x.discount}
-                                onChange={(e) => { lookForDiscountUpdate(x, e.target.value) }} />
+                            <Col className="col-name" ><FormInput className="units-edit" value={x.discObject.discountPercent}
+                                onChange={(e) => { lookDynamicDiscount(x, e.target.value, true) }} />
+                            </Col>
+                            <Col className="col-name" ><FormInput className="units-edit" value={x.discObject.discountAmount}
+                                onChange={(e) => { lookDynamicDiscount(x, e.target.value, false) }} />
                             </Col>
                             <Col className="col-name"><h4 onClick={() => { removeItem(x) }}>
                             ✖️</h4>

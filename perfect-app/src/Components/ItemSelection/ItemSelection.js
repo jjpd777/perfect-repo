@@ -57,7 +57,12 @@ function ItemSelection({ listItems, staff, fnItems }) {
                     itemId: x.id, itemName: x.itemName,
                     itemNumSess: x.itemNumSess, itemType: x.itemType,
                     itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
-                    financeTerms: 0, discount: 0, currentToggle: false
+                    financeTerms: 0, discount: 0, currentToggle: false,
+                    discObject:{
+                        discountType: 'percent',
+                        discountPercent: 0.05,
+                        discountAmount: 0,
+                    }
                 }]
             ])
         }

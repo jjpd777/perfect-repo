@@ -34,6 +34,22 @@ function Estimate({ listItems }) {
     const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
     const [user, loading, error]=useAuthState(auth);
     const [currentCustomer, setcurrentCustomer] = useState({});
+    const demoInitial = {
+        discObject:{
+            discountType: 'percent',
+            discountPercent: 0.05,
+            discountAmount: 0,
+        },
+        field: "hola",
+        field2: "hfhfhhf",
+        ohana: "YE",
+        parce: {
+            once: "!",
+            twice: "2"
+        }
+    }
+    const [demo, setDemo] = useState(demoInitial);
+
 
 
     useEffect(() => {
@@ -93,6 +109,7 @@ function Estimate({ listItems }) {
     const computeBalanceTotal = (x)=>{
         const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
         const ds = x.discount ===0 ? 1 : 1-(Number(x.discount)/100);
+
         const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds;
         const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 :(x.financeTerms===2? 0.33 : 0.3));
         const downP = tot * conversionFactor; const remBal = tot *(1-conversionFactor);
@@ -101,8 +118,6 @@ function Estimate({ listItems }) {
     };
 
 
-
-    console.log(programItems, "oh yea")
    
     useEffect(() => {
         const cyclesTmp = {};
@@ -151,15 +166,31 @@ function Estimate({ listItems }) {
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
 
+    const updateDemo = (val, monetary)=>{
+        if(!monetary){
+          setDemo({...demo, discObject: {
+            discountType: 'percent',
+            discountPercent: val,
+            discountAmount: 0,
+        }})
+        }else{
+            setDemo({...demo, discObject: {
+                discountType: 'amount',
+                discountPercent: 0,
+                discountAmount: val,
+            }})
+        }
+    };
+
+    console.log(demo, "DEMO")
+
     return (
         <div className="action-content">
             <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />
-            
             <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>
             <div className="temp-save-box">
                 <Button className="temporary-save" onClick={()=>setSaveBool(!saveBool)}>{ !saveBool ? "Save selection" : "Edit Selection"}</Button>
             </div>
-            
             <div className="estimates-box">
                 {!saveBool ?(<EstimateItems props={programItems} fn={setProgramItems} />):(<></>)}
             </div>
