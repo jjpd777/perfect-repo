@@ -11,13 +11,17 @@ import {
 } from "shards-react";
 
 
-function ItemSelection({ listItems, staff }) {
+function ItemSelection({ listItems, staff, fnItems }) {
     const [itemType, setItemType] = useState("treatment");
     const [itemCategory, setItemCategory] = useState("laser");
     const [rCategories, setReadCateg] = useState([]);
     const [editItems, setEditItems] = useState([]);
     const [programItems, setProgramItems] = useState([]);
     const [toggle, setToggle] = useState(false);
+
+    useEffect(()=>{
+        fnItems(programItems)
+    },[programItems])
 
     useEffect(() => {
         var tempCategories = [];
@@ -104,7 +108,7 @@ function ItemSelection({ listItems, staff }) {
                                         itemId: x.id, itemName: x.itemName,
                                         itemNumSess: x.itemNumSess, itemType: x.itemType,
                                         itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
-                                        financeTerms: x.financeTerms, discount: x.discount, currentToggle: false
+                                        financeTerms: 0, discount: 0, currentToggle: false
                                     }]
                                 ])
                             }

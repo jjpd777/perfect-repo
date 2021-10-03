@@ -2,6 +2,7 @@ $standard-button: 200px;
 $standard-large-font: 25px; 
 $standard-nav-btn: rgb(25, 87, 87);
 $secondary-color: rgb(33, 163, 163);
+$input-height: 60px;
 
 /// Item Selection ///
 
@@ -108,6 +109,45 @@ $secondary-color: rgb(33, 163, 163);
 .customer-options{
     background-color: $standard-nav-btn;
     border:0;
+}
+
+//// Estimate Items ///
+
+.estimate-items-box{
+    display: flex;
+    flex-direction: row;
+    width:100%;
+}
+
+.estimate-container{
+    width:100%;
+}
+.estimate-row{
+    height:150px;
+    align-content: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.col-name{
+    margin: 0 auto;
+    justify-content: center;
+    .units-edit{
+        min-width: 100px;
+        height:$input-height;
+        font-size: 25px;
+    }
+  
+    .dd-estimate-btn{
+        background-color:$standard-nav-btn;
+        height: $input-height;
+        color:white;
+    }
+}
+
+.estimate-col-name{
+    color: $standard-nav-btn;
+    min-width: 300px;
 }
 
 

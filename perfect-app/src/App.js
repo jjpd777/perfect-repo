@@ -14,7 +14,7 @@ import NewProgramEstimate from "./ActionComponents/NewProgramEstimate/NewProgram
 import StaffPrices from "./ActionComponents/StaffPrices";
 import {readItemsFunction } from "./UtilsFirebase/Database";
 import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates";
-
+import Estimate from "./Components/Estimate/Estimate";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ItemSelection from "./Components/ItemSelection/ItemSelection";
 import CustomerSearch from "./Components/CustomerSearch/CustomerSearch";
@@ -80,11 +80,16 @@ function App() {
           </Router>
             </div>
           </div>
-          <div className="item-selection-box">
+          {/* <div className="item-selection-box">
             <CustomerSearch fnSetCustomer={setValidCustomer} record={false} />
             <ItemSelection listItems={fetchedItems} staff={false}/>
-          </div>
-        
+          </div> */}
+          <div className="current-action-box">
+          {current==="Estimate" &&
+            <>
+              <Estimate listItems={fetchedItems} />
+            </>}
+            </div>
           {/* <div className="current-action-box">
             {current==="Estimate" &&
             <>
