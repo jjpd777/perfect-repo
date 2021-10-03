@@ -30,28 +30,34 @@ function ProgramItems({ props, fn }) {
 
     return (
         <div className="estimate-items-box">
-            <Container >
+            <Container className="estimate-container" >
+            <Row className="estimate-row">
+                             <Col className="estimate-col-name">
+                             <b>Treatment</b>
+                             </Col>
+                             <Col className="estimate-col">
+                             <b> Price/Session</b>
+                             </Col>
+                             <Col className="estimate-col">
+                             <b> Units</b>
+                             </Col>
+                             <Col className="estimate-col">
+                              <b></b>
+                             </Col>
+                            </Row>
                 {props.map((x,ix )=>
                         <>
-                        {ix ===0 &&(
-                            <Row className="estimate-row">
-                             <Col/>
-
-                             <Col className="item-units-edit"/>
-                             <Col className="item-units-edit"/>
-                             <Col className="item-units-edit"/> 
-                             <Col className="item-units-edit"/> 
-                            </Row>
-                        )}
                         <Row className="estimate-row">
-                            <Col /><div className="program-item-text">{x.itemName}</div>
-                            <Col>
-                            </Col>
-                            <Col /><h3>$</h3><FormInput className="item-units-edit" value={x.itemPriceUnit}
+                        <Col className="estimate-col-name">{x.itemName}</Col>
+                            <Col className="col-name">
+                                <FormInput className="units-edit-mon"  value={x.itemPriceUnit}
                                 onChange={(e) => { lookForPriceUpdate(x, e.target.value) }} />
-                            <Col /><FormInput className="item-units-edit" value={x.itemNumSess}
+                            </Col>
+                            <Col className="col-name">
+                                <FormInput type="number" className="units-edit" value={x.itemNumSess}
                                 onChange={(e) => { lookForSessUpdate(x, e.target.value) }} />
-                            <Col /><h4 onClick={() => { removeItem(x) }}>X</h4>
+                            </Col>
+                            <Col><h4 onClick={() => { removeItem(x) }}>X</h4></Col>
                         </Row>
                         </>
                 )}

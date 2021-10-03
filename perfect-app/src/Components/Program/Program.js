@@ -7,6 +7,8 @@ import PrintProgram from "./PrintProgram/PrintProgram";
 import ItemSelection from "../ItemSelection/ItemSelection";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
+import "../Design.scss";
+
 import { auth, logout} from "../../UtilsFirebase/Authentication";
 import {parseForFirebase} from "../../Utils/FirebaseParser";
 import { currentFullDate, formatUnixDate, currentUnixDate } from "../../Utils/DateTimeUtils";
