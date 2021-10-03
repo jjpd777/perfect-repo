@@ -9,9 +9,9 @@ import Register from "./Navigation/Register";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./UtilsFirebase/Authentication";
-import AdminNav from "./ActionComponents/NavComponents/AdminNav";
+import AdminActions from "./Components/AdminActions/AdminActions";
 import NewProgramEstimate from "./ActionComponents/NewProgramEstimate/NewProgramEstimate"
-import StaffPrices from "./ActionComponents/StaffPrices";
+import StaffPrices from "./Components/StaffPrices";
 import {readItemsFunction } from "./UtilsFirebase/Database";
 import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates";
 import Estimate from "./Components/Estimate/Estimate";
@@ -88,6 +88,14 @@ function App() {
           {current==="Estimate" &&
             <>
               <Estimate listItems={fetchedItems} />
+            </>}
+            {current==="Admin" &&
+            <>
+              <AdminActions listItems = {fetchedItems}/>
+            </>}
+            {current==="Staff" &&
+            <>
+            <StaffPrices listItems={fetchedItems}/>
             </>}
             </div>
           {/* <div className="current-action-box">

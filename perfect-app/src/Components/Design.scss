@@ -133,7 +133,6 @@ $input-height: 60px;
     margin: 0 auto;
     justify-content: center;
     .units-edit{
-        min-width: 100px;
         height:$input-height;
         font-size: 25px;
     }
@@ -144,12 +143,86 @@ $input-height: 60px;
         color:white;
     }
 }
-
-.estimate-col-name{
-    color: $standard-nav-btn;
-    min-width: 300px;
+.col-name-money{
+    margin: 0 auto;
+    justify-content: center;
+    .units-edit{
+        height:$input-height;
+        font-size: 25px;
+        min-width: 150px;
+    }
 }
 
+.estimate-col-name{
+    color: $secondary-color;
+    min-width: 350px;
+    font-size: 25px;
+    font-weight: 600;
+}
+.estimate-col{
+    color: $secondary-color;
+    font-size: 25px;
+    font-weight: 600;
+
+}
+
+.temporary-save{
+    background-color: $secondary-color;
+    font-size: $standard-large-font;
+}
+
+/// Admin ////
+
+.admin-content{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+}
+
+.admin-input-box{
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    width:100%;
+}
+
+.admin-input-header{
+    color:black;
+}
+.admin-display-table{
+
+    margin-top:200px;
+    align-content: flex-start;
+}
+
+.admin-row{
+    margin-top:20px;
+}
+
+.admin-modal-box{
+    min-width: 300px;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-self:center;
+
+}
+
+.admin-modal-card{
+    min-width: 500px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top:300px;
+    align-self:center;
+    justify-content: center;
+}
+.popup-text{
+    margin: 0 auto;
+    max-width: 50%;
+}
 
 
 

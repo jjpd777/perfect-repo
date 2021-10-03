@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../Utils/MoneyFormat";
+import "./Design.scss"
 import {
     FormInput, Button, FormRadio, Container, Row, Col,
     Dropdown, DropdownToggle,
@@ -42,10 +43,10 @@ function StaffPrices({ listItems }) {
                                 x.itemCategory===categ &&<>
                                     <Row>
                                         <Col>
-                                            {x.itemName}
+                                            <h3>{x.itemName}</h3>
                                         </Col>
                                         <Col>
-                                            {moneyFormatter.format(x.itemPriceUnit)}
+                                            <h3>{moneyFormatter.format(x.itemPriceUnit)}</h3>
                                         </Col>
                                     </Row>
 

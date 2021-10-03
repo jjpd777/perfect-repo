@@ -21,7 +21,6 @@ function PopUpEdit({ editItem, fnModal, editModal }) {
     },[editItem]);
     return (
         <div className="modal-box">
-            <h4>asdfasdf</h4>
             <Modal className="modal-card" size="lg" open={editModal} toggle={() => fnModal(!editModal)}>
                 <ModalHeader>Header</ModalHeader>
                 <ModalBody>

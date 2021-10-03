@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../../Utils/MoneyFormat";
+import CustomerSearch from "../CustomerSearch/CustomerSearch";
 import EstimateItems from "./EstimateItems";
-
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import ItemSelection from "../ItemSelection/ItemSelection";
@@ -34,6 +33,7 @@ function Estimate({ listItems }) {
     const [paymentBreakdown, setPaymentBreakdown] = useState({});
     const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
     const [user, loading, error]=useAuthState(auth);
+    const [currentCustomer, setcurrentCustomer] = useState({});
 
 
     useEffect(() => {
@@ -153,6 +153,7 @@ function Estimate({ listItems }) {
 
     return (
         <div className="action-content">
+            <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />
             
             <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>
             <div className="temp-save-box">

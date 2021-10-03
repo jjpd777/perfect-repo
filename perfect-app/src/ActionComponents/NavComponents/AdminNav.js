@@ -10,7 +10,7 @@ function AdminNav({listItems}){
     return(
         <>
         <div>
-            <Button onClick={()=>{setItemProgram(!itemProgram)}}>
+            <Button className="nav-btn" onClick={()=>{setItemProgram(!itemProgram)}}>
                 {itemProgram ? "New Item" : "New Program"}
             </Button>
         </div>

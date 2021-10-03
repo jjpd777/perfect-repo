@@ -7,7 +7,7 @@ import "../Design.scss";
 
 function CustomerSearch({ fnSetCustomer, record }) {
     const [searchInput, setSearchInput] = useState("");
-    const [newCustomer, setNewCustomer] = useState(true);
+    const [newCustomer, setNewCustomer] = useState(false);
     const [fetchedUsers, setFetchedUsers] = useState([]);
     const initialCustomer = {
         customerName: '',
@@ -125,7 +125,7 @@ function CustomerSearch({ fnSetCustomer, record }) {
                     >
                         Edit
                     </Button>}
-            {!record &&<Button className="save-btn"
+            {!record && !validCustomer &&<Button className="save-btn"
                         onClick={()=>{setValidCustomer(conditions) }}
                         valid={conditions}
                     >

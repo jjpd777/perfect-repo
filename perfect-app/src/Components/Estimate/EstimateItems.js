@@ -11,16 +11,22 @@ import {
 
 function EstimateItems({ props, fn }) {
     const terms = [0, 1, 2, 3, 6, 9, 12];
+    const inverseMoney = (x)=>{
+        return x.split("$").join("").split(",").join("");
+    }
 
     const lookForSessUpdate = (x, val) => {
         fn(prevState => (
             prevState.map(prevX =>
                 prevX.itemId === x.itemId ? { ...prevX, itemNumSess: val } : prevX)));
     };
-    const lookForPriceUpdate = (x, val) => {
+    const lookForPriceUpdate = (x, v) => {
+        const val = inverseMoney(v);
+        const valFix = moneyFormatter.format(val).includes("NaN") ? "0" : val;
+
         fn(prevState => (
             prevState.map(prevX =>
-                prevX.itemId === x.itemId ? { ...prevX, itemPriceUnit: val } : prevX)));
+                prevX.itemId === x.itemId ? { ...prevX, itemPriceUnit: valFix } : prevX)));
     };
     const lookForTermsUpdate = (x, val) => {
         fn(prevState => (
@@ -51,20 +57,20 @@ function EstimateItems({ props, fn }) {
                              <Col className="estimate-col-name">
                              <b>Treatment</b>
                              </Col>
-                             <Col>
+                             <Col className="estimate-col">
                                 <b>Terms</b>
-                             </Col>
-                             <Col>
+                             </Col >
+                             <Col className="estimate-col">
                              <b> Price/Session</b>
                              </Col>
-                             <Col>
+                             <Col className="estimate-col">
                              <b> Units</b>
                              </Col>
-                             <Col>
+                             <Col className="estimate-col">
                              <b> Discount</b>
                              </Col>
-                             <Col>
-                             <b>cancel</b>
+                             <Col className="estimate-col">
+                              <b></b>
                              </Col>
                             </Row>
                 {props.map((x)=>
@@ -85,7 +91,7 @@ function EstimateItems({ props, fn }) {
                                     </Dropdown>
                                 </div>
                             </Col>
-                            <Col className="col-name" >
+                            <Col className="col-name-money" >
                                 <FormInput className="units-edit" value={moneyFormatter.format(x.itemPriceUnit)}
                                 onChange={(e) => { lookForPriceUpdate(x, e.target.value) }} />
                             </Col>
@@ -96,7 +102,7 @@ function EstimateItems({ props, fn }) {
                                 onChange={(e) => { lookForDiscountUpdate(x, e.target.value) }} />
                             </Col>
                             <Col className="col-name"><h4 onClick={() => { removeItem(x) }}>
-                                X</h4>
+                            ✖️</h4>
                             </Col>
                         </Row>
                         </div>

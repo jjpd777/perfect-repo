@@ -20,13 +20,12 @@ function ItemSelection({ listItems, staff, fnItems }) {
     const [toggle, setToggle] = useState(false);
 
     useEffect(()=>{
-        fnItems(programItems)
+       if(!staff) fnItems(programItems)
     },[programItems])
 
     useEffect(() => {
         var tempCategories = [];
         var tmpEditItems = [];
-       
         listItems.map(x => {
             if (!(tempCategories.includes(x.itemCategory)) && (x.itemType === itemType)) {
                 tempCategories.push(x.itemCategory);
@@ -35,6 +34,8 @@ function ItemSelection({ listItems, staff, fnItems }) {
                 tmpEditItems.push(x);
             }
         })
+        
+        if(staff) fnItems(tmpEditItems);
         setReadCateg(tempCategories); setEditItems(tmpEditItems);
 
     }, [listItems,itemType, itemCategory]);
@@ -45,6 +46,22 @@ function ItemSelection({ listItems, staff, fnItems }) {
     },[itemType]);
 
     console.log(programItems, "PROGRAM");
+
+    const updateItemsFunction = (x)=>{
+        if (programItems.find(c => x.itemName === c.itemName)) {
+            setProgramItems(programItems.filter(c => c.itemName !== x.itemName));
+        } else {
+            setProgramItems([
+                ...programItems,
+                ...[{
+                    itemId: x.id, itemName: x.itemName,
+                    itemNumSess: x.itemNumSess, itemType: x.itemType,
+                    itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
+                    financeTerms: 0, discount: 0, currentToggle: false
+                }]
+            ])
+        }
+    }
 
     return(
         <div className="item-selection-div">
@@ -96,27 +113,13 @@ function ItemSelection({ listItems, staff, fnItems }) {
                     </Dropdown>
                 </div>
                 </div>
-                <div className="select-dropdown-box">
+                {!staff && <div className="select-dropdown-box">
                     {editItems.map(x => <Button className="item-select-btn"
-                        onClick={() => {
-                            if (programItems.find(c => x.itemName === c.itemName)) {
-                                setProgramItems(programItems.filter(c => c.itemName !== x.itemName));
-                            } else {
-                                setProgramItems([
-                                    ...programItems,
-                                    ...[{
-                                        itemId: x.id, itemName: x.itemName,
-                                        itemNumSess: x.itemNumSess, itemType: x.itemType,
-                                        itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
-                                        financeTerms: 0, discount: 0, currentToggle: false
-                                    }]
-                                ])
-                            }
-                        }}
+                        onClick={() => { updateItemsFunction(x)}}
                     >{x.itemName}</Button>)}
                     <br></br>
                     <br></br>
-                </div>
+                </div>}
         </div>
     )
 }
