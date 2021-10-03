@@ -33,7 +33,8 @@ function ItemSelection({ listItems, staff, fnItems }) {
             if (x.itemCategory === itemCategory && x.itemType === itemType) {
                 tmpEditItems.push(x);
             }
-        })
+        });
+
         
         if(staff) fnItems(tmpEditItems);
         setReadCateg(tempCategories); setEditItems(tmpEditItems);
@@ -60,7 +61,7 @@ function ItemSelection({ listItems, staff, fnItems }) {
                     financeTerms: 0, discount: 0, currentToggle: false,
                     discObject:{
                         discountType: 'percent',
-                        discountPercent: 0.05,
+                        discountPercent: 0,
                         discountAmount: 0,
                     }
                 }]

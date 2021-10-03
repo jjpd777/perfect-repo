@@ -1,49 +1,65 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../../Utils/MoneyFormat";
+import ProgramItems from "./ProgramItems";
 import CustomerSearch from "../CustomerSearch/CustomerSearch";
-import EstimateItems from "./EstimateItems";
+import PrintProgram from "./PrintProgram/PrintProgram";
+import ItemSelection from "../ItemSelection/ItemSelection";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
-import ItemSelection from "../ItemSelection/ItemSelection";
 import { auth, logout} from "../../UtilsFirebase/Authentication";
 import {parseForFirebase} from "../../Utils/FirebaseParser";
 import { currentFullDate, formatUnixDate, currentUnixDate } from "../../Utils/DateTimeUtils";
 import { createEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
-    DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader
+    DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader,
+    Modal, ModalHeader, ModalBody,ModalFooter
 } from "shards-react";
 import { program } from "@babel/types";
 import { set } from "date-fns";
 
 
-function Estimate({ listItems }) {
+function Program({ listItems }) {
     const [itemType, setItemType] = useState("treatment");
     const [itemCategory, setItemCategory] = useState("laser");
     const [rCategories, setReadCateg] = useState([]);
-
+    const [editItems, setEditItems] = useState([]);
     const [programItems, setProgramItems] = useState([]);
-
-    const typesEstimate = ["Financing Estimate", "Normal Estimate"];
+    const [toggle, setToggle] = useState(false);
     const [paymentCycles, setPaymentCycles] = useState([]);
+    const [currentCustomer, setCurrentCustomer] = useState({});
     const [isNewCustomer, setIsNewCustomer] = useState(true);
     const [saveBool, setSaveBool]= useState(false);
     const [paymentBreakdown, setPaymentBreakdown] = useState({});
-    const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
+    const [invoiceEstimate, setInvoiceEstimate] = useState("program estimate");
     const [user, loading, error]=useAuthState(auth);
-    const [currentCustomer, setcurrentCustomer] = useState({});
+    const [modalB, setModalB] = useState(false);
+
+    const initialState = {
+        downPayment: "30",
+        discount: 0,
+        terms:6,
+    };
+
+    const [programVariables, setProgramVariables] = useState(initialState);
 
 
     useEffect(() => {
         var tmp = [];
+        var tmpEditItems = [];
+       
         listItems.map(x => {
             if (!(tmp.includes(x.itemCategory)) && (itemType === x.itemType)) {
                 tmp.push(x.itemCategory);
             }
+            if (x.itemCategory === itemCategory && x.itemType === itemType) {
+                tmpEditItems.push(x);
+            }
         })
-        setReadCateg(tmp); 
-    }, [listItems, itemType, itemCategory]);
+        setReadCateg(tmp); setEditItems(tmpEditItems);
+
+    }, [listItems,itemType, itemCategory]);
 
     useEffect(()=>{
         if(!listItems.length) return;
@@ -77,73 +93,97 @@ function Estimate({ listItems }) {
             paymentBreakdown: paymentBreakdown,
             estimateType: invoiceEstimate,
             voided: false,
+            programV: programVariables
         };
         try {
            
             createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone)).then(()=>{setProgramItems([]);})
-            if(isNewCustomer)createCustomerFunction(customerFirebase).then(()=>{
-                setcurrentCustomer({});
-            })
+            if(isNewCustomer)createCustomerFunction(customerFirebase).then(()=>{});
+            setCurrentCustomer({});
         } catch (e) {
             console.log(e)
         }
     };
 
-    const simplifySubTotal = (x)=>{
-        const disc = x.discObject;
-        if(disc.discountType ==="percent"){
-            const ds = disc.discountPercent ===0 ? 1 : 1-(Number(disc.discountPercent)/100);
-            const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds;
-            return tot;
-        }else{
-            const tot = (Number(x.itemPriceUnit)-Number(disc.discountAmount))* Number(x.itemNumSess);
-            return tot;
+    const complexDiscountTable = {
+        "laser":{
+            "range" :[[1,0.99],[2,0.98],[3,0.97],[4,0.96]],
+        },
+        "facial":{
+            "range" :[[1,0.99],[2,0.98],[3,0.97],[4,0.96]],
+        },
+        "product" : {
+            "range" : [[1,0.98],[2,0.98],[3,0.98],[4,0.98],[5,0.98],[6,0.98],[7,0.98],[8,0.98],[9,0.98],[10,0.98]],
         }
-    }
-
-    const computeBalanceTotal = (x)=>{
-        const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
-        const tot = simplifySubTotal(x);
-        const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 :(x.financeTerms===2? 0.33 : 0.3));
-        const downP = tot * conversionFactor; const remBal = tot *(1-conversionFactor);
-        const monthly = remBal/ Number(ft);
-        return [downP, monthly, tot];
     };
 
+    const discountPerCategory = [1,0.99,0.98,0.97,0.96];
 
+    const chooseCategoriesDiscount =()=>{ 
+        const nCat = new Set(programItems.map(x=> x.itemCategory));
+        return discountPerCategory[nCat.size];
+    };
+    const countCategoriesDiscount = ()=>{
+        var d ={}; 
+        programItems.map(x=> {
+            if(x.itemType ==="product"){
+                d[x.itemType] =1;
+        }else{
+           d[x.itemCategory] ? d[x.itemCategory]+=1 : d[x.itemCategory]=1;
+        }
+    })
+        return d;
+    };
+
+    const chooseComplexDiscount =(s)=>{
+        const countedCategories = countCategoriesDiscount();
+        const units = countedCategories[s];
+        return complexDiscountTable[s].range.find(x=> x[0]===units);
+
+    }
+
+
+    const computeBalanceTotal = (x)=>{
+        const discAdjust = x.itemType === 'product' ? "product" : x.itemCategory;
+        const complexDiscount = chooseComplexDiscount(discAdjust)[1];
+
+        const financialterms = x.financeTerms ===0 ? 1 : Number(programVariables.terms);
+        const discount = programVariables.terms ==="0" ? 1 : 1-(Number(programVariables.discount)/100);
+
+        const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * discount * complexDiscount;
+
+        const dPayment = programVariables.downPayment ==="0" ? 1 : Number(programVariables.downPayment)/100;
+        const downP = tot * dPayment; const remBal = tot *(1-dPayment);
+        const monthly = remBal/ Number(financialterms);
+        return [downP, monthly, tot];
+    };
    
     useEffect(() => {
-        const cyclesTmp = {};
         var downPayGlobal = 0; var remainingBalGlobal =0;
         var totalSale = 0;
+        var cycleInfo = {};
+        cycleInfo[programVariables.terms] = {
+            monthly: 0,
+        };
+        console.log("8444", cycleInfo)
 
         programItems.map((item) => {
             const [downPayment, remainingBalance, localTotal] = computeBalanceTotal(item);
             downPayGlobal+=downPayment; remainingBalGlobal+=remainingBalance;
             totalSale += localTotal;
-            if (!(cyclesTmp[item.financeTerms])) {
-                cyclesTmp[item.financeTerms] = {
-                    monthly: remainingBalance,
-                    firstPayment: currentFullDate(),
-                    nextPayment: currentFullDate()
-                };
-            } else {
-                const t = cyclesTmp[item.financeTerms];
-                cyclesTmp[item.financeTerms] = {
-                    monthly: t.monthly + remainingBalance,
-                    firstPayment: currentFullDate(),
-                    nextPayment: currentFullDate(),
-                };
+            cycleInfo[programVariables.terms] = {
+                monthly: cycleInfo[programVariables.terms].monthly + remainingBalance,
             }
         });
 
         setPaymentBreakdown({
-            downPayment: downPayGlobal, 
-            remainingBalance:remainingBalGlobal
-            , total: totalSale});
-        const cycleKeys = Object.keys(cyclesTmp);
+            downPayment: downPayGlobal*chooseCategoriesDiscount(), 
+            remainingBalance:remainingBalGlobal*chooseCategoriesDiscount(),
+            total: totalSale*chooseCategoriesDiscount()});
+        const cycleKeys = Object.keys(cycleInfo);
         var cyclesCollection =[];
         var li = cycleKeys.length;
+
         cycleKeys.map((k,kIndex)=>{
             var tt={
                 numberTerms:k,
@@ -152,25 +192,32 @@ function Estimate({ listItems }) {
                 lastPayment: currentUnixDate()+( k==="0"? 0:2592000 )*(Number(cycleKeys[kIndex]))
             };
             for(let i=kIndex; i<li;i++){
-                tt.monthly+= cyclesTmp[cycleKeys[i]].monthly;
+                tt.monthly+= cycleInfo[cycleKeys[i]].monthly;
             };
             cyclesCollection.push(tt);
         })
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
 
-
-
+    console.log(programVariables)
 
     return (
         <div className="action-content">
-            <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />
+               <CustomerSearch fnSetCustomer={setCurrentCustomer} record={false} />
             <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>
+           { !saveBool && 
+           <>
+           <div className="dd-option">
+                    <h2>Program Estimate</h2>
+                </div>
+        </>
+        }
             <div className="temp-save-box">
                 <Button className="temporary-save" onClick={()=>setSaveBool(!saveBool)}>{ !saveBool ? "Save selection" : "Edit Selection"}</Button>
             </div>
+            
             <div className="estimates-box">
-                {!saveBool ?(<EstimateItems props={programItems} fn={setProgramItems} />):(<></>)}
+                {!saveBool ?(<ProgramItems props={programItems} fn={setProgramItems} />):(<></>)}
             </div>
             { saveBool &&
             <>
@@ -204,31 +251,33 @@ function Estimate({ listItems }) {
              <FormRadio
                     inline
                     className="radio-choices"
-                    checked={invoiceEstimate === "estimate"}
+                    checked={invoiceEstimate === "program estimate"}
                     onChange={() => {
-                        setInvoiceEstimate("estimate");
+                        setInvoiceEstimate("program estimate");
                     }}
                 >
-                    <h3>estimate</h3>
+                    <h3>program estimate</h3>
                 </FormRadio>
                 <FormRadio
                     inline
                     className="radio-choices"
-                    checked={invoiceEstimate === "invoice"}
+                    checked={invoiceEstimate === "program invoice"}
                     onChange={() => {
-                        setInvoiceEstimate("invoice");
+                        setInvoiceEstimate("program invoice");
                     }}
                 >
-                    <h3>invoice</h3>
+                    <h3>program invoice</h3>
                 </FormRadio>
             </div>
             <div className="save-program-box">
-                <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save a & Print</Button>             
+                <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save & Print</Button>             
+            </div>
+            <div className="program-print-box">
+                <PrintProgram/>
             </div>
            </>}
         </div>
     );
 };
 
-
-export default Estimate;
+export default Program;

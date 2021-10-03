@@ -136,6 +136,16 @@ $input-height: 60px;
         height:$input-height;
         font-size: 25px;
     }
+    .units-edit-m-disc{
+        height:$input-height;
+        font-size: 25px;
+        min-width: 120px;
+    }
+    .units-edit-mon{
+        height:$input-height;
+        font-size: 25px;
+        min-width: 120px;
+    }
   
     .dd-estimate-btn{
         background-color:$standard-nav-btn;
@@ -143,6 +153,14 @@ $input-height: 60px;
         color:white;
     }
 }
+
+.estimate-col-m-disc{
+    color: $secondary-color;
+    min-width: 120px;
+    font-size: 25px;
+    font-weight: 600;
+}
+
 .col-name-money{
     margin: 0 auto;
     justify-content: center;
@@ -151,7 +169,10 @@ $input-height: 60px;
         font-size: 25px;
         min-width: 150px;
     }
+  
 }
+
+
 
 .estimate-col-name{
     color: $secondary-color;

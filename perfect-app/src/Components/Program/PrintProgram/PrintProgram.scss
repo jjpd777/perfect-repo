@@ -1,0 +1,108 @@
+
+
+.print-big-box{
+    background-color: rgb(240, 231, 240);
+    margin-top:20px;
+    height:750px;
+    margin: 0 auto;
+}///////////////
+@media print {
+    @page { size: landscape; }
+  }
+.print-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom:50px;
+}
+
+.big-container{
+    display: flex;
+    flex-direction: column;
+}
+.perfect-b-header{
+    background-color:rgb(6, 163, 190);
+    display: flex;
+    flex-direction: row;
+    margin-top:50px;
+
+
+}
+
+.center-table{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: rgb(165, 179, 197);
+    margin:20px;
+}
+.sub-table{
+    min-width: 100%;
+    h4{
+        color:rgb(92, 107, 22);
+        font-size: 12px;
+        font-weight: 500;
+    }
+}
+
+.header-detail{
+    display: flex;
+    flex-direction: column;
+}
+
+.customer-details{
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    margin-left:1000px;
+    min-width:500px;
+}
+.recommendations{
+    margin: 0 auto;
+    max-width: 900px;
+    h3{
+        font-size:16px;
+    }
+}
+.print-btn{
+    margin-top:30px;
+
+}
+
+.trial-btn{
+    max-width: 300px;
+}
+
+.cycles-container{
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    padding:20px;
+    align-content: center;
+    justify-content: center;
+    background-color: rgb(218, 221, 220);
+}
+
+.cycles-box{
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-content: center;
+    padding:10px;
+}
+
+.additional-notes{
+    background-color: red;
+}
+
+.item-name{
+    min-width: 25%;
+   
+    h5{
+        color:rgb(226, 211, 211);
+        font-size:12px;
+    }
+}
+
+
+

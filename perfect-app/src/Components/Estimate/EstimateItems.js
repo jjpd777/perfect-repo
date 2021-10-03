@@ -11,8 +11,10 @@ import {
 
 function EstimateItems({ props, fn }) {
     const terms = [0, 1, 2, 3, 6, 9, 12];
+    
     const inverseMoney = (x)=>{
-        return x.split("$").join("").split(",").join("");
+        const valFix = x.split("$").join("").split(",").join("");
+        return moneyFormatter.format(valFix).includes("NaN") ? "0" : valFix;
     }
 
     const discountObject = {
@@ -28,11 +30,10 @@ function EstimateItems({ props, fn }) {
     };
     const lookForPriceUpdate = (x, v) => {
         const val = inverseMoney(v);
-        const valFix = moneyFormatter.format(val).includes("NaN") ? "0" : val;
 
         fn(prevState => (
             prevState.map(prevX =>
-                prevX.itemId === x.itemId ? { ...prevX, itemPriceUnit: valFix } : prevX)));
+                prevX.itemId === x.itemId ? { ...prevX, itemPriceUnit: val } : prevX)));
     };
     const lookForTermsUpdate = (x, val) => {
         fn(prevState => (
@@ -50,7 +51,7 @@ function EstimateItems({ props, fn }) {
         const dollar = {
             discountType: 'amount',
             discountPercent: 0,
-            discountAmount: val,
+            discountAmount: inverseMoney(val),
         };
         return percent ? perc : dollar;
        
@@ -133,7 +134,7 @@ function EstimateItems({ props, fn }) {
                             <Col className="col-name" ><FormInput className="units-edit" value={x.discObject.discountPercent}
                                 onChange={(e) => { lookDynamicDiscount(x, e.target.value, true) }} />
                             </Col>
-                            <Col className="col-name" ><FormInput className="units-edit" value={x.discObject.discountAmount}
+                            <Col className="col-name" ><FormInput className="units-edit-mon" value={moneyFormatter.format(x.discObject.discountAmount)}
                                 onChange={(e) => { lookDynamicDiscount(x, e.target.value, false) }} />
                             </Col>
                             <Col className="col-name"><h4 onClick={() => { removeItem(x) }}>

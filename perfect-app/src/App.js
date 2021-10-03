@@ -10,7 +10,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./UtilsFirebase/Authentication";
 import AdminActions from "./Components/AdminActions/AdminActions";
-import NewProgramEstimate from "./ActionComponents/NewProgramEstimate/NewProgramEstimate"
+import Program from "./Components/Program/Program";
 import StaffPrices from "./Components/StaffPrices";
 import {readItemsFunction } from "./UtilsFirebase/Database";
 import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates";
@@ -96,6 +96,10 @@ function App() {
             {current==="Staff" &&
             <>
             <StaffPrices listItems={fetchedItems}/>
+            </>}
+            {current==="Program" &&
+            <>
+              <Program listItems={fetchedItems}/>
             </>}
             </div>
           {/* <div className="current-action-box">
