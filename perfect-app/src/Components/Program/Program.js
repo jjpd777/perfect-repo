@@ -217,7 +217,7 @@ function Program({ listItems }) {
 
         const dPayment = programVariables.downPayment ==="0" ? 1 : Number(programVariables.downPayment)/100;
         const finalDownPaymet = totSummary* dPayment*chooseCategoriesDiscount();
-        const finalReamining = (remainingBalGlobal-totSalAmounAdjust)*chooseCategoriesDiscount();
+        const finalReamining = (remainingBalGlobal-((1-dPayment)*totSalAmounAdjust))*chooseCategoriesDiscount();
         const finalSaleTotal = totSummary* chooseCategoriesDiscount();
         setPaymentBreakdown({
             downPayment: finalDownPaymet, 
