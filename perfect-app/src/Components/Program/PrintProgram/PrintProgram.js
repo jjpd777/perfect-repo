@@ -103,10 +103,10 @@ class ComponentToPrint extends React.Component {
         <div className="perfect-b-header">
           <img src={perfectIcon} />
           <div className="header-detail">
-            <h3> Perfect B Med Spa</h3>
-            <h5>perfectb.com</h5>
-            <h5>(786)502-2260</h5>
-            <h5>IG: @perfectbmedspa</h5>
+            <strong> Perfect B Med Spa</strong>
+            <p>perfectb.com</p>
+            <p>(786)502-2260</p>
+            <p>IG: @perfectbmedspa</p>
           </div>
           <div className="customer-details">
             <div className="customer-details-item">
@@ -221,6 +221,15 @@ class ComponentToPrint extends React.Component {
         <div className="additional-notes">
           <strong>Additional terms:</strong>
           <p>This is a field for the additional terms for this estimate.</p>
+        </div>
+        <div className="download-app">
+          <p className="italic"> Download the Perfect B App</p>
+          <div>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRu9GF9ONvZnHXLa6Qt4VLxZkbmyvNT0NomZg&usqp=CAU"
+              alt="qr-code"
+            ></img>
+          </div>
         </div>
       </div>
     );
