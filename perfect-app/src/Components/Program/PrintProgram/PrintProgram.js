@@ -1,9 +1,11 @@
 import React from "react";
 import ReactToPrint from "react-to-print";
 import perfectIcon from "../../../perf-b-icon.png";
+import {moneyFormatter} from "../../../Utils/MoneyFormat";
+import {formatUnixDate} from "../../../Utils/DateTimeUtils";
 
 import "./PrintProgram.scss";
-import { Container, Row, Col } from "shards-react";
+import { Container, Row, Col, Button } from "shards-react";
 
 const thStyle = {
   fontFamily: "Anton",
@@ -90,14 +92,18 @@ const cyclesList = (x) => {
 };
 
 const totalCost = "1075.00";
-const terms = "3";
-const firstPayment = "483.75";
-const monthlyPayment = "197.08";
+
 const nextPayment = "11/3/21";
 const lastPayment = "1/3/22";
 
 class ComponentToPrint extends React.Component {
   render() {
+    const pItems = this.props.checkoutItems;
+    const pBdown = this.props.paybreakdown;
+    const pCycle = this.props.paycycle["0"];
+    const terms = pCycle.numberTerms;
+    // console.log(pCycle, "inside print")
+
     return (
       <div className="print-big-box">
         <div className="perfect-b-header">
@@ -143,7 +149,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Quanity</h4>
               </Col>
             </Row>
-            {programItems.map(
+            {pItems.map(
               (x) =>
                 x.itemType === "treatment" && (
                   <Row className="sub-table-row">
@@ -166,7 +172,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Quanity</h4>
               </Col>
             </Row>
-            {programItems.map(
+            {pItems.map(
               (x) =>
                 x.itemType === "product" && (
                   <Row className="sub-table-row">
@@ -186,7 +192,7 @@ class ComponentToPrint extends React.Component {
             <div className="totals-item">
               <div> Total Cost</div>
               <div>
-                <strong className="italic"> {totalCost} </strong>
+                <strong className="italic"> {moneyFormatter.format(pBdown.total)} </strong>
               </div>
             </div>
             <div className="totals-item">
@@ -199,21 +205,21 @@ class ComponentToPrint extends React.Component {
           <div className="totals-column">
             <div className="totals-item bold">
               <div> Pay Today </div>
-              <div className="dark-gray">{firstPayment} </div>
+              <div className="dark-gray">{moneyFormatter.format(pBdown.downPayment)} </div>
             </div>
             <div className="totals-item bold">
               <div> Monthly Payment</div>
-              <div className="light-gray">{monthlyPayment} </div>
+              <div className="light-gray">{moneyFormatter.format(pCycle.monthly)} </div>
             </div>
           </div>
           <div className="totals-column">
             <div className="totals-item">
               <div> Next Payment </div>
-              <div className="dark-gray bold">{nextPayment} </div>
+              <div className="dark-gray bold">{formatUnixDate(pCycle.firstPayment)} </div>
             </div>
             <div className="totals-item ">
               <div> Last Payment</div>
-              <div className="light-gray bold">{lastPayment} </div>
+              <div className="light-gray bold">{formatUnixDate(pCycle.lastPayment)} </div>
             </div>
           </div>
         </div>
@@ -238,14 +244,24 @@ class ComponentToPrint extends React.Component {
 
 class Example extends React.Component {
   render() {
+    // console.log(this.props.example);
+    // console.log("Playaa",this.props.checkoutItems)
+    // console.log("cycles", this.props.paycycle)
+
+
     return (
       <div className="big-container">
         <div className="print-container">
-          <ComponentToPrint ref={(el) => (this.componentRef = el)} />
+          <ComponentToPrint ref={(el) => (this.componentRef = el)} 
+            example={this.props.example}
+            checkoutItems={this.props.checkoutItems}
+            paybreakdown = {this.props.paybreakdown}
+            paycycle = {this.props.paycycle}
+          />
         </div>
         <div className="print-btn">
           <ReactToPrint
-            trigger={() => <button>Print this out!</button>}
+            trigger={() => <Button theme="success">Print this out!</Button>}
             content={() => this.componentRef}
           />
         </div>

@@ -16,13 +16,7 @@ function ItemSelection({ listItems, staff, fnItems }) {
     const [itemCategory, setItemCategory] = useState("laser");
     const [rCategories, setReadCateg] = useState([]);
     const [editItems, setEditItems] = useState([]);
-    const [programItems, setProgramItems] = useState([]);
     const [toggle, setToggle] = useState(false);
-
-
-    useEffect(()=>{
-       if(!staff) fnItems(programItems)
-    },[programItems]);
 
     useEffect(() => {
         var tempCategories = [];
@@ -68,12 +62,13 @@ function ItemSelection({ listItems, staff, fnItems }) {
 
     const updateItemsFunction = (x)=>{
         if(staff) return;
-        if (programItems.find(c => x.itemName === c.itemName)) {
-            setProgramItems(programItems.filter(c => c.itemName !== x.itemName));
-        } else {
-            setProgramItems([
-                ...programItems,
-                ...[{
+        // if (programItems.find(c => x.itemName === c.itemName)) {
+        //     setProgramItems(programItems.filter(c => c.itemName !== x.itemName));
+ 
+        fnItems(prevState => ([...prevState, ...[
+            prevState.find(c => x.itemName === c.itemName) ? 
+            fnItems(prevState.filter(c => c.itemName !== x.itemName)):
+                {
                     itemId: x.id, itemName: x.itemName,
                     itemNumSess: x.itemNumSess, itemType: x.itemType,
                     itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
@@ -83,9 +78,8 @@ function ItemSelection({ listItems, staff, fnItems }) {
                         discountPercent: 0,
                         discountAmount: 0,
                     }
-                }]
-            ])
-        }
+                }
+        ]]))
     }
 
     return(

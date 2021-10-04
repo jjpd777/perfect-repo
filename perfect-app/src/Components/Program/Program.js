@@ -37,9 +37,14 @@ function Program({ listItems }) {
     const [invoiceEstimate, setInvoiceEstimate] = useState("program estimate");
     const [user, loading, error]=useAuthState(auth);
     const [modalB, setModalB] = useState(false);
+    
+    const inverseMoney = (x)=>{
+        const valFix = x.split("$").join("").split(",").join("");
+        return moneyFormatter.format(valFix).includes("NaN") ? "0" : valFix;
+    };
 
     const initialState = {
-        downPayment: "30",
+        downPayment: "50",
         discount: 0,
         terms:6,
     };
@@ -146,26 +151,27 @@ function Program({ listItems }) {
         return complexDiscountTable[s].range.find(x=> x[0]===units);
 
     }
-
+    console.log(paymentBreakdown, "pBreakdown")
 
     const computeBalanceTotal = (x)=>{
         const discAdjust = x.itemType === 'product' ? "product" : x.itemCategory;
-        console.log(x, "here it is breaking")
         const complexDiscount = chooseComplexDiscount(discAdjust)[1];
 
-        const financialterms = x.financeTerms ===0 ? 1 : Number(programVariables.terms);
+        const financialterms = x.financeTerms ==="0" ? 1 : Number(programVariables.terms);
         const discount = programVariables.terms ==="0" ? 1 : 1-(Number(programVariables.discount)/100);
 
         const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * discount * complexDiscount;
 
         const dPayment = programVariables.downPayment ==="0" ? 1 : Number(programVariables.downPayment)/100;
-        const downP = tot * dPayment; const remBal = tot *(1-dPayment);
+        const remBal = tot *(1-dPayment);
+        console.log(remBal, "remaining", financialterms)
         const monthly = remBal/ Number(financialterms);
-        return [downP, monthly, tot];
+        console.log("Verify element:", [ monthly, tot] )
+        return [monthly, tot];
     };
    
     useEffect(() => {
-        var downPayGlobal = 0; var remainingBalGlobal =0;
+        var remainingBalGlobal =0;
         var totalSale = 0;
         var cycleInfo = {};
         cycleInfo[programVariables.terms] = {
@@ -174,18 +180,22 @@ function Program({ listItems }) {
         console.log("8444", cycleInfo)
 
         programItems.map((item) => {
-            const [downPayment, remainingBalance, localTotal] = computeBalanceTotal(item);
-            downPayGlobal+=downPayment; remainingBalGlobal+=remainingBalance;
+            const [monthlyRemaining, localTotal] = computeBalanceTotal(item);
+            remainingBalGlobal+=monthlyRemaining;
             totalSale += localTotal;
             cycleInfo[programVariables.terms] = {
-                monthly: cycleInfo[programVariables.terms].monthly + remainingBalance,
+                monthly: cycleInfo[programVariables.terms].monthly + monthlyRemaining,
             }
         });
 
+        const dPayment = programVariables.downPayment ==="0" ? 1 : Number(programVariables.downPayment)/100;
+        const finalDownPaymet = totalSale* dPayment*chooseCategoriesDiscount();
+        const finalReamining = remainingBalGlobal*chooseCategoriesDiscount();
+        const finalSaleTotal = totalSale* chooseCategoriesDiscount();
         setPaymentBreakdown({
-            downPayment: downPayGlobal*chooseCategoriesDiscount(), 
-            remainingBalance:remainingBalGlobal*chooseCategoriesDiscount(),
-            total: totalSale*chooseCategoriesDiscount()});
+            downPayment: finalDownPaymet, 
+            remainingBalance: finalReamining,
+            total: finalSaleTotal});
         const cycleKeys = Object.keys(cycleInfo);
         var cyclesCollection =[];
         var li = cycleKeys.length;
@@ -194,32 +204,50 @@ function Program({ listItems }) {
             var tt={
                 numberTerms:k,
                 monthly:0,
-                firstPayment: kIndex ===0 ? currentUnixDate()+ ( k==="0"? 0:2592000 ): currentUnixDate()+ 2592000*(Number(cycleKeys[kIndex-1])+1),
-                lastPayment: currentUnixDate()+( k==="0"? 0:2592000 )*(Number(cycleKeys[kIndex]))
+                firstPayment: currentUnixDate()+ 2592000,
+                lastPayment: currentUnixDate()+ (2592000 *(Number(cycleKeys[kIndex])))
             };
             for(let i=kIndex; i<li;i++){
                 tt.monthly+= cycleInfo[cycleKeys[i]].monthly;
             };
+            console.log(formatUnixDate(tt.firstPayment), "cycle");
+            console.log(formatUnixDate(tt.lastPayment), "cycle");
+
             cyclesCollection.push(tt);
         })
         setPaymentCycles(cyclesCollection);
-    }, [programItems]);
+    }, [programItems, programVariables]);
 
-    console.log(programVariables)
+
+
 
     return (
         <div className="action-content">
-              { !saveBool && 
+                
               <>
               <CustomerSearch fnSetCustomer={setCurrentCustomer} record={false} />
               <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>
               </>
-              }
+              <div className="program-header">
+                    <h2>Program Estimate for {currentCustomer.customerName}</h2>
+                </div>
+              <div className="program-variables-box">
+                    <h3>Down payment</h3>
+                    <FormInput className="program-variables-input" value={programVariables.downPayment}
+                        onChange={(e) => { setProgramVariables({...programVariables, downPayment:e.target.value}) }} />
+                    <h3>Discount</h3>
+                    <FormInput className="program-variables-input" 
+                               value={programVariables.discount}
+                               type="number"
+                               onChange={(e) => { setProgramVariables({...programVariables, discount:e.target.value}) }} />
+                    <h3>Terms</h3>
+                    <FormInput className="program-variables-input" value={programVariables.terms}
+                        type="number"
+                        onChange={(e) => { setProgramVariables({...programVariables, terms:e.target.value}) }} />
+                </div>
            { !saveBool && 
            <>
-           <div className="dd-option">
-                    <h2>Program Estimate</h2>
-                </div>
+           
         </>
         }
             <div className="temp-save-box">
@@ -260,7 +288,11 @@ function Program({ listItems }) {
             <br></br>
             <br></br>
             <div className="program-print-box">
-                <PrintProgram/>
+                <PrintProgram example={["one", "two"]}
+                    checkoutItems = {programItems}
+                    paybreakdown = {paymentBreakdown}
+                    paycycle = {paymentCycles}
+                />
             </div>
             <div className="input-radio-box">
              <FormRadio
