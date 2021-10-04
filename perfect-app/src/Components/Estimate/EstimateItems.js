@@ -15,12 +15,12 @@ function EstimateItems({ props, fn }) {
     const inverseMoney = (x)=>{
         const valFix = x.split("$").join("").split(",").join("");
         return moneyFormatter.format(valFix).includes("NaN") ? "0" : valFix;
-    }
+    };
 
-    const discountObject = {
-        discountType: 'percent',
-        discountPercent: 0.05,
-        discountAmount: 0,
+    const lookForNameUpdate = (x, val) =>{
+        fn(prevState => (
+            prevState.map(prevX =>
+                prevX.itemId === x.itemId ? { ...prevX, itemName: val } : prevX)));
     }
 
     const lookForSessUpdate = (x, val) => {
@@ -109,7 +109,14 @@ function EstimateItems({ props, fn }) {
                 {props.map((x)=>
                         <div className="estimate-row">
                         <Row >
-                            <Col className="estimate-col-name">{x.itemName}</Col>
+                            { x.itemCategory==="special"? (
+                            <Col className="estimate-col-name" >
+                                <FormInput className="units-edit-mon" value={x.itemName}
+                            onChange={(e) => { lookForNameUpdate(x, e.target.value) }} />
+                            </Col>
+                            ):(<Col className="estimate-col-name">{x.itemName}</Col>)
+                            
+                            }
                             <Col className="col-name">
                                 <div className="dd-option">
                                     <Dropdown open={x.currentToggle} toggle={() => lookForToggle(x)}>

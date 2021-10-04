@@ -19,9 +19,10 @@ function ItemSelection({ listItems, staff, fnItems }) {
     const [programItems, setProgramItems] = useState([]);
     const [toggle, setToggle] = useState(false);
 
+
     useEffect(()=>{
        if(!staff) fnItems(programItems)
-    },[programItems])
+    },[programItems]);
 
     useEffect(() => {
         var tempCategories = [];
@@ -40,15 +41,34 @@ function ItemSelection({ listItems, staff, fnItems }) {
         setReadCateg(tempCategories); setEditItems(tmpEditItems);
 
     }, [listItems,itemType, itemCategory]);
+
+    const insertOpenItem = ()=>{
+        var unixKeyID = String(Date.now());
+        console.log("unique key examined", unixKeyID)
+        fnItems(prevState => ([...prevState, ...[
+            {
+                itemId: unixKeyID, itemName: "successful insertion",
+                itemNumSess: "0", itemType: "treatment",
+                itemCategory: "special", itemPriceUnit: "0",
+                financeTerms: 0, discount: 0, currentToggle: false,
+                discObject:{
+                    discountType: 'percent',
+                    discountPercent: 0,
+                    discountAmount: 0,
+                }
+            }
+        ]]))
+    }
     
     useEffect(()=>{
         if(!listItems.length) return;
         setItemCategory(listItems.find(x=> x.itemType===itemType).itemCategory);
     },[itemType]);
 
-    console.log(programItems, "PROGRAM");
+    console.log(programItems, "ITEM SELECTION");
 
     const updateItemsFunction = (x)=>{
+        if(staff) return;
         if (programItems.find(c => x.itemName === c.itemName)) {
             setProgramItems(programItems.filter(c => c.itemName !== x.itemName));
         } else {
@@ -118,6 +138,13 @@ function ItemSelection({ listItems, staff, fnItems }) {
                         </DropdownMenu>
                     </Dropdown>
                 </div>
+                <div className="category-dropdown">
+                <Button 
+                onClick={()=>{insertOpenItem(); console.log("clicked")}}
+                className="open-item-button">
+                    Open Item
+                </Button>
+               </div>
                 </div>
                 {!staff && <div className="select-dropdown-box">
                     {editItems.map(x => <Button className="item-select-btn"

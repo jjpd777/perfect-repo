@@ -161,7 +161,7 @@ function Estimate({ listItems }) {
 
 
 
-
+    console.log(programItems, "ESTIMATE ITEMS");
     return (
         <div className="action-content">
             <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />
