@@ -134,8 +134,8 @@ class ComponentToPrint extends React.Component {
           </p>
         </div>
         <div className="center-table">
-          <Container className="sub-table">
-            <Row>
+          <div className="sub-table">
+            <Row className="sub-table-row">
               <Col className="item-name">
                 <h4>Treatments</h4>
               </Col>
@@ -146,7 +146,7 @@ class ComponentToPrint extends React.Component {
             {programItems.map(
               (x) =>
                 x.itemType === "treatment" && (
-                  <Row>
+                  <Row className="sub-table-row">
                     <Col className="item-name">
                       <h5>{x.itemName}</h5>
                     </Col>
@@ -156,9 +156,9 @@ class ComponentToPrint extends React.Component {
                   </Row>
                 )
             )}
-          </Container>
-          <Container className="sub-table">
-            <Row>
+          </div>
+          <div className="sub-table">
+            <Row className="sub-table-row">
               <Col className="item-name">
                 <h4>Products</h4>
               </Col>
@@ -169,7 +169,7 @@ class ComponentToPrint extends React.Component {
             {programItems.map(
               (x) =>
                 x.itemType === "product" && (
-                  <Row>
+                  <Row className="sub-table-row">
                     <Col className="item-name">
                       <h5>{x.itemName}</h5>
                     </Col>
@@ -179,7 +179,7 @@ class ComponentToPrint extends React.Component {
                   </Row>
                 )
             )}
-          </Container>
+          </div>
         </div>
         <div className="totals">
           <div className="totals-column">

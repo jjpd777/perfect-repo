@@ -39,9 +39,10 @@
   margin: 20px;
 }
 .sub-table {
-  width: 500px;
-  .row {
-    max-width: 500px !important;
+  width: 500px !important;
+  align-items: center;
+  &-row {
+    width: 480px !important;
   }
   h4 {
     font-weight: 900;
@@ -130,10 +131,10 @@
   max-width: 300px;
 }
 
-.item-name {
-  min-width: 25%;
-}
-
 .additional-notes {
   font-size: 12px;
+}
+
+.item-name {
+  width: 230px;
 }
