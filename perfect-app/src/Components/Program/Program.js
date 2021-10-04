@@ -47,9 +47,16 @@ function Program({ listItems }) {
         downPayment: "50",
         discount: 0,
         terms:6,
+        disc:{
+            type: "percent",
+            discPercent: 0,
+            discAmount:0,
+        }
     };
 
     const [programVariables, setProgramVariables] = useState(initialState);
+
+    console.log("PROGRAM V", programVariables)
 
 
     useEffect(() => {
@@ -129,6 +136,22 @@ function Program({ listItems }) {
 
     const discountPerCategory = [1,0.99,0.98,0.97,0.96];
 
+
+    const updateDiscountCorrect = (val, percent)=>{
+        const perc = {
+            discountType: 'percent',
+            discountPercent: val,
+            discountAmount: 0,
+         };
+
+        const dollar = {
+            discountType: 'amount',
+            discountPercent: 0,
+            discountAmount: val,
+        };
+        return percent ? perc : dollar
+    }
+
     const chooseCategoriesDiscount =()=>{ 
         const nCat = new Set(programItems.map(x=> x.itemCategory));
         return discountPerCategory[nCat.size];
@@ -158,7 +181,7 @@ function Program({ listItems }) {
         const complexDiscount = chooseComplexDiscount(discAdjust)[1];
 
         const financialterms = x.financeTerms ==="0" ? 1 : Number(programVariables.terms);
-        const discount = programVariables.terms ==="0" ? 1 : 1-(Number(programVariables.discount)/100);
+        const discount = (programVariables.terms ==="0" || programVariables.disc.discountType==="amount" )? 1 : 1-(Number(programVariables.discount)/100);
 
         const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * discount * complexDiscount;
 
@@ -187,11 +210,15 @@ function Program({ listItems }) {
                 monthly: cycleInfo[programVariables.terms].monthly + monthlyRemaining,
             }
         });
+        console.log("PROGRAM FUCKING VARIABLES", programVariables)
+        const totSalAmounAdjust = programVariables.disc.discountType==='amount' ? Number(programVariables.disc.discountAmount) : 0;
+        const totSummary = totalSale - totSalAmounAdjust;
+        console.log(totSalAmounAdjust, "adjustment")
 
         const dPayment = programVariables.downPayment ==="0" ? 1 : Number(programVariables.downPayment)/100;
-        const finalDownPaymet = totalSale* dPayment*chooseCategoriesDiscount();
-        const finalReamining = remainingBalGlobal*chooseCategoriesDiscount();
-        const finalSaleTotal = totalSale* chooseCategoriesDiscount();
+        const finalDownPaymet = totSummary* dPayment*chooseCategoriesDiscount();
+        const finalReamining = (remainingBalGlobal-totSalAmounAdjust)*chooseCategoriesDiscount();
+        const finalSaleTotal = totSummary* chooseCategoriesDiscount();
         setPaymentBreakdown({
             downPayment: finalDownPaymet, 
             remainingBalance: finalReamining,
@@ -232,14 +259,23 @@ function Program({ listItems }) {
                     <h2>Program Estimate for {currentCustomer.customerName}</h2>
                 </div>
               <div className="program-variables-box">
-                    <h3>Down payment</h3>
+                    <h3>Down payment %</h3>
                     <FormInput className="program-variables-input" value={programVariables.downPayment}
-                        onChange={(e) => { setProgramVariables({...programVariables, downPayment:e.target.value}) }} />
-                    <h3>Discount</h3>
+                        onChange={(e) => { setProgramVariables({...programVariables, downPayment:e.target.value})}} />
+                    
+                    <h3>Disc. %</h3>
                     <FormInput className="program-variables-input" 
-                               value={programVariables.discount}
+                               value={programVariables.disc.discountPercent}
                                type="number"
-                               onChange={(e) => { setProgramVariables({...programVariables, discount:e.target.value}) }} />
+                               onChange={(e) => { setProgramVariables({...programVariables, disc: updateDiscountCorrect(e.target.value, true)}) }} />
+                    
+                    <h3>Disc. $</h3>
+                    <FormInput className="program-variables-input" 
+                               value={programVariables.disc.discountAmount}
+                               type="number"
+                               onChange={(e) => { setProgramVariables({...programVariables, disc: updateDiscountCorrect(e.target.value, false)}) }} />
+
+
                     <h3>Terms</h3>
                     <FormInput className="program-variables-input" value={programVariables.terms}
                         type="number"
@@ -292,6 +328,7 @@ function Program({ listItems }) {
                     checkoutItems = {programItems}
                     paybreakdown = {paymentBreakdown}
                     paycycle = {paymentCycles}
+                    customer= {currentCustomer}
                 />
             </div>
             <div className="input-radio-box">

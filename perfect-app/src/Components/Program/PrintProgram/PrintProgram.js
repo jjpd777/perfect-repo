@@ -2,7 +2,7 @@ import React from "react";
 import ReactToPrint from "react-to-print";
 import perfectIcon from "../../../perf-b-icon.png";
 import {moneyFormatter} from "../../../Utils/MoneyFormat";
-import {formatUnixDate} from "../../../Utils/DateTimeUtils";
+import {currentFullDate, currentUnixDate,formatUnixDate} from "../../../Utils/DateTimeUtils";
 
 import "./PrintProgram.scss";
 import { Container, Row, Col, Button } from "shards-react";
@@ -102,8 +102,9 @@ class ComponentToPrint extends React.Component {
     const pBdown = this.props.paybreakdown;
     const pCycle = this.props.paycycle["0"];
     const terms = pCycle.numberTerms;
+    const cust = this.props.customer;
     // console.log(pCycle, "inside print")
-
+    const validUntil =Number(currentUnixDate())+ 86400*7;
     return (
       <div className="print-big-box">
         <div className="perfect-b-header">
@@ -116,13 +117,13 @@ class ComponentToPrint extends React.Component {
           </div>
           <div className="customer-details">
             <div className="customer-details-item">
-              <div> Client: </div> <div> Juan Jose</div>
+              <div> Client: </div> <div>{cust.customerName}</div>
             </div>
             <div className="customer-details-item">
-              <div> Effective Date: </div> <div> May 29, 2021</div>
+              <div> Effective Date: </div> <div>{currentFullDate().split("&")[1]}</div>
             </div>
             <div className="customer-details-item">
-              <div> Valid Until: </div> <div>Jun 5, 2022</div>
+              <div> Valid Until: </div> <div>{formatUnixDate(validUntil)}</div>
             </div>
             <div className="customer-details-item">
               <div className="italic"> Number: </div> <div>363340</div>
@@ -257,6 +258,7 @@ class Example extends React.Component {
             checkoutItems={this.props.checkoutItems}
             paybreakdown = {this.props.paybreakdown}
             paycycle = {this.props.paycycle}
+            customer = {this.props.customer}
           />
         </div>
         <div className="print-btn">
