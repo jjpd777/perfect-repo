@@ -19,6 +19,12 @@ function ProgramItems({ props, fn }) {
         return moneyFormatter.format(valFix).includes("NaN") ? "0" : valFix;
     }
 
+    const lookForNameUpdate = (x, val) =>{
+        fn(prevState => (
+            prevState.map(prevX =>
+                prevX.itemId === x.itemId ? { ...prevX, itemName: val } : prevX)));
+    }
+
     const lookForSessUpdate = (x, val) => {
         fn(prevState => (
             prevState.map(prevX =>
@@ -55,7 +61,14 @@ function ProgramItems({ props, fn }) {
                 {props.map((x,ix )=>
                         <>
                         <Row className="estimate-row">
-                        <Col className="estimate-col-name">{x.itemName}</Col>
+                        { x.itemCategory==="special"? (
+                            <Col className="estimate-col-name" >
+                                <FormInput className="units-edit-open" value={x.itemName}
+                            onChange={(e) => { lookForNameUpdate(x, e.target.value) }} />
+                            </Col>
+                            ):(<Col className="estimate-col-name">{x.itemName}</Col>)
+                            
+                            }
                             <Col className="col-name">
                                 <FormInput className="units-edit-mon"  value={moneyFormatter.format(x.itemPriceUnit)}
                                 onChange={(e) => { lookForPriceUpdate(x, e.target.value) }} />

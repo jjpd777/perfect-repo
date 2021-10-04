@@ -65,7 +65,6 @@ function ItemSelection({ listItems, staff, fnItems }) {
         setItemCategory(listItems.find(x=> x.itemType===itemType).itemCategory);
     },[itemType]);
 
-    console.log(programItems, "ITEM SELECTION");
 
     const updateItemsFunction = (x)=>{
         if(staff) return;

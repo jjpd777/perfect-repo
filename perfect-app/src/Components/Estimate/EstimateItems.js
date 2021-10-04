@@ -111,7 +111,7 @@ function EstimateItems({ props, fn }) {
                         <Row >
                             { x.itemCategory==="special"? (
                             <Col className="estimate-col-name" >
-                                <FormInput className="units-edit-mon" value={x.itemName}
+                                <FormInput className="units-edit-open" value={x.itemName}
                             onChange={(e) => { lookForNameUpdate(x, e.target.value) }} />
                             </Col>
                             ):(<Col className="estimate-col-name">{x.itemName}</Col>)
