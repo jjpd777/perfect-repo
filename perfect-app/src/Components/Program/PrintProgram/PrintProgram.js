@@ -1,27 +1,9 @@
 import React from "react";
 import ReactToPrint from "react-to-print";
-import { formatUnixDate } from "../../../Utils/DateTimeUtils";
-import { moneyFormatter } from "../../../Utils/MoneyFormat";
 import perfectIcon from "../../../perf-b-icon.png";
 
 import "./PrintProgram.scss";
-import {
-  FormInput,
-  Button,
-  FormRadio,
-  Container,
-  Row,
-  Col,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Card,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  CardHeader,
-} from "shards-react";
+import { Container, Row, Col } from "shards-react";
 
 const thStyle = {
   fontFamily: "Anton",
@@ -107,6 +89,13 @@ const cyclesList = (x) => {
   return keys.map((k) => x[k]);
 };
 
+const totalCost = "1075.00";
+const terms = "3";
+const firstPayment = "483.75";
+const monthlyPayment = "197.08";
+const nextPayment = "11/3/21";
+const lastPayment = "1/3/22";
+
 class ComponentToPrint extends React.Component {
   render() {
     return (
@@ -120,23 +109,29 @@ class ComponentToPrint extends React.Component {
             <h5>IG: @perfectbmedspa</h5>
           </div>
           <div className="customer-details">
-            <h5>Client: Juan Jose</h5>
-            <h5>Effective date: May 29, 2021</h5>
-            <h5>Valid until: Jun 5, 2022</h5>
-            <h5>
-              <span className="italic"> Number:</span> 363340
-            </h5>
+            <div className="customer-details-item">
+              <div> Client: </div> <div> Juan Jose</div>
+            </div>
+            <div className="customer-details-item">
+              <div> Effective Date: </div> <div> May 29, 2021</div>
+            </div>
+            <div className="customer-details-item">
+              <div> Valid Until: </div> <div>Jun 5, 2022</div>
+            </div>
+            <div className="customer-details-item">
+              <div className="italic"> Number: </div> <div>363340</div>
+            </div>
           </div>
         </div>
         <h1 className="program-title">Jaun's Program</h1>
         <div className="recommendations">
-          <h3>
+          <p>
             The following recommendations are created by Perfect B in order to
             Achieve client's desired goals in the most efficient manner. All
             recommendations are made considering the best technology available
             in the market and following local, state and federal health
             regulations.
-          </h3>
+          </p>
         </div>
         <div className="center-table">
           <Container className="sub-table">
@@ -145,19 +140,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Treatments</h4>
               </Col>
               <Col>
-                <h4>Price/Session</h4>
-              </Col>
-              <Col>
                 <h4>Quanity</h4>
-              </Col>
-              <Col>
-                <h4>Discount</h4>
-              </Col>
-              <Col>
-                <h4>Final Price</h4>
-              </Col>
-              <Col>
-                <h4>Terms</h4>
               </Col>
             </Row>
             {programItems.map(
@@ -170,18 +153,6 @@ class ComponentToPrint extends React.Component {
                     <Col>
                       <h5>{x.itemNumSess}</h5>
                     </Col>
-                    <Col>
-                      <h5>{x.itemPriceUnit}</h5>
-                    </Col>
-                    <Col>
-                      <h5>{x.discount}</h5>
-                    </Col>
-                    <Col>
-                      <h5>{x.discount}</h5>
-                    </Col>
-                    <Col>
-                      <h5>{x.financeTerms}</h5>
-                    </Col>
                   </Row>
                 )
             )}
@@ -189,22 +160,10 @@ class ComponentToPrint extends React.Component {
           <Container className="sub-table">
             <Row>
               <Col className="item-name">
-                <h4>Product</h4>
-              </Col>
-              <Col>
-                <h4>Price/Session</h4>
+                <h4>Products</h4>
               </Col>
               <Col>
                 <h4>Quanity</h4>
-              </Col>
-              <Col>
-                <h4>Discount</h4>
-              </Col>
-              <Col>
-                <h4>Final Price</h4>
-              </Col>
-              <Col>
-                <h4>Terms</h4>
               </Col>
             </Row>
             {programItems.map(
@@ -217,42 +176,51 @@ class ComponentToPrint extends React.Component {
                     <Col>
                       <h5>{x.itemNumSess}</h5>
                     </Col>
-                    <Col>
-                      <h5>{x.itemPriceUnit}</h5>
-                    </Col>
-                    <Col>
-                      <h5>{x.itemPriceUnit}</h5>
-                    </Col>
-                    <Col>
-                      <h5>{x.discount}</h5>
-                    </Col>
-                    <Col>
-                      <h5>{x.financeTerms}</h5>
-                    </Col>
                   </Row>
                 )
             )}
           </Container>
         </div>
-        <div className="cycles-container">
-          <div className="cycles-box">
-            <h4>Down payment</h4>
-            <h5>
-              Amount: {moneyFormatter.format(paymentBreakdown.downPayment)}
-            </h5>
-          </div>
-          {cyclesList(paymentCycles).map((x, i) => (
-            <div className="cycles-box">
-              <h4>Cycle {i + 1}</h4>
-              <h5>Monthly payment: {moneyFormatter.format(x.monthly)}</h5>
-              <h5>First payment: {formatUnixDate(x.firstPayment)}</h5>
-              <h5>Last payment: {formatUnixDate(x.firstPayment)}</h5>
+        <div className="totals">
+          <div className="totals-column">
+            <div className="totals-item">
+              <div> Total Cost</div>
+              <div>
+                <strong className="italic"> {totalCost} </strong>
+              </div>
             </div>
-          ))}
+            <div className="totals-item">
+              <div> Terms </div>
+              <div>
+                <strong> {terms} </strong>
+              </div>
+            </div>
+          </div>
+          <div className="totals-column">
+            <div className="totals-item bold">
+              <div> Pay Today </div>
+              <div className="dark-gray">{firstPayment} </div>
+            </div>
+            <div className="totals-item bold">
+              <div> Monthly Payment</div>
+              <div className="light-gray">{monthlyPayment} </div>
+            </div>
+          </div>
+          <div className="totals-column">
+            <div className="totals-item">
+              <div> Next Payment </div>
+              <div className="dark-gray bold">{nextPayment} </div>
+            </div>
+            <div className="totals-item ">
+              <div> Last Payment</div>
+              <div className="light-gray bold">{lastPayment} </div>
+            </div>
+          </div>
         </div>
+
         <div className="additional-notes">
-          <h4>Additional terms:</h4>
-          <h3>This is a field for the additional terms for this estimate.</h3>
+          <strong>Additional terms:</strong>
+          <p>This is a field for the additional terms for this estimate.</p>
         </div>
       </div>
     );
@@ -266,14 +234,6 @@ class Example extends React.Component {
         <div className="print-container">
           <ComponentToPrint ref={(el) => (this.componentRef = el)} />
         </div>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
         <div className="print-btn">
           <ReactToPrint
             trigger={() => <button>Print this out!</button>}

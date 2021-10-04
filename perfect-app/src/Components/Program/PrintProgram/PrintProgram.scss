@@ -1,10 +1,21 @@
 .print-big-box {
+  max-width: 1000px;
   background-color: rgb(255, 255, 255);
   margin-top: 20px;
   height: 750px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  padding: 1rem;
+  font-size: 12px;
+  color: black;
+
+  p,
+  h3,
+  h4,
+  h5 {
+    font-size: 12px;
+  }
 
   .italic {
     font-style: italic;
@@ -15,11 +26,6 @@
     size: landscape;
   }
 }
-
-.big-container {
-  display: flex;
-  flex-direction: column;
-}
 .perfect-b-header {
   background-color: rgb(255, 255, 255);
   display: flex;
@@ -29,15 +35,16 @@
 
 .center-table {
   display: flex;
-  flex-direction: column;
   margin: 0 auto;
   margin: 20px;
 }
 .sub-table {
-  min-width: 100%;
+  width: 500px;
+  .row {
+    max-width: 500px !important;
+  }
   h4 {
-    font-size: 12px;
-    font-weight: 800;
+    font-weight: 900;
   }
 }
 
@@ -53,6 +60,22 @@
   align-items: flex-end;
   margin-left: auto;
   min-width: 500px;
+
+  &-item {
+    width: 100%;
+    max-width: 250px;
+    display: flex;
+    font-family: "Poppins";
+    justify-content: space-between;
+
+    div:first-child {
+      margin-left: auto;
+    }
+    div:last-child {
+      min-width: 50%;
+      text-align: center;
+    }
+  }
 }
 
 .program-title {
@@ -61,41 +84,56 @@
   font-weight: 900;
   text-transform: uppercase;
 }
+
+.totals {
+  display: flex;
+  margin-bottom: 3rem;
+  &-column {
+    width: 100%;
+  }
+  &-item {
+    width: 100%;
+    max-width: 250px;
+    display: flex;
+    font-family: "Poppins";
+    justify-content: space-between;
+
+    div:first-child {
+      margin-left: auto;
+      margin-right: 4px;
+    }
+    div:last-child {
+      min-width: 50%;
+      text-align: center;
+    }
+
+    .light-gray {
+      background-color: lightgray;
+    }
+    .dark-gray {
+      background-color: rgb(158, 158, 158);
+    }
+  }
+  .bold {
+    font-weight: 900;
+  }
+}
 .recommendations {
   margin: 0 auto;
   max-width: 80%;
-  h3 {
-    font-size: 16px;
-  }
 }
 .print-btn {
-  margin-top: 30px;
+  margin-top: 5rem;
 }
 
 .trial-btn {
   max-width: 300px;
 }
 
-.cycles-container {
-  display: flex;
-  flex-direction: row;
-  margin: 0 auto;
-  padding: 20px;
-  align-content: center;
-  justify-content: center;
-}
-
-.cycles-box {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  align-content: center;
-  padding: 10px;
+.item-name {
+  min-width: 25%;
 }
 
 .additional-notes {
-}
-
-.item-name {
-  min-width: 25%;
+  font-size: 12px;
 }
