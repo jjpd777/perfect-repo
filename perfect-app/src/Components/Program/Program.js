@@ -109,7 +109,7 @@ function Program({ listItems }) {
 
     const complexDiscountTable = {
         "laser":{
-            "range" :[[1,0.99],[2,0.98],[3,0.97],[4,0.96]],
+            "range" :[[1,0.99],[2,0.98],[3,0.97],[4,0.96],[5,0.97],[6,0.96],[7,0.97],[8,0.96],[9,0.97],[10,0.96]],
         },
         "facial":{
             "range" :[[1,0.99],[2,0.98],[3,0.97],[4,0.96]],
@@ -150,6 +150,7 @@ function Program({ listItems }) {
 
     const computeBalanceTotal = (x)=>{
         const discAdjust = x.itemType === 'product' ? "product" : x.itemCategory;
+        console.log(x, "here it is breaking")
         const complexDiscount = chooseComplexDiscount(discAdjust)[1];
 
         const financialterms = x.financeTerms ===0 ? 1 : Number(programVariables.terms);
@@ -208,8 +209,12 @@ function Program({ listItems }) {
 
     return (
         <div className="action-content">
-               <CustomerSearch fnSetCustomer={setCurrentCustomer} record={false} />
-            <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>
+              { !saveBool && 
+              <>
+              <CustomerSearch fnSetCustomer={setCurrentCustomer} record={false} />
+              <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>
+              </>
+              }
            { !saveBool && 
            <>
            <div className="dd-option">
@@ -226,7 +231,7 @@ function Program({ listItems }) {
             </div>
             { saveBool &&
             <>
-            <div className="summary-box">
+            {/* <div className="summary-box">
                 <Card className="summary-card">
                     <CardBody>
                         <CardHeader className="summary-header">{currentCustomer.customerName}</CardHeader>
@@ -236,8 +241,8 @@ function Program({ listItems }) {
                         </CardSubtitle>
                     </CardBody>
                 </Card>
-            </div>
-            <div className="cycles-box">
+            </div> */}
+            {/* <div className="cycles-box">
                 {paymentCycles.map((x,i)=>
                 <>
                 <Card className="cycles-card">
@@ -251,6 +256,11 @@ function Program({ listItems }) {
                     </CardBody>
                 </Card>
                 </>)}
+            </div> */}
+            <br></br>
+            <br></br>
+            <div className="program-print-box">
+                <PrintProgram/>
             </div>
             <div className="input-radio-box">
              <FormRadio
@@ -277,9 +287,7 @@ function Program({ listItems }) {
             <div className="save-program-box">
                 <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save & Print</Button>             
             </div>
-            <div className="program-print-box">
-                <PrintProgram/>
-            </div>
+       
            </>}
         </div>
     );

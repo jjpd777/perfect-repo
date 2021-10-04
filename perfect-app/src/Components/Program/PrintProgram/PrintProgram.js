@@ -123,7 +123,7 @@ class ComponentToPrint extends React.Component {
             </div>
           </div>
         </div>
-        <h1 className="program-title">Jaun's Program</h1>
+        <h1 className="program-title">Juan's Program</h1>
         <div className="recommendations">
           <p>
             The following recommendations are created by Perfect B in order to
