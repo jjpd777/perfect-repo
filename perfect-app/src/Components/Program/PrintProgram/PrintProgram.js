@@ -252,7 +252,7 @@ class ComponentToPrint extends React.Component {
         </div>
         <div className="additional-notes">
           <h4>Additional terms:</h4>
-          <h3>This is a field for the additional terms for this estimate./</h3>
+          <h3>This is a field for the additional terms for this estimate.</h3>
         </div>
       </div>
     );
