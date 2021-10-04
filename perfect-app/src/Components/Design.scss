@@ -206,6 +206,11 @@ $input-height: 60px;
     font-size: $standard-large-font;
 }
 
+.invoice-radio-box{
+
+    padding:50px;
+}
+
 /// Admin ////
 
 .admin-content{
@@ -280,3 +285,17 @@ $input-height: 60px;
     font-size: $standard-large-font;
 }
 
+
+/// Estimate
+
+.save-db-box{
+
+    margin:0 auto;
+    .save-to-db{
+        width: $standard-button;
+        font-size: $standard-large-font;
+        background-color: $standard-nav-btn;
+        border:0;
+
+    }
+}

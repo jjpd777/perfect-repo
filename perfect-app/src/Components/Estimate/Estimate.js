@@ -3,6 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../../Utils/MoneyFormat";
 import CustomerSearch from "../CustomerSearch/CustomerSearch";
 import EstimateItems from "./EstimateItems";
+import PrintEstimate from "./PrintEstimate/PrintEstimate";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import ItemSelection from "../ItemSelection/ItemSelection";
@@ -25,16 +26,18 @@ function Estimate({ listItems }) {
 
     const [programItems, setProgramItems] = useState([]);
 
+    const voidState = {};
+
     const typesEstimate = ["Financing Estimate", "Normal Estimate"];
     const [paymentCycles, setPaymentCycles] = useState([]);
-    const [isNewCustomer, setIsNewCustomer] = useState(true);
     const [saveBool, setSaveBool]= useState(false);
-    const [paymentBreakdown, setPaymentBreakdown] = useState({});
+    const [paymentBreakdown, setPaymentBreakdown] = useState(voidState);
     const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
     const [user, loading, error]=useAuthState(auth);
-    const [currentCustomer, setcurrentCustomer] = useState({});
+    const [currentCustomer, setcurrentCustomer] = useState(voidState);
+    const [insertedDB, setInsertedDB] = useState(false);
 
-
+    console.log(currentCustomer, "Customersyyy")
     useEffect(() => {
         var tmp = [];
         listItems.map(x => {
@@ -61,9 +64,11 @@ function Estimate({ listItems }) {
     const insertProgramEstimate = () => {
         const customerFirebase = {
             customerName: currentCustomer.customerName,
+            customerLast: currentCustomer.customerLast,
             customerEmail: parseForFirebase(currentCustomer.customerEmail),
             customerPhone: parseForFirebase(currentCustomer.customerPhone),
         };
+        
 
         const item = {
             timestamp: currentFullDate(),
@@ -78,12 +83,13 @@ function Estimate({ listItems }) {
             estimateType: invoiceEstimate,
             voided: false,
         };
+        console.log(customerFirebase, "customer obj");
+        console.log(item, "item obj");
+
         try {
-           
-            createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone)).then(()=>{setProgramItems([]);})
-            if(isNewCustomer)createCustomerFunction(customerFirebase).then(()=>{
-                setcurrentCustomer({});
-            })
+            
+            createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone));
+            if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);
         } catch (e) {
             console.log(e)
         }
@@ -172,35 +178,10 @@ function Estimate({ listItems }) {
             <div className="estimates-box">
                 {!saveBool ?(<EstimateItems props={programItems} fn={setProgramItems} />):(<></>)}
             </div>
+            
             { saveBool &&
             <>
-            <div className="summary-box">
-                <Card className="summary-card">
-                    <CardBody>
-                        <CardHeader className="summary-header">{currentCustomer.customerName}</CardHeader>
-                        <CardTitle className="summary-title"><b>Down payment:</b> {moneyFormatter.format(paymentBreakdown.downPayment)}  <b>Total payment:</b> {moneyFormatter.format(paymentBreakdown.total)}</CardTitle>
-                        <CardSubtitle className="summary-items-list">
-                            {programItems.map(item=><h5>{item.itemName} with {item.financeTerms} financing {item.financeTerms===1 ? "term":"terms"} </h5>)}
-                        </CardSubtitle>
-                    </CardBody>
-                </Card>
-            </div>
-            <div className="cycles-box">
-                {paymentCycles.map((x,i)=>
-                <>
-                <Card className="cycles-card">
-                    <CardBody>
-                        <CardHeader className="cycles-header">Cycle #{i+1}</CardHeader>
-                        <CardTitle className="cycles-title">Monthly: {moneyFormatter.format(x.monthly)}</CardTitle>
-                        <CardSubtitle className="cycles-subtitle">
-                        <h3>First payment: {formatUnixDate(x.firstPayment)}</h3>
-                        <h3>Last payment: {formatUnixDate(x.lastPayment)} </h3>
-                        </CardSubtitle>
-                    </CardBody>
-                </Card>
-                </>)}
-            </div>
-            <div className="input-radio-box">
+            <div className="invoice-radio-box">
              <FormRadio
                     inline
                     className="radio-choices"
@@ -221,9 +202,33 @@ function Estimate({ listItems }) {
                 >
                     <h3>invoice</h3>
                 </FormRadio>
-            </div>
-            <div className="save-program-box">
+                {/* <div className="save-program-box">
                 <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save a & Print</Button>             
+            </div> */}
+            <PrintEstimate 
+            example={["one", "two"]}
+            checkoutItems = {programItems}
+            paybreakdown = {paymentBreakdown}
+            paycycle = {paymentCycles}
+            customer= {currentCustomer}
+            alreadyInserted = {insertedDB}
+            />
+            </div>
+            <div className="save-db-box">
+           { insertedDB ? (<Button 
+            onClick={()=>{}}
+            className="save-to-db">
+                New Estimate
+            </Button>):(
+                  <Button 
+                  onClick={()=>{
+                      setInsertedDB(true);
+                      insertProgramEstimate();
+                  }}
+                  className="save-to-db">
+                      Save {invoiceEstimate}
+                  </Button>
+            )}
             </div>
            </>}
         </div>

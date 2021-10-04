@@ -7,16 +7,16 @@ import "../Design.scss";
 
 function CustomerSearch({ fnSetCustomer, record }) {
     const [searchInput, setSearchInput] = useState("");
-    const [newCustomer, setNewCustomer] = useState(false);
+    const [newCustomer, setNewCustomer] = useState(true);
     const [fetchedUsers, setFetchedUsers] = useState([]);
     const initialCustomer = {
         customerName: '',
         customerLast: '',
         customerEmail: '',
-        customerPhone: "+1"
+        customerPhone: "+1",
+        isNewUser: newCustomer,
     };
     const [currentCustomer, setCurrentCustomer] = useState(initialCustomer);
-    const optionsFlag = true;
     const [validCustomer, setValidCustomer] = useState(false);
 
 
@@ -62,10 +62,10 @@ function CustomerSearch({ fnSetCustomer, record }) {
     return (
         <div className="customer-box">
             <div className="switch-box">
-           {!validCustomer && !record &&<Button className="switch-to-search" onClick={() => { switchSearchExisting() }}>{!newCustomer ? "Find user" : "New user"}</Button>}
+           {!validCustomer && !record &&<Button className="switch-to-search" onClick={() => { switchSearchExisting() }}>{newCustomer ? "Find user" : "New user"}</Button>}
             </div>
             {!validCustomer &&<div className="search-customer-box">
-                {(newCustomer || record) ? (
+                {(!newCustomer || record) ? (
                 <>
                 <div className="search-user-2">
                     <h3>Search user: </h3>

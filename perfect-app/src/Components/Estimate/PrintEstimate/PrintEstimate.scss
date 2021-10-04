@@ -1,0 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Birthstone&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+$standard-button: 200px;
+$standard-large-font: 25px; 
+$standard-nav-btn: rgb(25, 87, 87);
+$secondary-color: rgb(33, 163, 163);
+$input-height: 60px;
+
+.print-big-box {
+  max-width: 1000px;
+  background-color: rgb(255, 255, 255);
+  margin-top: 20px;
+  height: 750px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  font-size: 12px;
+  color: black;
+
+  font-family: "Open Sans" !important;
+
+  h1 {
+    font-size: 24px;
+    font-family: "Open Sans" !important;
+  }
+
+  p,
+  h3,
+  h4,
+  h5,
+  div {
+    font-size: 12px;
+    font-family: "Open Sans" !important;
+  }
+
+  strong {
+    font-weight: 900;
+  }
+  .italic {
+    font-style: italic;
+  }
+}
+
+@media print {
+  @page {
+    size: landscape;
+  }
+}
+.perfect-b-header {
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: row;
+  img {
+    height: 100px;
+  }
+}
+
+.center-table {
+  display: flex;
+  margin: 0 auto;
+  margin: 20px;
+}
+.sub-table {
+  width: 1400px !important;
+  text-align: center;
+  &-row {
+    width: 900px !important;
+  }
+  h4 {
+    font-weight: 900;
+  }
+  h4,
+  h5 {
+    margin-bottom: 0;
+  }
+}
+
+.item-name {
+  flex-grow: 2;
+}
+
+.header-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  strong,
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.customer-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  min-width: 500px;
+
+  &-item {
+    width: 100%;
+    max-width: 250px;
+    display: flex;
+    font-family: "Poppins";
+    justify-content: space-between;
+
+    div:first-child {
+      margin-left: auto;
+    }
+    div:last-child {
+      min-width: 50%;
+      text-align: center;
+    }
+  }
+}
+
+.program-title {
+  text-align: center;
+  margin: 2rem 0;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.totals {
+  margin-top: auto;
+  display: flex;
+  margin-bottom: 3rem;
+  &-column {
+    width: 100%;
+  }
+  &-item {
+    width: 100%;
+    max-width: 250px;
+    display: flex;
+    font-family: "Poppins";
+    justify-content: space-between;
+
+    div:first-child {
+      margin-left: auto;
+      margin-right: 4px;
+    }
+    div:last-child {
+      min-width: 50%;
+      text-align: center;
+    }
+
+    .light-gray {
+      background-color: lightgray;
+    }
+    .dark-gray {
+      background-color: rgb(158, 158, 158);
+    }
+  }
+  .bold {
+    font-weight: 900;
+  }
+}
+.recommendations {
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: left;
+}
+.print-btn {
+  margin-top: 5rem;
+  .finish-btn{
+    min-width: 300px;
+    font-size: $standard-large-font;
+    background-color: $secondary-color;
+    border:0;
+    height: 70px;
+  }
+}
+
+.trial-btn {
+  max-width: 300px;
+}
+
+.additional-notes {
+  font-size: 12px;
+  text-align: left;
+
+  p {
+    margin: 0.25rem 1rem;
+  }
+}
+
+.download-app {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  padding-right: 1rem;
+  margin-bottom: -4rem;
+
+  img {
+    width: 50px;
+    margin-left: 1rem;
+  }
+}
+
