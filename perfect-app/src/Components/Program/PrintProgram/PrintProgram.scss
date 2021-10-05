@@ -50,12 +50,12 @@
   }
 }
 
-.center-table {
+.center-table-prog {
   display: flex;
   margin: 0 auto;
   margin: 20px;
 }
-.sub-table {
+.sub-table-prog {
   width: 500px !important;
   text-align: center;
   &-row {
@@ -70,7 +70,7 @@
   }
 }
 
-.item-name {
+.item-name-prog {
   flex-grow: 2;
 }
 
@@ -184,3 +184,7 @@
     margin-left: 1rem;
   }
 }
+
+///////
+
+

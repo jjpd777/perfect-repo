@@ -72,7 +72,7 @@ $input-height: 60px;
 
 .customer-box{
     background-color:white;
-    max-width: 100%;
+    min-width: 100%;
 }
 
 .search-user-2{
@@ -318,3 +318,12 @@ $input-height: 60px;
         font-size: $standard-large-font;
     }
 }
+
+
+/// Record ///
+
+.record-main-box{
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+  }

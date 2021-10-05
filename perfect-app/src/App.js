@@ -16,8 +16,8 @@ import {readItemsFunction } from "./UtilsFirebase/Database";
 import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates";
 import Estimate from "./Components/Estimate/Estimate";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ItemSelection from "./Components/ItemSelection/ItemSelection";
-import CustomerSearch from "./Components/CustomerSearch/CustomerSearch";
+import Record from "./Components/Record/Record";
+
 import {
   Button,
   Dropdown,
@@ -100,6 +100,10 @@ function App() {
             {current==="Program" &&
             <>
               <Program listItems={fetchedItems}/>
+            </>}
+            {current==="Record" &&
+            <>
+              <Record listItems={fetchedItems}/>
             </>}
             </div>
           {/* <div className="current-action-box">

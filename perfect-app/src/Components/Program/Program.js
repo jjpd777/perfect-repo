@@ -34,10 +34,12 @@ function Program({ listItems }) {
     const [isNewCustomer, setIsNewCustomer] = useState(true);
     const [saveBool, setSaveBool]= useState(false);
     const [paymentBreakdown, setPaymentBreakdown] = useState({});
-    const [invoiceEstimate, setInvoiceEstimate] = useState("program estimate");
+    const [invoiceEstimate, setInvoiceEstimate] = useState("estimate");
     const [user, loading, error]=useAuthState(auth);
     const [modalB, setModalB] = useState(false);
     const [insertedDB, setInsertedDB] = useState(false);
+    const programOrEstimate = "program";
+
     const remarksInitial = {
         footerNotes: "",
         validUntil: ""
@@ -45,9 +47,10 @@ function Program({ listItems }) {
 
     const voidState = {};
     const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
+
     const resetAllVariables = ()=>{
         setPaymentBreakdown(voidState);
-        setcurrentCustomer(voidState);
+        setCurrentCustomer(voidState);
         setInsertedDB(false);
         setProgramItems([]);
         setSaveBool(false);
@@ -107,9 +110,11 @@ function Program({ listItems }) {
     const insertProgramEstimate = () => {
         const customerFirebase = {
             customerName: currentCustomer.customerName,
+            customerLast: currentCustomer.customerLast,
             customerEmail: parseForFirebase(currentCustomer.customerEmail),
             customerPhone: parseForFirebase(currentCustomer.customerPhone),
         };
+        
 
         const item = {
             timestamp: currentFullDate(),
@@ -122,14 +127,19 @@ function Program({ listItems }) {
             paymentsCycles: paymentCycles,
             paymentBreakdown: paymentBreakdown,
             estimateType: invoiceEstimate,
+            remarks: additionalRemarks,
             voided: false,
-            programV: programVariables
+            saveDetail: programOrEstimate,
         };
+        console.log(customerFirebase, "customer obj");
+        console.log(item, "item obj");
+
         try {
-           
-            createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone)).then(()=>{setProgramItems([]);})
-            if(isNewCustomer)createCustomerFunction(customerFirebase).then(()=>{});
-            setCurrentCustomer({});
+            
+            createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone))
+            .then(()=> {setInsertedDB(true); 
+                if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
+            
         } catch (e) {
             console.log(e)
         }
@@ -299,9 +309,39 @@ function Program({ listItems }) {
                         onChange={(e) => { setProgramVariables({...programVariables, terms:e.target.value}) }} />
                 </div>
            { !saveBool && 
-           <>
-           
-        </>
+             <div className="invoice-radio-box">
+             <FormRadio
+                    inline
+                    className="radio-choices"
+                    checked={invoiceEstimate === "estimate"}
+                    onChange={() => {
+                        setInvoiceEstimate("estimate");
+                    }}
+                >
+                    <h3>estimate</h3>
+                </FormRadio>
+                <FormRadio
+                    inline
+                    className="radio-choices"
+                    checked={invoiceEstimate === "invoice"}
+                    onChange={() => {
+                        setInvoiceEstimate("invoice");
+                    }}
+                >
+                    <h3>invoice</h3>
+                </FormRadio>
+                <div className="additional-remarks">
+                <h3>Additional remarks</h3>
+                <FormInput
+                type="text"
+                className="remark-text"
+                value={additionalRemarks.footerNotes}
+                onChange={(e) => setAdditionalRem({...additionalRemarks, footerNotes: e.target.value})}
+                placeholder="Insert remarks..."
+              />
+              </div>
+           </div>
+
         }
             <div className="temp-save-box">
                 <Button className="temporary-save" onClick={()=>setSaveBool(!saveBool)}>{ !saveBool ? "Save selection" : "Edit Selection"}</Button>
@@ -324,38 +364,16 @@ function Program({ listItems }) {
               </div>
             <br></br>
             <br></br>
-            <div className="program-print-box">
+            <div className="prog-print-box">
                 <PrintProgram example={["one", "two"]}
                     checkoutItems = {programItems}
                     paybreakdown = {paymentBreakdown}
                     paycycle = {paymentCycles}
                     customer= {currentCustomer}
+                    remarks ={additionalRemarks.footerNotes}
+                    alreadyInserted = {insertedDB}
+
                 />
-            </div>
-            <div className="input-radio-box">
-             <FormRadio
-                    inline
-                    className="radio-choices"
-                    checked={invoiceEstimate === "program estimate"}
-                    onChange={() => {
-                        setInvoiceEstimate("program estimate");
-                    }}
-                >
-                    <h3>program estimate</h3>
-                </FormRadio>
-                <FormRadio
-                    inline
-                    className="radio-choices"
-                    checked={invoiceEstimate === "program invoice"}
-                    onChange={() => {
-                        setInvoiceEstimate("program invoice");
-                    }}
-                >
-                    <h3>program invoice</h3>
-                </FormRadio>
-            </div>
-            <div className="save-program-box">
-                <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save & Print</Button>             
             </div>
             <div className="save-db-box">
                 <br></br>

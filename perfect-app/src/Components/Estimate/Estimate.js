@@ -28,7 +28,7 @@ function Estimate({ listItems }) {
 
     const voidState = {};
 
-    const typesEstimate = ["Financing Estimate", "Normal Estimate"];
+    const programOrEstimate = "simple";
     const [paymentCycles, setPaymentCycles] = useState([]);
     const [saveBool, setSaveBool]= useState(false);
     const [paymentBreakdown, setPaymentBreakdown] = useState(voidState);
@@ -93,13 +93,16 @@ function Estimate({ listItems }) {
             paymentsCycles: paymentCycles,
             paymentBreakdown: paymentBreakdown,
             estimateType: invoiceEstimate,
+            remarks: additionalRemarks,
             voided: false,
+            saveDetail: programOrEstimate,
         };
         console.log(customerFirebase, "customer obj");
         console.log(item, "item obj");
 
         try {
-            
+            console.log("THIS IS THE USER OBJECT", currentCustomer)
+
             createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone))
             .then(()=> {setInsertedDB(true); 
                 if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
@@ -124,7 +127,7 @@ function Estimate({ listItems }) {
     const computeBalanceTotal = (x)=>{
         const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
         const tot = simplifySubTotal(x);
-        const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 :(x.financeTerms===2? 0.33 : 0.3));
+        const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 : (x.financeTerms===2? 0.33 : 0.3));
         const downP = tot * conversionFactor; const remBal = tot *(1-conversionFactor);
         const monthly = remBal/ Number(ft);
         return [downP, monthly, tot];

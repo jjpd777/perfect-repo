@@ -140,10 +140,10 @@ class ComponentToPrint extends React.Component {
             regulations.
           </p>
         </div>
-        <div className="center-table">
-          <div className="sub-table">
-            <Row className="sub-table-row">
-              <Col className="item-name">
+        <div className="center-table-prog">
+          <div className="sub-table-prog">
+            <Row className="sub-table-row-prog">
+              <Col className="item-name-prog">
                 <h4>Treatments</h4>
               </Col>
               <Col>
@@ -153,8 +153,8 @@ class ComponentToPrint extends React.Component {
             {pItems.map(
               (x) =>
                 x.itemType === "treatment" && (
-                  <Row className="sub-table-row">
-                    <Col className="item-name">
+                  <Row className="sub-table-row-prog">
+                    <Col className="item-name-prog">
                       <h5>{x.itemName}</h5>
                     </Col>
                     <Col>
@@ -164,9 +164,9 @@ class ComponentToPrint extends React.Component {
                 )
             )}
           </div>
-          <div className="sub-table">
-            <Row className="sub-table-row">
-              <Col className="item-name">
+          <div className="sub-table-prog">
+            <Row className="sub-table-row-prog">
+              <Col className="item-name-prog">
                 <h4>Products</h4>
               </Col>
               <Col>
@@ -176,8 +176,8 @@ class ComponentToPrint extends React.Component {
             {pItems.map(
               (x) =>
                 x.itemType === "product" && (
-                  <Row className="sub-table-row">
-                    <Col className="item-name">
+                  <Row className="sub-table-row-prog">
+                    <Col className="item-name-prog">
                       <h5>{x.itemName}</h5>
                     </Col>
                     <Col>
@@ -227,7 +227,7 @@ class ComponentToPrint extends React.Component {
 
         <div className="additional-notes">
           <strong>Additional terms:</strong>
-          <p>This is a field for the additional terms for this estimate.</p>
+          <p>{this.props.remarks}</p>
         </div>
         <div className="download-app">
           <p className="italic"> Download the Perfect B App</p>
@@ -259,14 +259,16 @@ class Example extends React.Component {
             paybreakdown = {this.props.paybreakdown}
             paycycle = {this.props.paycycle}
             customer = {this.props.customer}
+            remarks = {this.props.remarks}
           />
         </div>
+        {this.props.alreadyInserted && 
         <div className="print-btn">
           <ReactToPrint
-            trigger={() => <Button theme="success">Print this out!</Button>}
+            trigger={() => <Button className="finish-btn" >Print this out!</Button>}
             content={() => this.componentRef}
           />
-        </div>
+        </div>}
       </div>
     );
   }

@@ -14,7 +14,7 @@ function CustomerSearch({ fnSetCustomer, record }) {
         customerLast: '',
         customerEmail: '',
         customerPhone: "+1",
-        isNewUser: newCustomer,
+        isNewCustomer: newCustomer,
     };
     const [currentCustomer, setCurrentCustomer] = useState(initialCustomer);
     const [validCustomer, setValidCustomer] = useState(false);
