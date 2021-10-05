@@ -221,7 +221,7 @@ class ComponentToPrint extends React.Component {
 
         <div className="additional-notes">
           <strong>Additional terms:</strong>
-          <p>This is a field for the additional terms for this estimate.</p>
+          <p>{this.props.remarks}</p>
         </div>
         <div className="download-app">
           <p className="italic"> Download the Perfect B App</p>
@@ -249,6 +249,7 @@ class Example extends React.Component {
             paybreakdown = {this.props.paybreakdown}
             paycycle = {this.props.paycycle}
             customer = {this.props.customer}
+            remarks = {this.props.remarks}
           />
         </div>
         { this.props.alreadyInserted && <div className="print-btn">

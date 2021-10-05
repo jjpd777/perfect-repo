@@ -37,6 +37,22 @@ function Program({ listItems }) {
     const [invoiceEstimate, setInvoiceEstimate] = useState("program estimate");
     const [user, loading, error]=useAuthState(auth);
     const [modalB, setModalB] = useState(false);
+    const [insertedDB, setInsertedDB] = useState(false);
+    const remarksInitial = {
+        footerNotes: "",
+        validUntil: ""
+    };
+
+    const voidState = {};
+    const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
+    const resetAllVariables = ()=>{
+        setPaymentBreakdown(voidState);
+        setcurrentCustomer(voidState);
+        setInsertedDB(false);
+        setProgramItems([]);
+        setSaveBool(false);
+    };
+  
     
     const inverseMoney = (x)=>{
         const valFix = x.split("$").join("").split(",").join("");
@@ -246,6 +262,7 @@ function Program({ listItems }) {
     }, [programItems, programVariables]);
 
 
+    const customerValidFormat = !!(currentCustomer.customerName && currentCustomer.customerPhone && currentCustomer.customerLast);
 
 
     return (
@@ -295,32 +312,16 @@ function Program({ listItems }) {
             </div>
             { saveBool &&
             <>
-            {/* <div className="summary-box">
-                <Card className="summary-card">
-                    <CardBody>
-                        <CardHeader className="summary-header">{currentCustomer.customerName}</CardHeader>
-                        <CardTitle className="summary-title"><b>Down payment:</b> {moneyFormatter.format(paymentBreakdown.downPayment)}  <b>Total payment:</b> {moneyFormatter.format(paymentBreakdown.total)}</CardTitle>
-                        <CardSubtitle className="summary-items-list">
-                            {programItems.map(item=><h5>{item.itemName} with {item.financeTerms} financing {item.financeTerms===1 ? "term":"terms"} </h5>)}
-                        </CardSubtitle>
-                    </CardBody>
-                </Card>
-            </div> */}
-            {/* <div className="cycles-box">
-                {paymentCycles.map((x,i)=>
-                <>
-                <Card className="cycles-card">
-                    <CardBody>
-                        <CardHeader className="cycles-header">Cycle #{i+1}</CardHeader>
-                        <CardTitle className="cycles-title">Monthly: {moneyFormatter.format(x.monthly)}</CardTitle>
-                        <CardSubtitle className="cycles-subtitle">
-                        <h3>First payment: {formatUnixDate(x.firstPayment)}</h3>
-                        <h3>Last payment: {formatUnixDate(x.lastPayment)} </h3>
-                        </CardSubtitle>
-                    </CardBody>
-                </Card>
-                </>)}
-            </div> */}
+            <div className="additional-remarks">
+                <h3>Additional remarks</h3>
+                <FormInput
+                type="text"
+                className="remark-text"
+                value={additionalRemarks.footerNotes}
+                onChange={(e) => setAdditionalRem({...additionalRemarks, footerNotes: e.target.value})}
+                placeholder="Insert remarks..."
+              />
+              </div>
             <br></br>
             <br></br>
             <div className="program-print-box">
@@ -356,7 +357,28 @@ function Program({ listItems }) {
             <div className="save-program-box">
                 <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save & Print</Button>             
             </div>
-       
+            <div className="save-db-box">
+                <br></br>
+           { insertedDB ? (<Button 
+            onClick={()=>{resetAllVariables()}}
+            className="save-to-db">
+                New Estimate
+            </Button>):(
+                <>
+                                  {!customerValidFormat &&<h2>{ "Please enter user"}</h2>}
+                    <br></br>
+                  <Button 
+                  onClick={()=>{
+                      insertProgramEstimate();
+                  }}
+                  className="save-to-db">
+                      Save {invoiceEstimate}
+                  </Button>
+                  </>
+            )}
+            <br></br>
+            <br></br>
+            </div>
            </>}
         </div>
     );

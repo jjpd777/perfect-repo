@@ -41,7 +41,7 @@ function ItemSelection({ listItems, staff, fnItems }) {
         console.log("unique key examined", unixKeyID)
         fnItems(prevState => ([...prevState, ...[
             {
-                itemId: unixKeyID, itemName: "successful insertion",
+                itemId: unixKeyID, itemName: "",
                 itemNumSess: "0", itemType: "treatment",
                 itemCategory: "special", itemPriceUnit: "0",
                 financeTerms: 0, discount: 0, currentToggle: false,

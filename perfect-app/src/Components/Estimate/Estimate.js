@@ -36,8 +36,20 @@ function Estimate({ listItems }) {
     const [user, loading, error]=useAuthState(auth);
     const [currentCustomer, setcurrentCustomer] = useState(voidState);
     const [insertedDB, setInsertedDB] = useState(false);
+    const remarksInitial = {
+        footerNotes: "",
+        validUntil: ""
+    }
+    const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
+    const resetAllVariables = ()=>{
+        setPaymentBreakdown(voidState);
+        setcurrentCustomer(voidState);
+        setInsertedDB(false);
+        setProgramItems([]);
+        setSaveBool(false);
+    };
+  
 
-    console.log(currentCustomer, "Customersyyy")
     useEffect(() => {
         var tmp = [];
         listItems.map(x => {
@@ -88,8 +100,10 @@ function Estimate({ listItems }) {
 
         try {
             
-            createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone));
-            if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);
+            createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone))
+            .then(()=> {setInsertedDB(true); 
+                if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
+            
         } catch (e) {
             console.log(e)
         }
@@ -116,6 +130,7 @@ function Estimate({ listItems }) {
         return [downP, monthly, tot];
     };
 
+    const customerValidFormat = !!(currentCustomer.customerName && currentCustomer.customerPhone && currentCustomer.customerLast);
 
    
     useEffect(() => {
@@ -146,7 +161,9 @@ function Estimate({ listItems }) {
         setPaymentBreakdown({
             downPayment: downPayGlobal, 
             remainingBalance:remainingBalGlobal
-            , total: totalSale});
+            , total: totalSale
+        });
+
         const cycleKeys = Object.keys(cyclesTmp);
         var cyclesCollection =[];
         var li = cycleKeys.length;
@@ -165,9 +182,10 @@ function Estimate({ listItems }) {
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
 
+    console.log(currentCustomer, "current customer")
+    console.log(customerValidFormat)
 
 
-    console.log(programItems, "ESTIMATE ITEMS");
     return (
         <div className="action-content">
             <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />
@@ -202,6 +220,16 @@ function Estimate({ listItems }) {
                 >
                     <h3>invoice</h3>
                 </FormRadio>
+                <div className="additional-remarks">
+                <h3>Additional remarks</h3>
+                <FormInput
+                type="text"
+                className="remark-text"
+                value={additionalRemarks.footerNotes}
+                onChange={(e) => setAdditionalRem({...additionalRemarks, footerNotes: e.target.value})}
+                placeholder="Insert remarks..."
+              />
+              </div>
                 {/* <div className="save-program-box">
                 <Button className="cat-btn" onClick={() => { insertProgramEstimate() }}>Save a & Print</Button>             
             </div> */}
@@ -212,23 +240,30 @@ function Estimate({ listItems }) {
             paycycle = {paymentCycles}
             customer= {currentCustomer}
             alreadyInserted = {insertedDB}
+            remarks ={additionalRemarks.footerNotes}
             />
             </div>
             <div className="save-db-box">
+                <br></br>
            { insertedDB ? (<Button 
-            onClick={()=>{}}
+            onClick={()=>{resetAllVariables()}}
             className="save-to-db">
                 New Estimate
             </Button>):(
+                <>
+                                  {!customerValidFormat &&<h2>{ "Please enter user"}</h2>}
+                    <br></br>
                   <Button 
                   onClick={()=>{
-                      setInsertedDB(true);
                       insertProgramEstimate();
                   }}
                   className="save-to-db">
                       Save {invoiceEstimate}
                   </Button>
+                  </>
             )}
+            <br></br>
+            <br></br>
             </div>
            </>}
         </div>
