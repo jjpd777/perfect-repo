@@ -21,7 +21,7 @@ import { set } from "date-fns";
 
 function Estimate({ listItems }) {
     const [itemType, setItemType] = useState("treatment");
-    const [itemCategory, setItemCategory] = useState("laser");
+    const [itemCategory, setItemCategory] = useState("LHR");
     const [rCategories, setReadCateg] = useState([]);
 
     const [programItems, setProgramItems] = useState([]);

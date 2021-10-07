@@ -253,6 +253,34 @@ $input-height: 60px;
     flex-direction: column;
     margin: 0 auto;
     align-self:center;
+    position:relative;
+    .delete-btn{
+        position:absolute;
+        right:10px;
+        top:10px;
+        background-color:transparent;
+        border-color:red;
+        color:red;
+    }
+    .popup-cat-dropdown{
+        display:flex;
+        flex-direction: column;
+        margin: 0 auto;
+        align-content: center;
+    }
+    .popup-dd-button{
+        margin: 0 auto;
+        align-content: center;
+        font-size: $standard-large-font;
+    }
+    .popup-dd-list{
+
+        margin: 0 auto;
+        position:absolute;
+        left:300px;
+
+
+    }
 
 }
 

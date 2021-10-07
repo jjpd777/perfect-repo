@@ -16,7 +16,7 @@ import {
 
 function AdminActions({listItems}) {
   const [itemType, setItemType] = useState("treatment");
-  const [itemCategory, setItemCategory] = useState("laser");
+  const [itemCategory, setItemCategory] = useState("LHR");
   const [itemName, setItemName] = useState("");
   const [itemPriceUnit, setPriceUnit] = useState(0);
   const [itemUnits, setItemUnits] = useState(1);
@@ -28,7 +28,22 @@ function AdminActions({listItems}) {
   console.log("EDIT", editItems);
 
   
-  
+  const categoriesS =()=>{ 
+    const categories = []
+    listItems.map((x)=> !categories.includes(x.itemCategory) && categories.push(x.itemCategory));
+    setReadCateg(categories);
+  };
+
+  useEffect(()=>{
+    if(!editItems[0])return;
+    console.log(editItems[0],"Oyea")
+    setItemCategory(editItems[0].itemCategory)
+  },[editItems])
+
+
+  useEffect(()=>{
+    categoriesS()
+  },[listItems])
 
   const resetInputs = () => {
     ; setItemName("");
@@ -38,7 +53,7 @@ function AdminActions({listItems}) {
   const insertItem = () => {
     const item = {
       timestamp: currentFullDate(),
-      itemDelted: false,
+      itemDeleted: false,
       createdBy: "x.createdBy",
       itemType: itemType,
       itemCategory: itemCategory,
@@ -57,7 +72,9 @@ function AdminActions({listItems}) {
 
   return (
     <div className="admin-content">
-      <PopUpAdmin editItem={itemToModal} fnModal={setEditModal} editModal={editModal}/>
+      <PopUpAdmin editItem={itemToModal} fnModal={setEditModal} editModal={editModal}
+        categ = {rCategories}
+        />
       <ItemSelection listItems={listItems} staff={true} fnItems={setEditItems} />
       <div className="admin-input-box">
         <Container>

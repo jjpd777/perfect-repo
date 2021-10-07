@@ -1,7 +1,7 @@
 import { auth, db, googleProvider } from "../firebase";
 import { currentFullDate } from "../Utils/DateTimeUtils";
 
-const ROOT = "perfect-dev";
+const ROOT = "perfect-prod";
 const ITEMS_PATH = ROOT + "/perect-items";
 const PROGRAMS_PATH = ROOT + "/perect-programs";
 const CUSTOMER_PATH = ROOT + "/perfect-customers";
@@ -48,13 +48,21 @@ export const createEstimateFunction = (data, customerPhone) => {
     return generateEntry(data, ESTIMATE_PATH+"/"+customerPhone+"/");
 };
 
-
+export const createCustomerFunction = (data)=>{
+    return generateEntry(data, CUSTOMER_PATH);
+};
 export const updateItemFunction = (data,id)=>{
-    const target = ITEMS_PATH + id;
+    const target = ITEMS_PATH + "/"+id;
     return db.ref(target).update(data);
 };
 
-export const createCustomerFunction = (data)=>{
-    return generateEntry(data, CUSTOMER_PATH);
-}
+
+/// Delete
+
+export const deleteItemFunction = (data,id)=>{
+    const target = ITEMS_PATH + "/"+id;
+    console.log(target,"target")
+    return db.ref(target).remove();
+};
+
 

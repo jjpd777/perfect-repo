@@ -13,7 +13,7 @@ import {
 
 function ItemSelection({ listItems, staff, fnItems }) {
     const [itemType, setItemType] = useState("treatment");
-    const [itemCategory, setItemCategory] = useState("laser");
+    const [itemCategory, setItemCategory] = useState("LHR");
     const [rCategories, setReadCateg] = useState([]);
     const [editItems, setEditItems] = useState([]);
     const [toggle, setToggle] = useState(false);
@@ -56,14 +56,15 @@ function ItemSelection({ listItems, staff, fnItems }) {
     
     useEffect(()=>{
         if(!listItems.length) return;
-        setItemCategory(listItems.find(x=> x.itemType===itemType).itemCategory);
+        if(!(listItems.find(x=> x.itemType===itemType))){
+            setItemCategory("");
+        }else{
+        setItemCategory(listItems.find(x=> x.itemType===itemType).itemCategory);}
     },[itemType]);
 
 
     const updateItemsFunction = (x)=>{
         if(staff) return;
-        // if (programItems.find(c => x.itemName === c.itemName)) {
-        //     setProgramItems(programItems.filter(c => c.itemName !== x.itemName));
  
         fnItems(prevState => ([...prevState, ...[
             prevState.find(c => x.itemName === c.itemName) ? 
@@ -132,11 +133,11 @@ function ItemSelection({ listItems, staff, fnItems }) {
                     </Dropdown>
                 </div>
                 <div className="category-dropdown">
-                <Button 
+                {!staff &&<Button 
                 onClick={()=>{insertOpenItem(); console.log("clicked")}}
                 className="open-item-button">
                     Open Item
-                </Button>
+                </Button>}
                </div>
                 </div>
                 {!staff && <div className="select-dropdown-box">

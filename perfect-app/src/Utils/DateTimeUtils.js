@@ -9,7 +9,7 @@ const DateUtil = () => {
       var dd = String(today.getDate()).padStart(2, '0');
       var mm = String(today.getMonth() + 1).padStart(2, '0');
       var yyyy = today.getFullYear();
-      return hr + ":" + min + "&" + dd + '-' + mm + '-' + yyyy;
+      return hr + ":" + min + "&" + mm+ '-' + dd + '-' + yyyy;
     };
     return { newMHDMY, unixTime }
   }
@@ -30,5 +30,5 @@ export const formatUnixDate = (x)=>{
       var dd = String(today.getDate()).padStart(2, '0');
       var mm = String(today.getMonth() + 1).padStart(2, '0');
       var yyyy = today.getFullYear();
-      return dd + '-' + mm + '-' + yyyy;
+      return mm + '-' + dd + '-' + yyyy;
 }

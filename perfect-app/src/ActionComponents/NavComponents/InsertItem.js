@@ -15,7 +15,7 @@ import {
 
 function InsertItem({listItems}) {
   const [itemType, setItemType] = useState("treatment");
-  const [itemCategory, setItemCategory] = useState("laser");
+  const [itemCategory, setItemCategory] = useState("LHR");
   const [itemName, setItemName] = useState("");
   const [itemPriceUnit, setPriceUnit] = useState(0);
   const [itemUnits, setItemUnits] = useState(1);
