@@ -55,7 +55,7 @@ class ComponentToPrint extends React.Component {
               <div> Valid Until: </div> <div>{formatUnixDate(validUntil)}</div>
             </div>
             <div className="customer-details-item">
-              <div className="italic"> Number: </div> <div>363340</div>
+              <div className="italic"> Number: </div> <div>{this.props.perfID}</div>
             </div>
           </div>
         </div>
@@ -178,6 +178,7 @@ class Example extends React.Component {
             paycycle = {this.props.paycycle}
             customer = {this.props.customer}
             remarks = {this.props.remarks}
+            perfID = {this.props.perfID}
           />
         </div>
         { this.props.alreadyInserted && <div className="print-btn">

@@ -37,6 +37,7 @@ function Estimate({ listItems }) {
     const remarksInitial = {
         footerNotes: "",
         validUntil: "",
+        perfID:""
     }
     const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
     const resetAllVariables = ()=>{
@@ -51,6 +52,11 @@ function Estimate({ listItems }) {
     useEffect(()=>{
         setResetCustomer(true);
     },[resetCustomer]);
+
+    useEffect(()=>{
+        const perfID = perfectbUniqueID();
+        setAdditionalRem({...remarksInitial, perfID: perfID});
+    },[saveBool])
 
 
 
@@ -195,6 +201,7 @@ function Estimate({ listItems }) {
             customer= {currentCustomer}
             alreadyInserted = {insertedDB}
             remarks ={additionalRemarks.footerNotes}
+            perfID={additionalRemarks.perfID}
             />
             </div>
             <div className="save-db-box">

@@ -38,6 +38,7 @@ const initialState = {
         discountPercent: 0,
         discountAmount:0,
     },
+    perfID: ""
 };
 
 
@@ -52,6 +53,11 @@ function Program({ listItems }) {
     const [insertedDB, setInsertedDB] = useState(false);
     const [resetCustomer, setResetCustomer] = useState(true);
     const [programVariables, setProgramVariables] = useState(initialState);
+
+    useEffect(()=>{
+        const perfID = perfectbUniqueID();
+        setProgramVariables({...programVariables, perfID: perfID});
+    },[saveBool])
 
 
     const programOrEstimate = "program";
@@ -82,7 +88,7 @@ function Program({ listItems }) {
         const customerFirebase = structureCustomer(currentCustomer);
 
         const item = {
-            perfectID: perfectbUniqueID(),
+            perfectID: programVariables.perfID,
             timestamp: currentFullDate(),
             unix: currentUnixDate(),
             createdBy: user.email,
@@ -256,7 +262,7 @@ function Program({ listItems }) {
                     customer= {currentCustomer}
                     remarks ={additionalRemarks.footerNotes}
                     alreadyInserted = {insertedDB}
-
+                    perfID ={programVariables.perfID}
                 />
             </div>
             <div className="save-db-box">
