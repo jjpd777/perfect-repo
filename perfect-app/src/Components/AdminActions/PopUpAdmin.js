@@ -3,7 +3,7 @@ import { Form, FormInput, FormGroup,
      Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
     DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader,
     Modal, ModalHeader, ModalBody,ModalFooter } from "shards-react";
-import {moneyFormatter} from "../../Utils/MoneyFormat";
+import {moneyFormatter, inverseMoney} from "../../Utils/MoneyFormat";
 import {updateItemFunction, deleteItemFunction} from "../../UtilsFirebase/Database";
 
 import "../Design.scss";
@@ -13,9 +13,7 @@ function PopUpAdmin({ editItem, fnModal, editModal, categ }) {
     console.log(categ, "categories")
     const [editVariables, setEditVariables] = useState({});
     const [categoryDrop, setCategoryDrop] = useState(false);
-    const inverseMoney = (x)=>{
-        return x.split("$").join("").split(",").join("");
-    };
+    
     const cat = categ ? categ :[];
     const setMoneyFormat = (v)=>{
         const val = inverseMoney(v);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { moneyFormatter } from "../../Utils/MoneyFormat";
+import { moneyFormatter, inverseMoney } from "../../Utils/MoneyFormat";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
@@ -13,11 +13,6 @@ import {
 
 function ProgramItems({ props, fn }) {
     const terms = [0, 1, 2, 3, 6, 9, 12];
-
-    const inverseMoney = (x)=>{
-        const valFix = x.split("$").join("").split(",").join("");
-        return moneyFormatter.format(valFix).includes("NaN") ? "0" : valFix;
-    }
 
     const lookForNameUpdate = (x, val) =>{
         fn(prevState => (

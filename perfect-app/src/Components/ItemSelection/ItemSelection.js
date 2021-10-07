@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import "../Design.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
+import {compare} from "../../Utils/Sorting";
 
 import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
@@ -30,9 +31,9 @@ function ItemSelection({ listItems, staff, fnItems }) {
             }
         });
 
-        
+        console.log("SORTED", tmpEditItems.sort())
         if(staff) fnItems(tmpEditItems);
-        setReadCateg(tempCategories); setEditItems(tmpEditItems);
+        setReadCateg(tempCategories); setEditItems(tmpEditItems.sort(compare));
 
     }, [listItems,itemType, itemCategory]);
 

@@ -1,24 +1,13 @@
 import React from "react";
 import ReactToPrint from "react-to-print";
 import perfectIcon from "../../../perf-b-icon.png";
-import {moneyFormatter} from "../../../Utils/MoneyFormat";
+import {moneyFormatter, inverseMoney} from "../../../Utils/MoneyFormat";
 import {currentFullDate, currentUnixDate,formatUnixDate} from "../../../Utils/DateTimeUtils";
-
+import {computeBalanceTotal} from "../UtilsEstimate";
 import "./PrintEstimate.scss";
 import { Container, Row, Col, Button } from "shards-react";
 
 
-
-const cyclesList = (x) => {
-  if (!x) return [];
-  const keys = Object.keys(x);
-  return keys.map((k) => x[k]);
-};
-
-const totalCost = "1075.00";
-
-const nextPayment = "11/3/21";
-const lastPayment = "1/3/22";
 
 class ComponentToPrint extends React.Component {
   render() {
@@ -30,12 +19,21 @@ class ComponentToPrint extends React.Component {
     const cycles = displayK.map(k=> this.props.paycycle[k])
     // const terms = pCycle.financeTerms;
     const cust = this.props.customer;
-    console.log(this.props.paycycle, "inside print")
+    console.log(this.props.paycycle, "inside print");
+    const returnSubTotal = (x)=>{
+      const [dPay, remaining, locTot] = computeBalanceTotal(x);
+      return moneyFormatter.format(locTot);
+    }
+  
     const validUntil =Number(currentUnixDate())+ 86400*7;
     const returnDisplayDisc = (x)=>{
           const discOb = x.discObject 
         return discOb.discountType ==="percent" ? "%"+discOb.discountPercent : "$"+discOb.discountAmount
-    }
+    };
+
+    const discFlag = !!pItems.find(x=> inverseMoney(x.discObject.discountAmount)!=="0" || inverseMoney(x.discObject.discountPercent)!=="0");
+    const termsFlag = !!pItems.find(x=> x.financeTerms !==0);
+
     return (
       <div className="print-big-box">
         <div className="perfect-b-header">
@@ -83,11 +81,14 @@ class ComponentToPrint extends React.Component {
               <Col>
                 <h4>Quanity</h4>
               </Col>
-              <Col>
+              {discFlag && <Col>
                 <h4>Discount</h4>
-              </Col>
-              <Col>
+              </Col>}
+              {termsFlag && <Col>
                 <h4>Terms</h4>
+              </Col>}
+              <Col>
+                <h4>Subtotal</h4>
               </Col>
             </Row>
             {pItems.map(
@@ -97,16 +98,19 @@ class ComponentToPrint extends React.Component {
                       <h5>{x.itemName}</h5>
                     </Col>
                     <Col>
-                      <h5>{x.itemPriceUnit}</h5>
+                      <h5>{moneyFormatter.format(x.itemPriceUnit)}</h5>
                     </Col>
                     <Col>
                       <h5>{x.itemNumSess}</h5>
                     </Col>
-                    <Col>
+                    {discFlag &&<Col>
                       <h5>{returnDisplayDisc(x)}</h5>
-                    </Col>
-                    <Col>
+                    </Col>}
+                    {termsFlag && <Col>
                       <h5>{x.financeTerms}</h5>
+                    </Col>}
+                     <Col>
+                      <h5>{returnSubTotal(x)}</h5>
                     </Col>
                   </Row>
             )}
@@ -125,7 +129,7 @@ class ComponentToPrint extends React.Component {
               <div className="light-gray">{"0%"} </div>
             </div>
           </div>
-          {cycles.map((cycle,i)=>
+          {cycles.map((cycle,i)=> String(cycle.monthly) !=="0" &&
           <div className="totals-column">
           <div className="totals-item">
               <div> Cycle {i+1} </div>

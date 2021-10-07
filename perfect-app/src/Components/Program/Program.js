@@ -137,9 +137,10 @@ function Program({ listItems }) {
         try {
             
             createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone))
-            .then(()=> {setInsertedDB(true); 
+            .then(()=> {
+                setInsertedDB(true); 
                 if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
-            
+                console.log("NEW CUSTOMER", currentCustomer)
         } catch (e) {
             console.log(e)
         }

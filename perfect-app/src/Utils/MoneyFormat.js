@@ -10,3 +10,8 @@ export const moneyFormatter = new Intl.NumberFormat('en-US', {
     //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
   });
   
+export const inverseMoney = (input)=>{
+    const x = String(input)
+    const valFix = x.split("$").join("").split(",").join("");
+    return moneyFormatter.format(valFix).includes("NaN") ? "0" : valFix;
+};

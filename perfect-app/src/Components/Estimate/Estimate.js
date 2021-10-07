@@ -18,6 +18,7 @@ import {
 import { program } from "@babel/types";
 import { set } from "date-fns";
 
+import {computeBalanceTotal, programObjectBuilder, structureCustomer} from "./UtilsEstimate";
 
 function Estimate({ listItems }) {
     const [itemType, setItemType] = useState("treatment");
@@ -65,29 +66,16 @@ function Estimate({ listItems }) {
         setItemCategory(listItems.find(x=> x.itemType===itemType).itemCategory);
     },[itemType]);
 
-    const programObjectBuilder = () => {
-        var rsp = {};
-        programItems.map((item, ix) => {
-            rsp["item-" + String(ix + 1)] = item;
-        });
-        return rsp;
-    }
 
     const insertProgramEstimate = () => {
-        const customerFirebase = {
-            customerName: currentCustomer.customerName,
-            customerLast: currentCustomer.customerLast,
-            customerEmail: parseForFirebase(currentCustomer.customerEmail),
-            customerPhone: parseForFirebase(currentCustomer.customerPhone),
-        };
+        const customerFirebase = structureCustomer(currentCustomer);
         
-
         const item = {
             timestamp: currentFullDate(),
             unix: currentUnixDate(),
             itemDelted: false,
             createdBy: user.email,
-            programItems: programObjectBuilder(),
+            programItems: programObjectBuilder(programItems),
             programTotal: paymentBreakdown.total,
             customerObject: customerFirebase,
             paymentsCycles: paymentCycles,
@@ -97,8 +85,7 @@ function Estimate({ listItems }) {
             voided: false,
             saveDetail: programOrEstimate,
         };
-        console.log(customerFirebase, "customer obj");
-        console.log(item, "item obj");
+
 
         try {
             console.log("THIS IS THE USER OBJECT", currentCustomer)
@@ -112,26 +99,6 @@ function Estimate({ listItems }) {
         }
     };
 
-    const simplifySubTotal = (x)=>{
-        const disc = x.discObject;
-        if(disc.discountType ==="percent"){
-            const ds = disc.discountPercent ===0 ? 1 : 1-(Number(disc.discountPercent)/100);
-            const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds;
-            return tot;
-        }else{
-            const tot = (Number(x.itemPriceUnit)-Number(disc.discountAmount))* Number(x.itemNumSess);
-            return tot;
-        }
-    }
-
-    const computeBalanceTotal = (x)=>{
-        const ft = x.financeTerms ===0 ? 1 : Number(x.financeTerms);
-        const tot = simplifySubTotal(x);
-        const conversionFactor = x.financeTerms=== 0 ? 1 :(x.financeTerms===1? 0.5 : (x.financeTerms===2? 0.33 : 0.3));
-        const downP = tot * conversionFactor; const remBal = tot *(1-conversionFactor);
-        const monthly = remBal/ Number(ft);
-        return [downP, monthly, tot];
-    };
 
     const customerValidFormat = !!(currentCustomer.customerName && currentCustomer.customerPhone && currentCustomer.customerLast);
 
@@ -143,8 +110,10 @@ function Estimate({ listItems }) {
 
         programItems.map((item) => {
             const [downPayment, remainingBalance, localTotal] = computeBalanceTotal(item);
+
             downPayGlobal+=downPayment; remainingBalGlobal+=remainingBalance;
             totalSale += localTotal;
+
             if (!(cyclesTmp[item.financeTerms])) {
                 cyclesTmp[item.financeTerms] = {
                     monthly: remainingBalance,
@@ -185,8 +154,6 @@ function Estimate({ listItems }) {
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
 
-    console.log(currentCustomer, "current customer")
-    console.log(customerValidFormat)
 
 
     return (

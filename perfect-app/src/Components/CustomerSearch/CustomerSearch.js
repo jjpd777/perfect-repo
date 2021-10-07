@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-    FormInput, Button
+    FormInput, Button, Container, Row, Col
 } from "shards-react";
 import { createCustomerFunction, readCustomersFunction } from "../../UtilsFirebase/Database";
 import "../Design.scss";
@@ -17,7 +17,6 @@ function CustomerSearch({ fnSetCustomer, record }) {
         isNewCustomer: newCustomer,
     };
     const [currentCustomer, setCurrentCustomer] = useState(initialCustomer);
-    const [validCustomer, setValidCustomer] = useState(false);
 
 
     function validatePhone(phone) {
@@ -36,6 +35,7 @@ function CustomerSearch({ fnSetCustomer, record }) {
         });
         return () => ref.off('value', refVal)
     }, []);
+
 
     var searched = searchInput === "" ? [] : fetchedUsers.filter(u => {
         return (u.customerName.toLowerCase()
@@ -62,54 +62,87 @@ function CustomerSearch({ fnSetCustomer, record }) {
     return (
         <div className="customer-box">
             <div className="switch-box">
-           {!validCustomer && !record &&<Button className="switch-to-search" onClick={() => { switchSearchExisting() }}>{newCustomer ? "Find user" : "New user"}</Button>}
+           {true && !record &&<Button className="switch-to-search" onClick={() => { switchSearchExisting() }}>{newCustomer ? "Find user" : "New user"}</Button>}
             </div>
-            {!validCustomer &&<div className="search-customer-box">
+            {true &&<div className="search-customer-box">
                 {(!newCustomer || record) ? (
                 <>
                 <div className="search-user-2">
-                    <h3>Search user: </h3>
-                    <FormInput className="search-user-db"
+                    <Container>
+                        <Row>
+                            <Col>
+                            <h3>Search user: </h3>
+                            </Col>
+                            <Col>
+                            <FormInput className="search-user-input"
                         value={searchInput}
                         onChange={(c) => {
                             setSearchInput(c.target.value);
                         }} />
+                            </Col>
+                        </Row>
+                    </Container>
+                   
                 </div>
 
                 <div className="searched-options">
                     {searched.map((c) => <>
-                        <Button className="customer-options" onClick={() => { setCurrentCustomer(c) }}>{c.customerName}</Button>
+                        <Button className="customer-options" onClick={() => { setCurrentCustomer(c);  }}>{c.customerName}</Button>
                     </>)}
                 </div>
             </>
                 )
                     : (
                         <div className="search-user-2">
-                        <h3>Name *</h3>
-                        <FormInput className="search-user-input"
+                        <Container>
+                            <Row>
+                                <Col>
+                                <h3>Name *</h3>
+                                </Col>
+                                <Col>
+                                <h3>Last Name *</h3>
+                                </Col>
+                                <Col>
+                                <h3>Phone *</h3>
+                                </Col>
+                                <Col>
+                                <h3>Email *</h3>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                <FormInput className="search-user-input"
                             invalid={!currentCustomer.customerName.length}
                             onChange={(e) => setCurrentCustomer({ ...currentCustomer, customerName: e.target.value })}
                             value={currentCustomer.customerName}
                         />
-                        <h3>Last Name *</h3>
-                        <FormInput className="search-user-input"
+                                </Col>
+                                <Col>
+                                <FormInput className="search-user-input"
                             invalid={!currentCustomer.customerName.length}
                             onChange={(e) => setCurrentCustomer({ ...currentCustomer, customerLast: e.target.value })}
                             value={currentCustomer.customerLast}
                         />
-                        <h3>Phone *</h3>
-                        <FormInput className="search-user-input"
+                                </Col>
+                                <Col>
+                                <FormInput className="search-user-input"
                             type="text"
                             onChange={(e) => setCurrentCustomer({ ...currentCustomer, customerPhone: e.target.value })}
                             valid={phoneIsValid}
                             invalid={!phoneIsValid}
                             value={currentCustomer.customerPhone}
                         />
-                        <h3>Email</h3>
-                        <FormInput className="search-user-input"
+                                </Col>
+                                <Col>
+                                <FormInput className="search-user-input"
                             onChange={(e) => setCurrentCustomer({ ...currentCustomer, customerEmail: e.target.value })}
                             value={currentCustomer.customerEmail}
                         />
+                                </Col>
+                            </Row>
+
+                        </Container>
+                        
                     </div>
                     )}
             </div>}
@@ -119,18 +152,6 @@ function CustomerSearch({ fnSetCustomer, record }) {
                 <h4><b>Email: </b>{currentCustomer.customerEmail}</h4>
                 <h4><b>Phone: </b>{currentCustomer.customerPhone}</h4>
             </div>
-            {validCustomer && !record &&<Button className="save-btn"
-                        onClick={()=>{setValidCustomer(false) }}
-                        valid={conditions}
-                    >
-                        Edit
-                    </Button>}
-            {!record && !validCustomer &&<Button className="save-btn"
-                        onClick={()=>{setValidCustomer(conditions) }}
-                        valid={conditions}
-                    >
-                        Save
-                    </Button>}                  
         </div>)
 };
 

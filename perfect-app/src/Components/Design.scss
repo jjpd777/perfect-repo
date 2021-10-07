@@ -77,6 +77,10 @@ $input-height: 60px;
 
 .search-user-2{
     background-color: white;
+    .search-user-input{
+        height: $input-height;
+        font-size: $standard-large-font;
+    }
 }
 .switch-box{
     display: flex;
