@@ -37,7 +37,7 @@ const initialState = {
         type: "percent",
         discountPercent: 0,
         discountAmount:0,
-    }
+    },
 };
 
 
@@ -130,9 +130,10 @@ function Program({ listItems }) {
         setPaymentBreakdown({
             downPayment: downPayment, 
             remainingBalance: remainingBalance,
-            total: finalTotal
+            total: finalTotal,
+            salesTax:0,
         });
-        
+
         const cyclesCollection = {
             "0" :{
                 "firstPayment": currentUnixDate()+ 2592000,

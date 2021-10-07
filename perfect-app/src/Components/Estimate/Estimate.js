@@ -36,7 +36,7 @@ function Estimate({ listItems }) {
     const [resetCustomer, setResetCustomer] = useState(true);
     const remarksInitial = {
         footerNotes: "",
-        validUntil: ""
+        validUntil: "",
     }
     const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
     const resetAllVariables = ()=>{
@@ -115,7 +115,8 @@ function Estimate({ listItems }) {
         setPaymentBreakdown({
             downPayment: downPayGlobal, 
             remainingBalance:remainingBalGlobal
-            , total: totalSale
+            , total: totalSale,
+            salesTax: 0,
         });
 
         const cycleKeys = Object.keys(cyclesTmp);
