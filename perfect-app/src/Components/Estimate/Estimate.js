@@ -72,8 +72,6 @@ function Estimate({ listItems }) {
             voided: false,
             saveDetail: programOrEstimate,
         };
-        console.log(item, "estimate item")
-
 
         try {
             console.log("THIS IS THE USER OBJECT", currentCustomer)
@@ -206,8 +204,8 @@ function Estimate({ listItems }) {
                 New Estimate
             </Button>):(
                 <>
-                                  {!customerValidFormat &&<h2>{ "Please enter user"}</h2>}
-                    <br></br>
+                                  {!customerValidFormat ?<h2>{ "Please enter user"}</h2>
+                    :
                   <Button 
                   onClick={()=>{
                       insertProgramEstimate();
@@ -215,6 +213,7 @@ function Estimate({ listItems }) {
                   className="save-to-db">
                       Save {invoiceEstimate}
                   </Button>
+                  }
                   </>
             )}
             <br></br>

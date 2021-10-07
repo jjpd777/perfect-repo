@@ -102,7 +102,7 @@ class ComponentToPrint extends React.Component {
           </div>
         </div>
         <div className="totals">
-          <div className="totals-column">
+          {/* <div className="totals-column">
             <div className="totals-item">
               <div> Total Cost</div>
               <div>
@@ -115,25 +115,29 @@ class ComponentToPrint extends React.Component {
                 <strong> {terms} </strong>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="totals-column">
             <div className="totals-item bold">
               <div> Pay Today </div>
-              <div className="dark-gray">{moneyFormatter.format(pBdown.downPayment)} </div>
+              <div className="light-gray">{moneyFormatter.format(pBdown.downPayment)} </div>
             </div>
             <div className="totals-item bold">
               <div> Monthly Payment</div>
-              <div className="light-gray">{moneyFormatter.format(pCycle.monthly)} </div>
+              <div className="dark-gray">{moneyFormatter.format(pCycle.monthly)} </div>
+            </div>
+            <div className="totals-item bold">
+              <div> Terms</div>
+              <div className="light-gray">{terms} </div>
             </div>
           </div>
           <div className="totals-column">
             <div className="totals-item">
               <div> Next Payment </div>
-              <div className="dark-gray bold">{formatUnixDate(pCycle.firstPayment)} </div>
+              <div className="light-gray bold">{formatUnixDate(pCycle.firstPayment)} </div>
             </div>
             <div className="totals-item ">
               <div> Last Payment</div>
-              <div className="light-gray bold">{formatUnixDate(pCycle.lastPayment)} </div>
+              <div className="dark-gray bold">{formatUnixDate(pCycle.lastPayment)} </div>
             </div>
           </div>
         </div>

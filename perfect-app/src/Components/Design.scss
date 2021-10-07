@@ -16,7 +16,7 @@ $input-height: 60px;
     margin: 0 auto;
 
     .select-dropdown-box{
-        max-width: 70%;
+        max-width: 100%;
         margin: 0 auto;
         .item-select-btn{
             background-color:white;
@@ -49,7 +49,7 @@ $input-height: 60px;
         align-self: center;
     
         .dd-button{
-            width: $standard-button;
+            width: 300px;
             font-size: $standard-large-font;
             background-color: $standard-nav-btn;
             border:0;
