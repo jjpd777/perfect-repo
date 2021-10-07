@@ -41,7 +41,7 @@ function ItemSelection({ listItems, staff, fnItems }) {
         fnItems(prevState => ([...prevState, ...[
             {
                 itemId: unixKeyID, itemName: "",
-                itemNumSess: "0", itemType: itemType,
+                itemNumSess: "1", itemType: itemType,
                 itemCategory: "special", itemPriceUnit: "0",
                 financeTerms: 0, currentToggle: false,
                 discObject:{

@@ -7,6 +7,7 @@
     "unix": 1633596395,
     "id": "-MlOvh2ZB_YdDHfP87kv",
     "voided": false,
+    "programTotal": 75.5,
 
     "todelete":{ 
         "itemDelted": false
@@ -76,8 +77,5 @@
             "monthly": 11.724999999999998,
             "numberTerms": "2"
         }
-    },
-
-    "programTotal": 75.5,
-   
+    }   
 }
