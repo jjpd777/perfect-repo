@@ -73,7 +73,7 @@ class ComponentToPrint extends React.Component {
           <div className="sub-table">
             <Row className="sub-table-row">
               <Col className="item-name">
-                <h4>Treatments</h4>
+                <h4>Treatments/Products</h4>
               </Col>
               <Col>
                 <h4>Price/Session</h4>

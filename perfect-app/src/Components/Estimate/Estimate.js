@@ -9,24 +9,20 @@ import "shards-ui/dist/css/shards.min.css";
 import ItemSelection from "../ItemSelection/ItemSelection";
 import { auth, logout} from "../../UtilsFirebase/Authentication";
 import {parseForFirebase} from "../../Utils/FirebaseParser";
-import { currentFullDate, formatUnixDate, currentUnixDate } from "../../Utils/DateTimeUtils";
+import { currentFullDate, formatUnixDate, currentUnixDate,perfectbUniqueID } from "../../Utils/DateTimeUtils";
 import { createEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 import {
-    FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
-    DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader
+    FormInput, Button, FormRadio
 } from "shards-react";
 import { program } from "@babel/types";
 import { set } from "date-fns";
 
-import {computeBalanceTotal, programObjectBuilder, structureCustomer} from "./UtilsEstimate";
+import {computeBalanceTotal} from "./UtilsEstimate";
+import {programObjectBuilder, structureCustomer} from "../SharedUtils";
 
 function Estimate({ listItems }) {
-    const [itemType, setItemType] = useState("treatment");
-    const [itemCategory, setItemCategory] = useState("LHR");
-    const [rCategories, setReadCateg] = useState([]);
 
     const [programItems, setProgramItems] = useState([]);
-
     const voidState = {};
 
     const programOrEstimate = "simple";
@@ -37,12 +33,14 @@ function Estimate({ listItems }) {
     const [user, loading, error]=useAuthState(auth);
     const [currentCustomer, setcurrentCustomer] = useState(voidState);
     const [insertedDB, setInsertedDB] = useState(false);
+    const [resetCustomer, setResetCustomer] = useState(true);
     const remarksInitial = {
         footerNotes: "",
         validUntil: ""
     }
     const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
     const resetAllVariables = ()=>{
+        setResetCustomer(false);
         setPaymentBreakdown(voidState);
         setcurrentCustomer(voidState);
         setInsertedDB(false);
@@ -50,30 +48,19 @@ function Estimate({ listItems }) {
         setSaveBool(false);
     };
   
-
-    useEffect(() => {
-        var tmp = [];
-        listItems.map(x => {
-            if (!(tmp.includes(x.itemCategory)) && (itemType === x.itemType)) {
-                tmp.push(x.itemCategory);
-            }
-        })
-        setReadCateg(tmp); 
-    }, [listItems, itemType, itemCategory]);
-
     useEffect(()=>{
-        if(!listItems.length) return;
-        setItemCategory(listItems.find(x=> x.itemType===itemType).itemCategory);
-    },[itemType]);
+        setResetCustomer(true);
+    },[resetCustomer]);
+
 
 
     const insertProgramEstimate = () => {
         const customerFirebase = structureCustomer(currentCustomer);
         
         const item = {
+            perfectID: perfectbUniqueID(),
             timestamp: currentFullDate(),
             unix: currentUnixDate(),
-            itemDelted: false,
             createdBy: user.email,
             programItems: programObjectBuilder(programItems),
             programTotal: paymentBreakdown.total,
@@ -85,12 +72,13 @@ function Estimate({ listItems }) {
             voided: false,
             saveDetail: programOrEstimate,
         };
+        console.log(item, "estimate item")
 
 
         try {
             console.log("THIS IS THE USER OBJECT", currentCustomer)
 
-            createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone))
+            createEstimateFunction(item, customerFirebase.customerPhone)
             .then(()=> {setInsertedDB(true); 
                 if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
             
@@ -117,15 +105,11 @@ function Estimate({ listItems }) {
             if (!(cyclesTmp[item.financeTerms])) {
                 cyclesTmp[item.financeTerms] = {
                     monthly: remainingBalance,
-                    firstPayment: currentFullDate(),
-                    nextPayment: currentFullDate()
                 };
             } else {
                 const t = cyclesTmp[item.financeTerms];
                 cyclesTmp[item.financeTerms] = {
                     monthly: t.monthly + remainingBalance,
-                    firstPayment: currentFullDate(),
-                    nextPayment: currentFullDate(),
                 };
             }
         });
@@ -143,8 +127,9 @@ function Estimate({ listItems }) {
             var tt={
                 numberTerms:k,
                 monthly:0,
-                firstPayment: kIndex ===0 ? currentUnixDate()+ ( k==="0"? 0:2592000 ): currentUnixDate()+ 2592000*(Number(cycleKeys[kIndex-1])+1),
-                lastPayment: currentUnixDate()+( k==="0"? 0:2592000 )*(Number(cycleKeys[kIndex]))
+                firstPayment: kIndex ===0 ? (currentUnixDate()+ ( k==="0"? 0:2592000 ))
+                                          : (currentUnixDate()+ 2592000*(Number(cycleKeys[kIndex-1])+1)),
+                lastPayment: currentUnixDate()+( k==="0"? 0 : 2592000 )*(Number(cycleKeys[kIndex]))
             };
             for(let i=kIndex; i<li;i++){
                 tt.monthly+= cyclesTmp[cycleKeys[i]].monthly;
@@ -158,8 +143,8 @@ function Estimate({ listItems }) {
 
     return (
         <div className="action-content">
-            <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />
-            <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>
+            {resetCustomer && <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />}
+            {resetCustomer && <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>}
             <div className="temp-save-box">
                 <Button className="temporary-save" onClick={()=>setSaveBool(!saveBool)}>{ !saveBool ? "Save selection" : "Edit Selection"}</Button>
             </div>

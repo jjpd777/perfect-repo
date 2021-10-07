@@ -1,0 +1,83 @@
+{
+    "createdBy": "juan@gmail.com",
+    "perfectID": 71599594,
+    "estimateType": "estimate",
+    "saveDetail": "simple",
+    "timestamp": "04:46&10-07-2021",
+    "unix": 1633596395,
+    "id": "-MlOvh2ZB_YdDHfP87kv",
+    "voided": false,
+
+    "todelete":{ 
+        "itemDelted": false
+    },
+
+
+    "customerObject": {
+        "customerName": "Juan Jose",
+        "customerLast": "Palacio",
+        "customerEmail": "",
+        "customerPhone": "+16505673013"
+    },
+    "programItems": {
+        "item-1": {
+            "currentToggle": false,
+            "discObject": {
+                "discountType": "percent",
+                "discountPercent": "10",
+                "discountAmount": 0
+            },
+            "financeTerms": 1,
+            "itemCategory": "LHR",
+            "itemId": "-MlMm03uTP7fzrQn-aM2",
+            "itemName": "Belly Line",
+            "itemNumSess": 1,
+            "itemPriceUnit": "45",
+            "itemType": "treatment"
+        },
+        "item-2": {
+            "currentToggle": false,
+            "discObject": {
+                "discountType": "amount",
+                "discountPercent": 0,
+                "discountAmount": "50.00"
+            },
+            "financeTerms": 1,
+            "itemCategory": "LHR",
+            "itemId": "-MlMm03uTP7fzrQn-aM2",
+            "itemName": "Belly Line",
+            "itemNumSess": 1,
+            "itemPriceUnit": "45",
+            "itemType": "treatment"
+        }
+
+
+    },
+    "remarks": {
+        "footerNotes": "",
+        "validUntil": ""
+    },
+
+    "paymentBreakdown": {
+        "downPayment": 31.8,
+        "remainingBalance": 31.974999999999998,
+        "total": 75.5
+    },
+    "paymentsCycles": {
+        "0": {
+            "firstPayment": 1636188380,
+            "lastPayment": 1636188380,
+            "monthly": 31.974999999999998,
+            "numberTerms": "1"
+        },
+        "1": {
+            "firstPayment": 1638780380,
+            "lastPayment": 1638780380,
+            "monthly": 11.724999999999998,
+            "numberTerms": "2"
+        }
+    },
+
+    "programTotal": 75.5,
+   
+}

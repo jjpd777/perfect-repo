@@ -11,7 +11,6 @@ const ESTIMATE_PATH = ROOT + "/perfect-estimates";
 const itemModel = (x) => {
     return {
         timestamp: currentFullDate(),
-        itemDelted: false,
         createdBy: x.createdBy,
         itemType: x.itemType,
         itemCategory: x.itemCategory,

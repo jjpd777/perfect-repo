@@ -20,20 +20,3 @@ export const computeBalanceTotal = (x)=>{
     const monthly = remBal/ Number(ft);
     return [downP, monthly, tot];
 };
-
-export const programObjectBuilder = (programItems) => {
-    var rsp = {};
-    programItems.map((item, ix) => {
-        rsp["item-" + String(ix + 1)] = item;
-    });
-    return rsp;
-};
-
-export const structureCustomer = (currentCustomer)=>{
-    return{
-        customerName: currentCustomer.customerName,
-        customerLast: currentCustomer.customerLast,
-        customerEmail: parseForFirebase(currentCustomer.customerEmail),
-        customerPhone: parseForFirebase(currentCustomer.customerPhone),
-    };
-}

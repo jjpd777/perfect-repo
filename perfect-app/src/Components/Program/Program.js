@@ -20,6 +20,8 @@ import {
 } from "shards-react";
 import { program } from "@babel/types";
 import { set } from "date-fns";
+import { structureCustomer} from "../SharedUtils";
+
 
 
 function Program({ listItems }) {
@@ -38,6 +40,8 @@ function Program({ listItems }) {
     const [user, loading, error]=useAuthState(auth);
     const [modalB, setModalB] = useState(false);
     const [insertedDB, setInsertedDB] = useState(false);
+    const [resetCustomer, setResetCustomer] = useState(true);
+
     const programOrEstimate = "program";
 
     const remarksInitial = {
@@ -49,18 +53,21 @@ function Program({ listItems }) {
     const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
 
     const resetAllVariables = ()=>{
+        setResetCustomer(false);
         setPaymentBreakdown(voidState);
         setCurrentCustomer(voidState);
         setInsertedDB(false);
         setProgramItems([]);
         setSaveBool(false);
     };
+
+
+    useEffect(()=>{
+        setResetCustomer(true);
+    },[resetCustomer]);
   
     
-    const inverseMoney = (x)=>{
-        const valFix = x.split("$").join("").split(",").join("");
-        return moneyFormatter.format(valFix).includes("NaN") ? "0" : valFix;
-    };
+  
 
     const initialState = {
         downPayment: "50",
@@ -108,18 +115,12 @@ function Program({ listItems }) {
     }
 
     const insertProgramEstimate = () => {
-        const customerFirebase = {
-            customerName: currentCustomer.customerName,
-            customerLast: currentCustomer.customerLast,
-            customerEmail: parseForFirebase(currentCustomer.customerEmail),
-            customerPhone: parseForFirebase(currentCustomer.customerPhone),
-        };
-        
+        const customerFirebase = structureCustomer(currentCustomer);
+
 
         const item = {
             timestamp: currentFullDate(),
             unix: currentUnixDate(),
-            itemDelted: false,
             createdBy: user.email,
             programItems: programObjectBuilder(),
             programTotal: paymentBreakdown.total,
@@ -259,7 +260,7 @@ function Program({ listItems }) {
                 monthly: cycleInfo[programVariables.terms].monthly + monthlyRemaining,
             }
         });
-        console.log("PROGRAM FUCKING VARIABLES", programVariables)
+
         const totSalAmounAdjust = programVariables.disc.discountType==='amount' ? Number(programVariables.disc.discountAmount) : 0;
         const totSummary = totalSale - totSalAmounAdjust;
         console.log(totSalAmounAdjust, "adjustment")

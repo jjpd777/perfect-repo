@@ -30,8 +30,6 @@ function ItemSelection({ listItems, staff, fnItems }) {
                 tmpEditItems.push(x);
             }
         });
-
-        console.log("SORTED", tmpEditItems.sort())
         if(staff) fnItems(tmpEditItems);
         setReadCateg(tempCategories); setEditItems(tmpEditItems.sort(compare));
 
@@ -43,9 +41,9 @@ function ItemSelection({ listItems, staff, fnItems }) {
         fnItems(prevState => ([...prevState, ...[
             {
                 itemId: unixKeyID, itemName: "",
-                itemNumSess: "0", itemType: "treatment",
+                itemNumSess: "0", itemType: itemType,
                 itemCategory: "special", itemPriceUnit: "0",
-                financeTerms: 0, discount: 0, currentToggle: false,
+                financeTerms: 0, currentToggle: false,
                 discObject:{
                     discountType: 'percent',
                     discountPercent: 0,
@@ -74,7 +72,7 @@ function ItemSelection({ listItems, staff, fnItems }) {
                     itemId: x.id, itemName: x.itemName,
                     itemNumSess: x.itemNumSess, itemType: x.itemType,
                     itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
-                    financeTerms: 0, discount: 0, currentToggle: false,
+                    financeTerms: 0, currentToggle: false,
                     discObject:{
                         discountType: 'percent',
                         discountPercent: 0,
