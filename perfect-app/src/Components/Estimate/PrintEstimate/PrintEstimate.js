@@ -46,7 +46,7 @@ class ComponentToPrint extends React.Component {
           </div>
           <div className="customer-details">
             <div className="customer-details-item">
-              <div> Client: </div> <div>{cust.customerName}</div>
+              <div> Patient Name: </div> <div>{cust.customerName}</div>
             </div>
             <div className="customer-details-item">
               <div> Effective Date: </div> <div>{currentFullDate().split("&")[1]}</div>
@@ -88,7 +88,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Terms</h4>
               </Col>}
               <Col>
-                <h4>Subtotal</h4>
+                <h4>Total</h4>
               </Col>
             </Row>
             {pItems.map(

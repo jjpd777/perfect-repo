@@ -52,7 +52,7 @@ export const updateDiscountCorrect = (val, percent)=>{
 
 
 export const chooseCategoriesDiscount =(programItems)=>{ 
-    const discountPerCategory = [1,0.99,0.98,0.97,0.96];
+    const discountPerCategory = [1,1,1,1,1,1,1,1,1,1];
     const nCat = new Set(programItems.map(x=> x.itemCategory));
     return discountPerCategory[nCat.size];
 };
