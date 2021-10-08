@@ -15,15 +15,36 @@ import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
     DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader
 } from "shards-react";
-import { program } from "@babel/types";
-import { set } from "date-fns";
+
+import {decEstimateItems, decCustomer} from "./Deconstruct";
 
 
-function Record({ listItems }) {
+function Record({ fnCurrent, fnReviewList }) {
     const [currentCustomer, setCurrentCustomer]=useState({});
     const [estimatesList, setEstimates] = useState([]);
 
+    const handleEdit = (estimate)=>{
+      if(estimate.estimateType==="invoice") return;
+      if(estimate.saveDetail ==="simple"){
+        // set Edit for Estimate
+        fnCurrent("Estimate");
+        console.log("ESTIMATE FULL INFO", estimate)
+        const estimateItems = decEstimateItems(estimate);
+        const customerInfo = decCustomer(estimate);
+        const revItems = {
+          "estimateItems" : estimateItems,
+          "customerInfo" : customerInfo,
+          "updateKey" : estimate.id,
+          "remarks" : estimate.remarks
+        }
+        fnReviewList(revItems);
 
+      }else{
+        // set Edit for Program
+        fnCurrent("Program");
+
+      }
+    }
   useEffect(() => {
     const ref = readCustomerEstimatesFunction(currentCustomer.customerPhone);
     const refVal = ref.on('value', function (snapshot) {
@@ -46,7 +67,7 @@ function Record({ listItems }) {
             <h4>Estimates and invoices</h4>
           { estimatesList.map((x)=>  
           <div className="summary-box">
-               <RecordCard estimate={x}/>
+               <RecordCard estimate={x} fnHandleEdit={handleEdit}/>
           </div>)}
         </div>
     )

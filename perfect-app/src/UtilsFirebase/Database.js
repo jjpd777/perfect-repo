@@ -42,10 +42,17 @@ export const createItemFunction = (data) => {
 export const createProgramFunction = (data) => {
     return generateEntry(data, PROGRAMS_PATH);
 };
+///////
 
 export const createEstimateFunction = (data, customerPhone) => {
     return generateEntry(data, ESTIMATE_PATH+"/"+customerPhone+"/");
 };
+
+export const updateEstimateFunction = (data,id)=>{
+    const target = ESTIMATE_PATH + "/"+id;
+    return db.ref(target).update(data);
+}
+/////
 
 export const createCustomerFunction = (data)=>{
     return generateEntry(data, CUSTOMER_PATH);

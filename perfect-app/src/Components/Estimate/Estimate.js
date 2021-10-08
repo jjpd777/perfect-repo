@@ -10,18 +10,20 @@ import ItemSelection from "../ItemSelection/ItemSelection";
 import { auth, logout} from "../../UtilsFirebase/Authentication";
 import {parseForFirebase} from "../../Utils/FirebaseParser";
 import { currentFullDate, formatUnixDate, currentUnixDate,perfectbUniqueID } from "../../Utils/DateTimeUtils";
-import { createEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
+import { createEstimateFunction, updateEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 import {
     FormInput, Button, FormRadio
 } from "shards-react";
 import { program } from "@babel/types";
 import { set } from "date-fns";
+import {isObjectEmpty} from "../../Utils/ObjectVarious";
+
 
 import {computeBalanceTotal} from "./UtilsEstimate";
 import {programObjectBuilder, structureCustomer} from "../SharedUtils";
 
-function Estimate({ listItems }) {
-
+function Estimate({ listItems, reviewItems, fnReviewList }) {
+    const revFlag = isObjectEmpty(reviewItems);
     const [programItems, setProgramItems] = useState([]);
     const voidState = {};
 
@@ -47,18 +49,28 @@ function Estimate({ listItems }) {
         setInsertedDB(false);
         setProgramItems([]);
         setSaveBool(false);
+        fnReviewList({});
     };
-  
+    console.log(additionalRemarks, "ADDITIONAL REMARKS")
     useEffect(()=>{
         setResetCustomer(true);
     },[resetCustomer]);
 
     useEffect(()=>{
         const perfID = perfectbUniqueID();
-        setAdditionalRem({...remarksInitial, perfID: perfID});
-    },[saveBool])
+        setAdditionalRem({...additionalRemarks, perfID: perfID});
+    },[saveBool]);
 
+    useEffect(()=>{
+        if(revFlag) return;
+        console.log(reviewItems, "These are passed from Record")
+        setProgramItems(reviewItems.estimateItems);
+        setcurrentCustomer(reviewItems.customerInfo);
+        setAdditionalRem(reviewItems.remarks)
+    },[reviewItems])
 
+    console.log("PROGRAM ITEMS FAM", programItems)
+    console.log(currentCustomer);
 
     const insertProgramEstimate = () => {
         const customerFirebase = structureCustomer(currentCustomer);
@@ -82,10 +94,19 @@ function Estimate({ listItems }) {
 
         try {
             console.log("THIS IS THE USER OBJECT", currentCustomer)
+            if(!revFlag){
+                const pathToItem = customerFirebase.customerPhone +"/"+ reviewItems.updateKey;
+                updateEstimateFunction(item,pathToItem).then(()=>{
+                    setInsertedDB(true)
+                })
+                console.log(pathToItem, "PATH TO ESTIMATE")
+            }else{
+                createEstimateFunction(item, customerFirebase.customerPhone)
+                .then(()=> {setInsertedDB(true); 
+                    if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
+            }
 
-            createEstimateFunction(item, customerFirebase.customerPhone)
-            .then(()=> {setInsertedDB(true); 
-                if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
+  
             
         } catch (e) {
             console.log(e)
@@ -93,7 +114,7 @@ function Estimate({ listItems }) {
     };
 
 
-    const customerValidFormat = !!(currentCustomer.customerName && currentCustomer.customerPhone && currentCustomer.customerLast);
+    const customerValidFormat = !!(currentCustomer &&(currentCustomer.customerName && currentCustomer.customerPhone && currentCustomer.customerLast));
 
    
     useEffect(() => {
@@ -144,12 +165,12 @@ function Estimate({ listItems }) {
         })
         setPaymentCycles(cyclesCollection);
     }, [programItems]);
-
+    console.log("REVIEW MOFO", reviewItems, isObjectEmpty(reviewItems))
 
 
     return (
         <div className="action-content">
-            {resetCustomer && <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />}
+            {resetCustomer && revFlag&& <CustomerSearch fnSetCustomer={setcurrentCustomer} record={false} />}
             {resetCustomer && <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>}
             <div className="temp-save-box">
                 <Button className="temporary-save" onClick={()=>setSaveBool(!saveBool)}>{ !saveBool ? "Save selection" : "Edit Selection"}</Button>
@@ -220,7 +241,7 @@ function Estimate({ listItems }) {
                       insertProgramEstimate();
                   }}
                   className="save-to-db">
-                      Save {invoiceEstimate}
+                   {!revFlag ? "Update" :  "Save"} {invoiceEstimate}
                   </Button>
                   }
                   </>

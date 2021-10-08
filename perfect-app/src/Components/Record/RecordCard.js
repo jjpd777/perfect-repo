@@ -10,7 +10,7 @@ import {moneyFormatter} from "../../Utils/MoneyFormat";
 
 
 
-const RecordCard = ({estimate}) => {
+const RecordCard = ({estimate, fnHandleEdit}) => {
     const [cardOpen, setCardOpen] = useState(false);
 
     const typeOfProgram = (x)=>{
@@ -104,10 +104,9 @@ const RecordCard = ({estimate}) => {
                 <Button theme="warning" className="record-options-btn">
                     Invoice
                 </Button>
-                <Button theme="success" className="record-options-btn">
-                    Print Again
-                </Button>
-                <Button theme="danger" className="record-options-btn">
+                <Button theme="danger" className="record-options-btn"
+                    onClick={()=>{fnHandleEdit(estimate)}}
+                >
                     Edit
                 </Button>
             </div>}

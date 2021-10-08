@@ -17,7 +17,7 @@ import RecordEstimates from "./ActionComponents/RecortEstimates/RecordEstimates"
 import Estimate from "./Components/Estimate/Estimate";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Record from "./Components/Record/Record";
-
+import {isObjectEmpty} from "./Utils/ObjectVarious";
 import {
   Button,
   Dropdown,
@@ -35,6 +35,9 @@ function App() {
   const [current, setCurrent] = useState(sideBarElements[0]); 
   const [validCustomer, setValidCustomer] = useState({});
   console.log(validCustomer, "here it is");
+  const [reviewList, setReviewList] = useState({});
+
+ 
 
   
   useEffect(() => {
@@ -65,7 +68,9 @@ function App() {
         ):(
           <div className="content-box">
           <div className="nav-bar">
-            <SideNav props={sideBarElements} currentPage={setCurrent}> </SideNav>
+            <SideNav props={sideBarElements} currentPage={setCurrent}
+            fnReview={setReviewList}
+            >  </SideNav>
             <div>
               <div className="plain-text">
             <h3>{user.email}</h3>
@@ -87,7 +92,11 @@ function App() {
           <div className="current-action-box">
           {current==="Estimate" &&
             <>
-              <Estimate listItems={fetchedItems} />
+              <Estimate 
+                listItems={fetchedItems}
+                reviewItems ={reviewList}
+                fnReviewList={setReviewList}
+              />
             </>}
             {current==="Admin" &&
             <>
@@ -103,7 +112,7 @@ function App() {
             </>}
             {current==="Record" &&
             <>
-              <Record listItems={fetchedItems}/>
+              <Record fnCurrent={setCurrent} fnReviewList={setReviewList}/>
             </>}
             </div>
           {/* <div className="current-action-box">

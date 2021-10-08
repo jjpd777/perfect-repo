@@ -11,6 +11,8 @@ import {
 
 function EstimateItems({ props, fn }) {
     const terms = [0, 1, 2, 3, 6, 9, 12];
+
+    const estIt = !!props ? props : [];
     
 
 
@@ -103,7 +105,7 @@ function EstimateItems({ props, fn }) {
                               <b></b>
                              </Col>
                             </Row>
-                {props.map((x)=>
+                {estIt.map((x)=>
                         <div className="estimate-row">
                         <Row >
                             { x.itemCategory==="special"? (
