@@ -30,16 +30,16 @@ class ComponentToPrint extends React.Component {
           </div>
           <div className="customer-details">
             <div className="customer-details-item">
-              <div> Client: </div> <div>{cust.customerName}</div>
+              <div> Patient</div> <div>{cust.customerName}{" "+cust.customerLast}</div>
             </div>
             <div className="customer-details-item">
-              <div> Effective Date: </div> <div>{currentFullDate().split("&")[1]}</div>
+              <div> Effective Date</div> <div>{currentFullDate().split("&")[1]}</div>
             </div>
             <div className="customer-details-item">
-              <div> Valid Until: </div> <div>{formatUnixDate(validUntil)}</div>
+              <div> Valid Until</div> <div>{formatUnixDate(validUntil)}</div>
             </div>
             <div className="customer-details-item">
-              <div className="italic"> Number: </div> <div>{this.props.perfID}</div>
+              <div className="italic"> Number </div> <div>{this.props.perfID}</div>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@ class ComponentToPrint extends React.Component {
         <div className="recommendations">
           <p>
             The following recommendations are created by Perfect B in order to
-            Achieve client's desired goals in the most efficient manner. All
+            achieve patient's desired goals in the most efficient manner. All
             recommendations are made considering the best technology available
             in the market and following local, state and federal health
             regulations.
@@ -102,11 +102,17 @@ class ComponentToPrint extends React.Component {
           </div>
         </div>
         <div className="totals">
-          {/* <div className="totals-column">
+          <div className="totals-column">
             <div className="totals-item">
               <div> Total Cost</div>
               <div>
                 <strong className="italic"> {moneyFormatter.format(pBdown.total)} </strong>
+              </div>
+            </div>
+            <div className="totals-item">
+              <div> Down Payment</div>
+              <div>
+                <strong className="italic"> {moneyFormatter.format(pBdown.downPayment)} </strong>
               </div>
             </div>
             <div className="totals-item">
@@ -115,14 +121,10 @@ class ComponentToPrint extends React.Component {
                 <strong> {terms} </strong>
               </div>
             </div>
-          </div> */}
+          </div>
           <div className="totals-column">
             <div className="totals-item bold">
-              <div> Pay Today </div>
-              <div className="light-gray">{moneyFormatter.format(pBdown.downPayment)} </div>
-            </div>
-            <div className="totals-item bold">
-              <div> Monthly Payment</div>
+              <div> Monthly Payments</div>
               <div className="dark-gray">{moneyFormatter.format(pCycle.monthly)} </div>
             </div>
             <div className="totals-item bold">

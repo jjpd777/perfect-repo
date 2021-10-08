@@ -102,6 +102,7 @@ function Program({ listItems }) {
             voided: false,
             saveDetail: programOrEstimate,
             programVariables: programVariables,
+            validUntil: currentUnixDate()+ (7*86400)
         };
         console.log(customerFirebase, "customer obj");
         console.log(item, "item obj");

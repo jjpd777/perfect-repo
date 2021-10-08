@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { moneyFormatter } from "../../Utils/MoneyFormat";
 import CustomerSearch from "../CustomerSearch/CustomerSearch";
+import RecordCard from "./RecordCard";
 
 import "../Design.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -24,26 +25,16 @@ function Record({ listItems }) {
 
 
   useEffect(() => {
-    const ref = readCustomerEstimatesFunction(currentCustomer.customerEmail);
+    const ref = readCustomerEstimatesFunction(currentCustomer.customerPhone);
     const refVal = ref.on('value', function (snapshot) {
       const snap = snapshot.val();
-      console.log("BRUH", currentCustomer)
       if (!snap) return;
       const respKeys = Object.keys(snap);
-      console.log(respKeys, "KEYS")
       const items = respKeys.map((k) => snap[k]);
       setEstimates(items);
     });
     return () => ref.off('value', refVal)
   }, [currentCustomer]);
-
-  const cyclesFormatter = (x)=>{
-      if(!x) return[];
-      const keys = Object.keys(x.paymentsCycles);
-      console.log("FAMFAMFAM", x.paymentsCycles)
-      var resp = [];keys.map((k)=>resp.push(x[k]))
-      return resp;
-  }
 
 
   console.log(currentCustomer, "CURRENT CUSTOMER")
@@ -55,21 +46,7 @@ function Record({ listItems }) {
             <h4>Estimates and invoices</h4>
           { estimatesList.map((x)=>  
           <div className="summary-box">
-                <Card className="summary-card">
-                    <CardBody>
-                        <CardHeader className="summary-header">{x.estimateType}  {x.timestamp.split("&").join(" ")}</CardHeader>
-                        <CardTitle className="summary-title"> </CardTitle>
-                        <CardTitle className="summary-title"><b>Total payment:</b> {moneyFormatter.format(x.paymentBreakdown.total)} </CardTitle>
-                        <CardTitle className="summary-title"><b>Down payment:</b> {moneyFormatter.format(x.paymentBreakdown.downPayment)} </CardTitle>
-                        {x.paymentsCycles.map((cycle,ix)=>
-                        <>
-                        <h4>Cycle # {ix+1}</h4>
-                        <h5>monthly: {moneyFormatter.format(cycle.monthly)}</h5>
-                        <h5>starts:{formatUnixDate(cycle.firstPayment)}</h5>
-                        <h5>ends: {formatUnixDate(cycle.lastPayment)}  </h5>
-                        </>)}
-                    </CardBody>
-                </Card>
+               <RecordCard estimate={x}/>
           </div>)}
         </div>
     )

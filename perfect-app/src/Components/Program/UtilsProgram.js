@@ -32,7 +32,6 @@ export const complexDiscountTable = {
     "Lab Tests" :{
         "range" : [[1,0.98],[2,0.98],[3,0.98],[4,0.98],[5,0.98],[6,0.98],[7,0.98],[8,0.98],[9,0.98],[10,0.98]],
     },
-    
 };
 
 export const updateDiscountCorrect = (val, percent)=>{

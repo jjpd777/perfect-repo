@@ -8,6 +8,7 @@
     "id": "-MlOvh2ZB_YdDHfP87kv",
     "voided": false,
     "programTotal": 75.5,
+    "validUntil" : "unix-date",
 
     "todelete":{ 
         "itemDelted": false

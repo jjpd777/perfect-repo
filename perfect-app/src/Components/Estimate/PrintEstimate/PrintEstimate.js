@@ -6,6 +6,7 @@ import {currentFullDate, currentUnixDate,formatUnixDate} from "../../../Utils/Da
 import {computeBalanceTotal} from "../UtilsEstimate";
 import "./PrintEstimate.scss";
 import { Container, Row, Col, Button } from "shards-react";
+import CustomerSearch from "../../CustomerSearch/CustomerSearch";
 
 
 
@@ -46,16 +47,16 @@ class ComponentToPrint extends React.Component {
           </div>
           <div className="customer-details">
             <div className="customer-details-item">
-              <div> Patient Name: </div> <div>{cust.customerName}</div>
+              <div> Patient Name </div> <div>{cust.customerName +" "+ cust.customerLast}</div>
             </div>
             <div className="customer-details-item">
-              <div> Effective Date: </div> <div>{currentFullDate().split("&")[1]}</div>
+              <div> Effective Date </div> <div>{currentFullDate().split("&")[1]}</div>
             </div>
             <div className="customer-details-item">
-              <div> Valid Until: </div> <div>{formatUnixDate(validUntil)}</div>
+              <div> Valid Until </div> <div>{formatUnixDate(validUntil)}</div>
             </div>
             <div className="customer-details-item">
-              <div className="italic"> Number: </div> <div>{this.props.perfID}</div>
+              <div className="italic"> Number </div> <div>{this.props.perfID}</div>
             </div>
           </div>
         </div>
@@ -63,7 +64,7 @@ class ComponentToPrint extends React.Component {
         <div className="recommendations">
           <p>
             The following recommendations are created by Perfect B in order to
-            Achieve client's desired goals in the most efficient manner. All
+            achieve patient's desired goals in the most efficient manner. All
             recommendations are made considering the best technology available
             in the market and following local, state and federal health
             regulations.
@@ -81,12 +82,17 @@ class ComponentToPrint extends React.Component {
               <Col>
                 <h4>Quanity</h4>
               </Col>
-              {discFlag && <Col>
-                <h4>Discount</h4>
-              </Col>}
+            
               {termsFlag && <Col>
                 <h4>Terms</h4>
               </Col>}
+              {discFlag && <Col>
+                <h4>Sub Total</h4>
+              </Col>}
+              {discFlag && <Col>
+                <h4>Discount</h4>
+              </Col>}
+   
               <Col>
                 <h4>Total</h4>
               </Col>
@@ -103,12 +109,17 @@ class ComponentToPrint extends React.Component {
                     <Col>
                       <h5>{x.itemNumSess}</h5>
                     </Col>
-                    {discFlag &&<Col>
-                      <h5>{returnDisplayDisc(x)}</h5>
-                    </Col>}
                     {termsFlag && <Col>
                       <h5>{x.financeTerms}</h5>
                     </Col>}
+                    
+                    {discFlag &&<Col>
+                      <h5>{(moneyFormatter.format(Number(x.itemPriceUnit* x.itemNumSess)))}</h5>
+                    </Col>}
+                    {discFlag &&<Col>
+                      <h5>{returnDisplayDisc(x)}</h5>
+                    </Col>}
+                    
                      <Col>
                       <h5>{returnSubTotal(x)}</h5>
                     </Col>

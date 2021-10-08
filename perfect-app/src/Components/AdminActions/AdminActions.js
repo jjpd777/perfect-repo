@@ -27,7 +27,11 @@ function AdminActions({listItems}) {
   const [itemToModal, setItemToModal] = useState({});
   console.log("EDIT", editItems);
 
-  
+  useEffect(()=>{
+    if(editItems.length<1)return;
+    setItemType(editItems[0].itemType);
+
+  },[editItems])
   const categoriesS =()=>{ 
     const categories = []
     listItems.map((x)=> !categories.includes(x.itemCategory) && categories.push(x.itemCategory));

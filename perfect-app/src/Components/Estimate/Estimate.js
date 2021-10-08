@@ -77,6 +77,7 @@ function Estimate({ listItems }) {
             remarks: additionalRemarks,
             voided: false,
             saveDetail: programOrEstimate,
+            validUntil: currentUnixDate()+ (7*86400)
         };
 
         try {

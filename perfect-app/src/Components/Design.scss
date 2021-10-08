@@ -359,3 +359,36 @@ $input-height: 60px;
     display: flex;
     flex-direction: column;
   }
+
+//// RECORD //
+
+.record-main-box{
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    width:100%;
+  }
+  
+  .record-card-box{
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    width: 800px;
+    position:relative;
+    .invoice-or-est{
+      position:absolute;
+      left:20px;
+      top:20px;
+    }
+    .perfect-id{
+        position:absolute;
+        right:20px;
+        top:20px;
+      }
+      .record-card-options{
+        }
+        .record-options-btn{
+            margin:15px;
+            font-size: $standard-large-font;
+        }
+  }
