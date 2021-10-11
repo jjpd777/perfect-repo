@@ -382,11 +382,24 @@ $input-height: 60px;
     }
     .perfect-id{
         position:absolute;
-        right:20px;
+        left:20px;
         top:20px;
       }
-      .record-card-options{
-        }
+      .typeof-rec{
+          font-size: 30px;
+      }
+      .rec-date{
+          position:absolute;
+          top:20px;
+          right:20px;
+      }
+      .action-content-rev{
+
+          display: flex;
+          margin: 0 auto;
+
+          margin-top:100px;
+      }
         .record-options-btn{
             margin:15px;
             font-size: $standard-large-font;

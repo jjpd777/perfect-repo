@@ -3,16 +3,34 @@ import {
     Form, FormInput, FormGroup,
     Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
     DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader,
-    Modal, ModalHeader, ModalBody, ModalFooter, Badge
+    Modal, ModalHeader, ModalBody, ModalFooter, Badge, CardFooter
 } from "shards-react";
 import "../Design.scss";
 import {moneyFormatter} from "../../Utils/MoneyFormat";
+
+import { updateToInvoice } from "../../UtilsFirebase/Database";
+import PrintEstimate from "../Estimate/PrintEstimate/PrintEstimate";
+import {deconstructItems, deconstructProducts} from "../SharedUtils";
+
 
 
 
 const RecordCard = ({estimate, fnHandleEdit}) => {
     const [cardOpen, setCardOpen] = useState(false);
+    const [printView, setPrintView] = useState(false);
+    const programItems = deconstructProducts(estimate.programItems);
+    const paymentBreakdown = estimate.paymentBreakdown;
+    const paymentCycles = estimate.paymentsCycles;
+    const currentCustomer = estimate.customerObject;
+    const remarks = estimate.footerNotes;
+    const perfectID = estimate.perfectID;
+    const invoiceFlag = estimate.estimateType ==="invoice";
 
+    console.log(paymentCycles, "apasdfasdf")
+
+    useEffect(()=>{
+        !cardOpen ? setPrintView(false) : setPrintView(printView);
+    }, [cardOpen])
     const typeOfProgram = (x)=>{
         const isProgram = x.saveDetail ==="simple" ? "Financing" : "Program";
         return isProgram + " "+ x.estimateType;
@@ -21,95 +39,80 @@ const RecordCard = ({estimate, fnHandleEdit}) => {
         return x.customerObject.customerName + " " + x.customerObject.customerLast;
     };
 
-    const paymentCycles = (x)=>{
+    const payCycleLen = (x)=>{
         const payK = Object.keys(x.paymentsCycles);
         return payK.length;
     };
 
-    const deconstructProducts = (x)=>{
-        var returnList = [];
-        for(const k in x){
-            returnList.push(x[k])
+    const setInvoice = (x)=>{
+        try{
+            updateToInvoice(x.id, x.customerObject.customerPhone);
         }
-        return returnList;
+        catch(e){
+            console.log(e)
+        }
     }
+ 
     return (
 
         <div className="record-card-box">
-          <Card onClick={()=>setCardOpen(!cardOpen)}>
-                <CardHeader>
-                    <Badge theme={estimate.estimateType==="invoice" ? "danger" : "light"} 
-                    className="invoice-or-est">
-                        {typeOfProgram(estimate)}
-                    </Badge>
-                    <Badge className="perfect-id" theme="dark">
+          <Card>
+              <div onClick={()=>setCardOpen(!cardOpen)}>                
+                  <CardHeader>
+                    <Badge className="perfect-id" theme="light">
                         {estimate.perfectID}
                     </Badge>
-                </CardHeader>
-                <CardHeader>{customerName(estimate)}
+                    <h3 className="rec-date">
+                    {estimate.timestamp.split("&")[1]}
+                    </h3>
+                    {customerName(estimate)}
+
                 </CardHeader>
                 <CardTitle>
-                    Estimate date: 10/10/2021
+                <Badge className="typeof-rec" theme={estimate.estimateType==="invoice" ? "danger" : "secondary"} >
+                       {typeOfProgram(estimate)}
+                    </Badge>
+                    
                 </CardTitle>
+
                 <CardBody>
-                    <CardSubtitle>
-                        <Container>
-                            <Row>
-                                <Col>
-                                <p>Total payment: {moneyFormatter.format(estimate.programTotal)}</p>
-                                </Col>
-                                <Col>
-                                   Payment Cycles: {paymentCycles(estimate)}
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                <p>Down payment: ${moneyFormatter.format(estimate.paymentBreakdown.downPayment)}</p>
-                                </Col>
-                                <Col>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </CardSubtitle>
-                </CardBody>
-                <CardBody>
-                <Container>
-                    <Row>
-                        <Col>
-                        Name
-                        </Col>
-                        <Col>
-                        Units
-                        </Col>
-                    </Row>
-                    {deconstructProducts(estimate.programItems).map((item,ix)=> ix<3 &&
-                                 <Row>
-                                     <Col>
-                                     <h5>{item.itemName}</h5>
-                                     </Col>
-                                     <Col>
-                                     <h5>{item.itemNumSess}</h5>
-                                     </Col>
-                                     <Col>
-                                     <h5>{moneyFormatter.format(item.itemPriceUnit)}</h5>
-                                     </Col>
-                                 </Row>
-                        )}
-           
-                </Container>
-                </CardBody>
-            </Card>
-            {cardOpen && 
+                {cardOpen && 
             <div className="record-card-options">
-                <Button theme="warning" className="record-options-btn">
+                {!invoiceFlag && <Button 
+                onClick={()=>{setInvoice(estimate)}}
+                theme="warning" className="record-options-btn">
                     Invoice
-                </Button>
-                <Button theme="danger" className="record-options-btn"
+                </Button>}
+               {!invoiceFlag && <Button theme="danger" className="record-options-btn"
                     onClick={()=>{fnHandleEdit(estimate)}}
                 >
                     Edit
-                </Button>
+                </Button>}
             </div>}
+                </CardBody>
+                </div>
+                <CardFooter>
+            <Button theme="success" className="record-options-btn"
+                    onClick={()=>{setPrintView(!printView)}}
+                >
+                    {printView ? "Close view" : "View"}
+                </Button>
+            </CardFooter>
+            </Card>
+            <div className="action-content-rev">
+           {printView &&
+            <PrintEstimate 
+                example={["one", "two"]}
+                checkoutItems = {programItems}
+                paybreakdown = {paymentBreakdown}
+                paycycle = {paymentCycles}
+                customer= {currentCustomer}
+                alreadyInserted = {true}
+                remarks ={remarks}
+                perfID={perfectID}
+            />
+            }
+            </div>
 
         </div>
     )

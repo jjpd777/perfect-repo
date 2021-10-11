@@ -15,8 +15,10 @@ import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
     DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader
 } from "shards-react";
+import { createEstimateFunction, updateEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 
-import {decEstimateItems, decCustomer} from "./Deconstruct";
+import {deconstructItems} from "./Deconstruct";
+import PrintEstimate from "../Estimate/PrintEstimate/PrintEstimate";
 
 
 function Record({ fnCurrent, fnReviewList }) {
@@ -25,22 +27,22 @@ function Record({ fnCurrent, fnReviewList }) {
 
     const handleEdit = (estimate)=>{
       if(estimate.estimateType==="invoice") return;
-      if(estimate.saveDetail ==="simple"){
-        // set Edit for Estimate
-        fnCurrent("Estimate");
-        console.log("ESTIMATE FULL INFO", estimate)
-        const estimateItems = decEstimateItems(estimate);
-        const customerInfo = decCustomer(estimate);
-        const revItems = {
-          "estimateItems" : estimateItems,
-          "customerInfo" : customerInfo,
-          "updateKey" : estimate.id,
-          "remarks" : estimate.remarks
-        }
-        fnReviewList(revItems);
 
+      const estimateItems = deconstructItems(estimate);
+      const revItems = {
+        "estimateItems" : estimateItems,
+        "customerInfo" : estimate.customerObject,
+        "updateKey" : estimate.id,
+        "remarks" : estimate.remarks,
+        "programVariables" : estimate.programVariables ? estimate.programVariables : "" 
+      };
+
+      fnReviewList(revItems);
+
+      if(estimate.saveDetail ==="simple"){
+        fnCurrent("Estimate");
       }else{
-        // set Edit for Program
+
         fnCurrent("Program");
 
       }
@@ -58,8 +60,7 @@ function Record({ fnCurrent, fnReviewList }) {
   }, [currentCustomer]);
 
 
-  console.log(currentCustomer, "CURRENT CUSTOMER")
-  console.log(estimatesList, "FETCHY")
+
     return(
         <div className="record-main-box">
             <h3>Customer search</h3>

@@ -10,11 +10,6 @@
     "programTotal": 75.5,
     "validUntil" : "unix-date",
 
-    "todelete":{ 
-        "itemDelted": false
-    },
-
-
     "customerObject": {
         "customerName": "Juan Jose",
         "customerLast": "Palacio",

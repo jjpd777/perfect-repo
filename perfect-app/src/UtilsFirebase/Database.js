@@ -51,6 +51,12 @@ export const createEstimateFunction = (data, customerPhone) => {
 export const updateEstimateFunction = (data,id)=>{
     const target = ESTIMATE_PATH + "/"+id;
     return db.ref(target).update(data);
+};
+
+export const updateToInvoice = (id, phoneNum) =>{
+    const target = ESTIMATE_PATH + "/" +phoneNum +"/" + id;
+    console.log(target, "this is the target")
+    return db.ref(target).update({"estimateType":"invoice"})
 }
 /////
 

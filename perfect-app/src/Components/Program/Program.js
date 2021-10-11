@@ -8,11 +8,12 @@ import ItemSelection from "../ItemSelection/ItemSelection";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import "../Design.scss";
+import {isObjectEmpty} from "../../Utils/ObjectVarious";
 
 import { auth, logout} from "../../UtilsFirebase/Authentication";
 import {parseForFirebase} from "../../Utils/FirebaseParser";
 import { currentFullDate, currentUnixDate,perfectbUniqueID } from "../../Utils/DateTimeUtils";
-import { createEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
+import { createEstimateFunction, updateEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
     DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader,
@@ -42,7 +43,9 @@ const initialState = {
 };
 
 
-function Program({ listItems }) {
+function Program({ listItems,reviewItems, fnReviewList }) {
+    const revFlag = isObjectEmpty(reviewItems);
+
     const [programItems, setProgramItems] = useState([]);
     const [paymentCycles, setPaymentCycles] = useState([]);
     const [currentCustomer, setCurrentCustomer] = useState({});
@@ -53,18 +56,30 @@ function Program({ listItems }) {
     const [insertedDB, setInsertedDB] = useState(false);
     const [resetCustomer, setResetCustomer] = useState(true);
     const [programVariables, setProgramVariables] = useState(initialState);
+    const voidState = {};
+    const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
 
     useEffect(()=>{
         const perfID = perfectbUniqueID();
         setProgramVariables({...programVariables, perfID: perfID});
-    },[saveBool])
+    },[saveBool]);
+
+    
+    useEffect(()=>{
+        if(revFlag) return;
+        console.log(reviewItems, "Program from Record");
+        setProgramItems(reviewItems.estimateItems);
+        setCurrentCustomer(reviewItems.customerInfo);
+        setAdditionalRem(reviewItems.remarks);
+        setProgramVariables(reviewItems.programVariables);
+    },[reviewItems])
+
 
 
     const programOrEstimate = "program";
 
 
-    const voidState = {};
-    const [additionalRemarks,setAdditionalRem] = useState(remarksInitial);
+    
 
     const resetAllVariables = ()=>{
         setResetCustomer(false);
@@ -75,6 +90,7 @@ function Program({ listItems }) {
         setSaveBool(false);
         setProgramVariables(initialState);
         setAdditionalRem(remarksInitial);
+        fnReviewList({});
     };
 
 
@@ -109,11 +125,19 @@ function Program({ listItems }) {
 
         try {
             
-            createEstimateFunction(item, parseForFirebase(currentCustomer.customerPhone))
-            .then(()=> {
-                setInsertedDB(true); 
-                if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
-                console.log("NEW CUSTOMER", currentCustomer)
+            console.log("THIS IS THE USER OBJECT", currentCustomer)
+            if(!revFlag){
+                const pathToItem = customerFirebase.customerPhone +"/"+ reviewItems.updateKey;
+                updateEstimateFunction(item,pathToItem).then(()=>{
+                    setInsertedDB(true)
+                })
+                console.log(pathToItem, "PATH TO ESTIMATE")
+            }else{
+                createEstimateFunction(item, customerFirebase.customerPhone)
+                .then(()=> {setInsertedDB(true); 
+                    if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
+            }
+
         } catch (e) {
             console.log(e)
         }
@@ -159,11 +183,8 @@ function Program({ listItems }) {
 
     return (
         <div className="action-content">
-                
-             { resetCustomer && <>
-              <CustomerSearch fnSetCustomer={setCurrentCustomer} record={false} />
-              <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>
-              </>}
+                 {resetCustomer && revFlag&& <CustomerSearch fnSetCustomer={setCurrentCustomer} record={false} />}
+            {resetCustomer && <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>}
               <div className="program-header">
                     <h2>Program Estimate for {currentCustomer.customerName}</h2>
                 </div>
@@ -280,7 +301,7 @@ function Program({ listItems }) {
                       insertProgramEstimate();
                   }}
                   className="save-to-db">
-                      Save {invoiceEstimate}
+                      {!revFlag ? "Update" :  "Save"} {invoiceEstimate}
                   </Button>
                                   }
                   </>

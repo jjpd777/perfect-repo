@@ -67,7 +67,7 @@ function Estimate({ listItems, reviewItems, fnReviewList }) {
         setProgramItems(reviewItems.estimateItems);
         setcurrentCustomer(reviewItems.customerInfo);
         setAdditionalRem(reviewItems.remarks)
-    },[reviewItems])
+    },[reviewItems]);
 
     console.log("PROGRAM ITEMS FAM", programItems)
     console.log(currentCustomer);

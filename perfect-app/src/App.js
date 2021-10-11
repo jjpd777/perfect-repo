@@ -98,6 +98,14 @@ function App() {
                 fnReviewList={setReviewList}
               />
             </>}
+            {current==="Program" &&
+            <>
+              <Program 
+                listItems={fetchedItems}
+                reviewItems = {reviewList}
+                fnReviewList = {setReviewList}
+              />
+            </>}
             {current==="Admin" &&
             <>
               <AdminActions listItems = {fetchedItems}/>
@@ -106,37 +114,11 @@ function App() {
             <>
             <StaffPrices listItems={fetchedItems}/>
             </>}
-            {current==="Program" &&
-            <>
-              <Program listItems={fetchedItems}/>
-            </>}
             {current==="Record" &&
             <>
               <Record fnCurrent={setCurrent} fnReviewList={setReviewList}/>
             </>}
             </div>
-          {/* <div className="current-action-box">
-            {current==="Estimate" &&
-            <>
-              <NewEstimate listItems={fetchedItems}/>
-            </>}
-            {current==="Record" &&
-            <>
-              <RecordEstimates listItems={fetchedItems}/>
-            </>}
-            {current==="Program" &&
-            <>
-              <NewProgramEstimate listItems={fetchedItems}/>
-            </>}
-            {current==="Admin" &&
-            <>
-              <AdminNav listItems = {fetchedItems}/>
-            </>}
-            {current==="Staff" &&
-            <>
-            <StaffPrices listItems={fetchedItems}/>
-            </>}
-          </div> */}
         </div>
         )}
       </div>

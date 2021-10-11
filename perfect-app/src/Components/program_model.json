@@ -8,12 +8,23 @@
     "id": "-MlOvh2ZB_YdDHfP87kv",
     "voided": false,
     "programTotal": 75.5,
-
-
-    "todelete":{ 
-        "itemDelted": false
+    "validUntil" : "unix-date",
+    "remarks": {
+        "footerNotes": "",
+        "validUntil": ""
     },
 
+    "programVariables":{
+        "disc" :{
+            "discountType" : "percent",
+            "discountAmount" : 0,
+            "discountPercent" : "10"
+        },
+        "downPayment" : "30",
+        "perfID" : 71698668,
+        "terms" : 6
+
+    },
 
     "customerObject": {
         "customerName": "Juan Jose",
@@ -55,11 +66,7 @@
 
 
     },
-    "remarks": {
-        "footerNotes": "",
-        "validUntil": ""
-    },
-
+   
     "paymentBreakdown": {
         "downPayment": 31.8,
         "remainingBalance": 31.974999999999998,
@@ -78,7 +85,5 @@
             "monthly": 11.724999999999998,
             "numberTerms": "2"
         }
-    },
-
-   
+    }
 }
