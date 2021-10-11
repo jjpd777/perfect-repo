@@ -7,15 +7,18 @@ import {
 } from "shards-react";
 import "../Design.scss";
 import {moneyFormatter} from "../../Utils/MoneyFormat";
-
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, logout} from "../../UtilsFirebase/Authentication";
 import { updateToInvoice } from "../../UtilsFirebase/Database";
 import PrintEstimate from "../Estimate/PrintEstimate/PrintEstimate";
+import PrintProgram from "../Program/PrintProgram/PrintProgram";
 import {deconstructItems, deconstructProducts} from "../SharedUtils";
 
 
 
 
 const RecordCard = ({estimate, fnHandleEdit}) => {
+    const [user, loading, error]=useAuthState(auth);
     const [cardOpen, setCardOpen] = useState(false);
     const [printView, setPrintView] = useState(false);
     const programItems = deconstructProducts(estimate.programItems);
@@ -25,6 +28,9 @@ const RecordCard = ({estimate, fnHandleEdit}) => {
     const remarks = estimate.footerNotes;
     const perfectID = estimate.perfectID;
     const invoiceFlag = estimate.estimateType ==="invoice";
+    const programFlag = estimate.saveDetail !== "simple";
+    const rafael = user.email ==="rafael@perfectb.com";
+    
 
     console.log(paymentCycles, "apasdfasdf")
 
@@ -32,7 +38,7 @@ const RecordCard = ({estimate, fnHandleEdit}) => {
         !cardOpen ? setPrintView(false) : setPrintView(printView);
     }, [cardOpen])
     const typeOfProgram = (x)=>{
-        const isProgram = x.saveDetail ==="simple" ? "Financing" : "Program";
+        const isProgram = !programFlag  ? "Financing" : "Program";
         return isProgram + " "+ x.estimateType;
     };
     const customerName = (x)=>{
@@ -78,7 +84,7 @@ const RecordCard = ({estimate, fnHandleEdit}) => {
                 <CardBody>
                 {cardOpen && 
             <div className="record-card-options">
-                {!invoiceFlag && <Button 
+                {!invoiceFlag && rafael && <Button 
                 onClick={()=>{setInvoice(estimate)}}
                 theme="warning" className="record-options-btn">
                     Invoice
@@ -100,8 +106,20 @@ const RecordCard = ({estimate, fnHandleEdit}) => {
             </CardFooter>
             </Card>
             <div className="action-content-rev">
-           {printView &&
+           {printView && !programFlag&&
             <PrintEstimate 
+                example={["one", "two"]}
+                checkoutItems = {programItems}
+                paybreakdown = {paymentBreakdown}
+                paycycle = {paymentCycles}
+                customer= {currentCustomer}
+                alreadyInserted = {true}
+                remarks ={remarks}
+                perfID={perfectID}
+            />
+            }
+            {printView && programFlag &&
+            <PrintProgram
                 example={["one", "two"]}
                 checkoutItems = {programItems}
                 paybreakdown = {paymentBreakdown}

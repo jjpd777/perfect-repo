@@ -148,6 +148,16 @@ class ComponentToPrint extends React.Component {
           <strong>Additional terms:</strong>
           <p>{this.props.remarks}</p>
         </div>
+        <div className="download-app-left">
+        <div>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRu9GF9ONvZnHXLa6Qt4VLxZkbmyvNT0NomZg&usqp=CAU"
+              alt="qr-code"
+            ></img>
+          </div>
+          <p className="italic"> Download your Patient Portal</p>
+       
+        </div>
         <div className="download-app">
           <p className="italic"> Download the Perfect B App</p>
           <div>
