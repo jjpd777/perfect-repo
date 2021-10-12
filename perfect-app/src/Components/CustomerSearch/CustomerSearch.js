@@ -14,7 +14,7 @@ function CustomerSearch({ fnSetCustomer, record }) {
         customerLast: '',
         customerEmail: '',
         customerPhone: "+1",
-        isNewCustomer: newCustomer,
+        isNewCustomer: true,
     };
     const [currentCustomer, setCurrentCustomer] = useState(initialCustomer);
 
@@ -50,6 +50,7 @@ function CustomerSearch({ fnSetCustomer, record }) {
     const switchSearchExisting=()=>{
         setNewCustomer(!newCustomer);
         setCurrentCustomer(initialCustomer);
+        fnSetCustomer(initialCustomer);
     };
     const conditions = validatePhone(currentCustomer.customerPhone) && currentCustomer.customerName !== '' && currentCustomer.customerLast !== '';
 

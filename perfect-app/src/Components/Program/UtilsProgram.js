@@ -51,7 +51,7 @@ export const updateDiscountCorrect = (val, percent)=>{
 
 
 export const chooseCategoriesDiscount =(programItems)=>{ 
-    const discountPerCategory = [1,0.99,0.98,0.95,1,1,1,1,1,1];
+    const discountPerCategory = [1,0.99,0.98,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,];
     const nCat = new Set(programItems.map(x=> x.itemCategory));
     return discountPerCategory[nCat.size];
 };
@@ -86,8 +86,8 @@ export const computeItemsSubTotal = (programItems)=>{
 };
 
 export const computeTotal = (partialSubTotal, discountObject)=>{
-    console.log(partialSubTotal,"YEE")
-    if(discountObject.type==="percent"){
+    console.log(partialSubTotal,discountObject,"OHYEA")
+    if(discountObject.discountType==="percent"){
         return partialSubTotal * (1-(Number(discountObject.discountPercent)/100));
     }else{
         return partialSubTotal - Number(discountObject.discountAmount);

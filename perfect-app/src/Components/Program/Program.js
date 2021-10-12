@@ -98,7 +98,8 @@ function Program({ listItems,reviewItems, fnReviewList }) {
         setResetCustomer(true);
     },[resetCustomer]);
   
-    
+    console.log(currentCustomer, "customer obj 7777788");
+
 
     const insertProgramEstimate = () => {
         const customerFirebase = structureCustomer(currentCustomer);
@@ -120,7 +121,6 @@ function Program({ listItems,reviewItems, fnReviewList }) {
             programVariables: programVariables,
             validUntil: currentUnixDate()+ (7*86400)
         };
-        console.log(customerFirebase, "customer obj");
         console.log(item, "item obj");
 
         try {
