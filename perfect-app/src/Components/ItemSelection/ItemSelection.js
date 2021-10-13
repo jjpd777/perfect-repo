@@ -64,12 +64,11 @@ function ItemSelection({ listItems, staff, fnItems }) {
 
     const updateItemsFunction = (x)=>{
         if(staff) return;
- 
+        var unixKeyID = String(Date.now());
+
         fnItems(prevState => ([...prevState, ...[
-            prevState.find(c => x.itemName === c.itemName) ? 
-            fnItems(prevState.filter(c => c.itemName !== x.itemName)):
                 {
-                    itemId: x.id, itemName: x.itemName,
+                    itemId: unixKeyID, itemName: x.itemName,
                     itemNumSess: x.itemNumSess, itemType: x.itemType,
                     itemCategory: x.itemCategory, itemPriceUnit: x.itemPriceUnit,
                     financeTerms: 0, currentToggle: false,

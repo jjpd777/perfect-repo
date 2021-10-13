@@ -257,8 +257,8 @@ class Example extends React.Component {
         <br></br>
         <div className="print-btn">
           <ReactToPrint
-            trigger={() => <button>Print this out!</button>}
-            content={() => this.componentRef}
+          trigger={() => <button>Print</button>}
+          content={() => this.componentRef}
           />
         </div>
       </div>

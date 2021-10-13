@@ -182,7 +182,7 @@ function Estimate({ listItems, reviewItems, fnReviewList }) {
             { saveBool &&
             <>
             <div className="invoice-radio-box">
-             <FormRadio
+             {/* <FormRadio
                     inline
                     className="radio-choices"
                     checked={invoiceEstimate === "estimate"}
@@ -201,7 +201,7 @@ function Estimate({ listItems, reviewItems, fnReviewList }) {
                     }}
                 >
                     <h3>invoice</h3>
-                </FormRadio>
+                </FormRadio> */}
                 <div className="additional-remarks">
                 <h3>Additional remarks</h3>
                 <FormInput

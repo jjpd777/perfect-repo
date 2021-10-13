@@ -230,31 +230,6 @@ function Program({ listItems,reviewItems, fnReviewList }) {
                     </Container>
                    
                 </div>
-           { saveBool && 
-             <div className="invoice-radio-box">
-             <FormRadio
-                    inline
-                    className="radio-choices"
-                    checked={invoiceEstimate === "estimate"}
-                    onChange={() => {
-                        setInvoiceEstimate("estimate");
-                    }}
-                >
-                    <h3>estimate</h3>
-                </FormRadio>
-                <FormRadio
-                    inline
-                    className="radio-choices"
-                    checked={invoiceEstimate === "invoice"}
-                    onChange={() => {
-                        setInvoiceEstimate("invoice");
-                    }}
-                >
-                    <h3>invoice</h3>
-                </FormRadio>
-           </div>
-
-        }
             <div className="temp-save-box">
                 <Button className="temporary-save" onClick={()=>setSaveBool(!saveBool)}>{ !saveBool ? "Save selection" : "Edit Selection"}</Button>
             </div>

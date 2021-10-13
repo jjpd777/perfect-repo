@@ -1,36 +1,130 @@
+const lhr = ()=>{
+    var x =[];
+    for (var i=1;i<1000; i++){
+        if(i<3){x.push([i,1])}
+        else if(i<6)  {x.push([i,0.95])}
+        else if(i<9)  {x.push([i,0.90])}
+        else if(i<13)  {x.push([i,0.85])}
+        else {
+            x.push([i,0.8])
+        };
+        return x;
+    };
+};
+
+const aestheticMedicine = ()=>{
+    var x =[];
+    for (var i=1;i<1000; i++){
+        if(i<2){x.push([i,1])}
+        else if(i<3)  {x.push([i,0.95])}
+        else if(i<4)  {x.push([i,0.94])}
+        else if(i<5)  {x.push([i,0.93])}
+        else if(i<6) {x.push([i,0.93])}
+        else {
+            x.push([i,0.9])
+        };
+        return x;
+    };
+};
+
+const product = ()=>{
+    var x =[];
+    for (var i=1;i<1000; i++){
+        if(i<3){x.push([i,95])}
+        else if(i<6)  {x.push([i,0.9])}
+        else {
+            x.push([i,0.85])
+        };
+        return x;
+    };
+};
+
+const body = ()=>{
+    var x =[];
+    for (var i=1;i<1000; i++){
+        if(i<2){x.push([i,1])}
+        else if(i<6)  {x.push([i,0.95])}
+        else if(i<9)  {x.push([i,0.90])}
+        else if(i<12)  {x.push([i,0.85])}
+        else if(i<18) {x.push([i,0.8])}
+        else {
+            x.push([i,0.75])
+        };
+        return x;
+    };
+};
+
+const piQo4 = ()=>{
+    var x =[];
+    for (var i=1;i<1000; i++){
+        if(i<3){x.push([i,1])}
+        else if(i<4)  {x.push([i,0.90])}
+        else if(i<6)  {x.push([i,0.875])}
+        else if(i<9)  {x.push([i,0.85])}
+        else if(i<12) {x.push([i,0.8])}
+        else {
+            x.push([i,0.75])
+        };
+        return x;
+    };
+};
+
+const ivTeeth = ()=>{
+    var x =[];
+    for (var i=1;i<1000; i++){
+        if(i<3){x.push([i,1])}
+        else if(i<6)  {x.push([i,0.90])}
+        else if(i<9)  {x.push([i,0.85])}
+        else {
+            x.push([i,0.8])
+        };
+        return x;
+    };
+};
+
+const special = ()=>{
+    var x =[];
+    for (var i=1;i<1000; i++){
+        x.push([i,0.98])
+        return x;
+    };
+}
+
+
+
 export const complexDiscountTable = {
     "LHR":{
-        "range" :[[1,1],[2,1],[3,0.95],[4,0.95],[5,0.95],[6,0.90],[7,0.9],[8,0.9],[9,0.85],[10,0.85],[11,0.85],[12,0.85],[13,0.8],[14,0.8]],
+        "range" :lhr(),
     },
     "Aesthetic Medicine":{
-        "range" :[[1,1.00],[2,0.95],[3,0.94],[4,0.93], [5,0.92],[6,0.9],[7,0.9],[8,0.9],[9,0.9],[10,0.9]],
+        "range" :aestheticMedicine(),
     },
     "product" : {
-        "range" : [[1,0.95],[2,0.95],[3,0.90],[4,0.9],[5,0.9],[6,0.85],[7,0.85],[8,0.85],[9,0.85],[10,0.85],[11,0.85],[12,0.85],[13,0.85],[14,0.85],[15,0.85],[16,0.85]],
+        "range" : product(),
     },
     "special" :{
-        "range" : [[1,0.98],[2,0.98],[3,0.98],[4,0.98],[5,0.98],[6,0.98],[7,0.98],[8,0.98],[9,0.98],[10,0.98]],
+        "range" : special(),
     },
     "Body" :{
-        "range" : [[1,1],[2,0.95],[3,0.95],[4,0.95],[5,0.95],[6,0.90],[7,0.90],[8,0.90],[9,0.85],[10,0.85],[11,0.85],[12,0.8],[13,0.8],[14,0.8],[15,0.8],[16,0.8],[17,0.8],[18,0.75],[19,0.75],[20,0.75]],
+        "range" : body(),
     },
     "Facial Treatments" :{
-        "range" : [[1,0.98],[2,0.98],[3,0.98],[4,0.98],[5,0.98],[6,0.98],[7,0.98],[8,0.98],[9,0.98],[10,0.98]],
+        "range" : piQo4(),
     },
     "PiQo4 Laser" :{
-        "range" : [[1,1],[2,1],[3,0.9],[4,0.875],[5,0.875],[6,0.85],[7,0.85],[8,0.85],[9,0.8],[10,0.8],[11,0.85],[12,0.8],[13,0.8]],
+        "range" : piQo4(),
     },
     "StellarM22 Laser" :{
-        "range" : [[1,0.98],[2,0.98],[3,0.98],[4,0.98],[5,0.98],[6,0.98],[7,0.98],[8,0.98],[9,0.98],[10,0.98]],
+        "range" : piQo4(),
     },
     "IV Therapy" :{
-        "range" : [[1,1],[2,1],[3,0.90],[4,0.9],[5,0.9],[6,0.85],[7,0.85],[8,0.85],[9,0.8],[10,0.8],[11,0.8],[12,0.8]],
+        "range" : ivTeeth(),
     },
     "Teeth Whitening" :{
-        "range" : [[1,1],[2,1],[3,0.90],[4,0.9],[5,0.9],[6,0.85],[7,0.85],[8,0.85],[9,0.8],[10,0.8],[11,0.8],[12,0.8]],
+        "range" : ivTeeth(),
     },
     "Lab Tests" :{
-        "range" : [[1,0.98],[2,0.98],[3,0.98],[4,0.98],[5,0.98],[6,0.98],[7,0.98],[8,0.98],[9,0.98],[10,0.98]],
+        "range" : piQo4(),
     },
 };
 
@@ -59,12 +153,10 @@ export const chooseCategoriesDiscount =(programItems)=>{
 const countCategoriesDiscount = (programItems)=>{
     var d ={}; 
     programItems.map(x=> {
-        if(x.itemType ==="product"){
-            d[x.itemType] =1;
-    }else{
-       d[x.itemCategory] ? d[x.itemCategory]+=1 : d[x.itemCategory]=1;
-    }
-})
+        const u = Number(x.itemNumSess);
+        d[x.itemCategory] ? d[x.itemCategory]+= u : d[x.itemCategory]=u;
+    });
+    console.log(d, "WHATEVER HERE")
     return d;
 };
 

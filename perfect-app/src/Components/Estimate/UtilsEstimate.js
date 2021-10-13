@@ -7,7 +7,7 @@ const simplifySubTotal = (x)=>{
         const tot = Number(x.itemPriceUnit) * Number(x.itemNumSess) * ds;
         return tot;
     }else{
-        const tot = (Number(x.itemPriceUnit)-Number(disc.discountAmount))* Number(x.itemNumSess);
+        const tot = ((Number(x.itemPriceUnit)*Number(x.itemNumSess))-Number(disc.discountAmount));
         return tot;
     }
 }

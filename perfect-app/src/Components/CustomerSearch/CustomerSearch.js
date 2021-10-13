@@ -72,7 +72,7 @@ function CustomerSearch({ fnSetCustomer, record }) {
                     <Container>
                         <Row>
                             <Col>
-                            <h3>Search user: </h3>
+                            <h3>Search patient: </h3>
                             </Col>
                             <Col>
                             <FormInput className="search-user-input"

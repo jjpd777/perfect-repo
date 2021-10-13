@@ -204,7 +204,7 @@ class Example extends React.Component {
         </div>
         { this.props.alreadyInserted && <div className="print-btn">
           <ReactToPrint
-            trigger={() => <Button className="finish-btn" >Print this out!</Button>}
+            trigger={() => <Button className="finish-btn" >Print</Button>}
             content={() => this.componentRef}
           />
         </div>}
