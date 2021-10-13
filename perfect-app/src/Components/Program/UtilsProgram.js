@@ -28,10 +28,10 @@ const aestheticMedicine = ()=>{
 
 };
 
-const product = ()=>{
+const productFn = ()=>{
     var x =[[0,0]];
     for (var i=1;i<1000; i++){
-        if(i<3){x.push([i,95])}
+        if(i<3){x.push([i,0.95])}
         else if(i<6){x.push([i,0.9])}
         else {
             x.push([i,0.85])
@@ -105,7 +105,7 @@ export const complexDiscountTable = {
         "range" :aestheticMedicine(),
     },
     "product" : {
-        "range" : product(),
+        "range" : productFn(),
     },
     "special" :{
         "range" : special(),
@@ -164,7 +164,7 @@ const countCategoriesDiscount = (programItems)=>{
             d["product"] ? d["product"]+= u : d["product"]=u;
 
         }else{
-        d[x.itemCategory] ? d[x.itemCategory]+= u : d[x.itemCategory]=u;}
+        d[x.itemCategory] ? d[x.itemCategory]+= u : d[x.itemCategory]=u};
     });
     console.log(d, "WHATEVER HERE")
     return d;
@@ -180,18 +180,17 @@ export const chooseComplexDiscount =(s, programItems)=>{
     console.log("Counted categories", countedCategories);
 
     const quickFix = s==="product" ? "product" : s;
-    console.log("Dynamic",countedCategories[quickFix] );
-    const units = countedCategories[quickFix];
-    console.log("UNITS FFS", units);
+    const units = Number(countedCategories[quickFix]);
     return complexDiscountTable[s].range.find(x=> x[0]===units)[1];
 };
 
 export const computeItemsSubTotal = (programItems)=>{
     var subTotal = 0;
     programItems.map(x=>{
-        const discAdjust = (x.itemType === 'product' || x.itemType === "Jan Marini") ? "product" : x.itemCategory;
+        const discAdjust = (x.itemType === 'product' || x.itemType === "Jan Marini") ? 'product' : x.itemCategory;
         const complexDiscount = chooseComplexDiscount(discAdjust, programItems);
         subTotal += Number(x.itemPriceUnit) * Number(x.itemNumSess) * complexDiscount;
+
     })
     return subTotal;
 };
