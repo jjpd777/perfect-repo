@@ -8,8 +8,8 @@ const lhr = ()=>{
         else {
             x.push([i,0.8])
         };
-        return x;
     };
+    return x;
 };
 
 const aestheticMedicine = ()=>{
@@ -23,20 +23,22 @@ const aestheticMedicine = ()=>{
         else {
             x.push([i,0.9])
         };
-        return x;
     };
+    return x;
+
 };
 
 const product = ()=>{
-    var x =[];
+    var x =[[0,0]];
     for (var i=1;i<1000; i++){
         if(i<3){x.push([i,95])}
-        else if(i<6)  {x.push([i,0.9])}
+        else if(i<6){x.push([i,0.9])}
         else {
             x.push([i,0.85])
         };
-        return x;
     };
+    return x;
+
 };
 
 const body = ()=>{
@@ -50,8 +52,9 @@ const body = ()=>{
         else {
             x.push([i,0.75])
         };
-        return x;
     };
+    return x;
+
 };
 
 const piQo4 = ()=>{
@@ -65,8 +68,9 @@ const piQo4 = ()=>{
         else {
             x.push([i,0.75])
         };
-        return x;
     };
+    return x;
+
 };
 
 const ivTeeth = ()=>{
@@ -78,16 +82,17 @@ const ivTeeth = ()=>{
         else {
             x.push([i,0.8])
         };
-        return x;
     };
+    return x;
 };
 
 const special = ()=>{
     var x =[];
     for (var i=1;i<1000; i++){
         x.push([i,0.98])
-        return x;
     };
+    return x;
+
 }
 
 
@@ -154,7 +159,12 @@ const countCategoriesDiscount = (programItems)=>{
     var d ={}; 
     programItems.map(x=> {
         const u = Number(x.itemNumSess);
-        d[x.itemCategory] ? d[x.itemCategory]+= u : d[x.itemCategory]=u;
+        const c = x.itemType ==="product";
+        if(c){
+            d["product"] ? d["product"]+= u : d["product"]=u;
+
+        }else{
+        d[x.itemCategory] ? d[x.itemCategory]+= u : d[x.itemCategory]=u;}
     });
     console.log(d, "WHATEVER HERE")
     return d;
@@ -163,14 +173,23 @@ const countCategoriesDiscount = (programItems)=>{
 
 export const chooseComplexDiscount =(s, programItems)=>{
     const countedCategories = countCategoriesDiscount(programItems);
-    const units = countedCategories[s];
+    console.log(s,"Program Items", programItems)
+
+    console.log("Key String",s, s.length, typeof(s));
+    console.log("Hard coded", countedCategories["product"]);
+    console.log("Counted categories", countedCategories);
+
+    const quickFix = s==="product" ? "product" : s;
+    console.log("Dynamic",countedCategories[quickFix] );
+    const units = countedCategories[quickFix];
+    console.log("UNITS FFS", units);
     return complexDiscountTable[s].range.find(x=> x[0]===units)[1];
 };
 
 export const computeItemsSubTotal = (programItems)=>{
     var subTotal = 0;
     programItems.map(x=>{
-        const discAdjust = x.itemType === 'product' ? "product" : x.itemCategory;
+        const discAdjust = (x.itemType === 'product' || x.itemType === "Jan Marini") ? "product" : x.itemCategory;
         const complexDiscount = chooseComplexDiscount(discAdjust, programItems);
         subTotal += Number(x.itemPriceUnit) * Number(x.itemNumSess) * complexDiscount;
     })
