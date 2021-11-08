@@ -88,7 +88,7 @@ function CustomerSearch({ fnSetCustomer, record }) {
 
                 <div className="searched-options">
                     {searched.map((c) => <>
-                        <Button className="customer-options" onClick={() => { setCurrentCustomer(c);  }}>{c.customerName}</Button>
+                        <Button className="customer-options" onClick={() => { setCurrentCustomer(c);  }}>{c.customerName +" "+ c.customerLast}</Button>
                     </>)}
                 </div>
             </>

@@ -129,7 +129,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Price/Session</h4>
               </Col>
               <Col>
-                <h4>Quanity</h4>
+                <h4>Quantity</h4>
               </Col>
               <Col>
                 <h4>Discount</h4>
@@ -176,7 +176,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Price/Session</h4>
               </Col>
               <Col>
-                <h4>Quanity</h4>
+                <h4>Quantity</h4>
               </Col>
               <Col>
                 <h4>Discount</h4>

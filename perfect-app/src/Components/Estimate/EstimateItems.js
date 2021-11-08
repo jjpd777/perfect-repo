@@ -96,10 +96,10 @@ function EstimateItems({ props, fn }) {
                              <b> Units</b>
                              </Col>
                              <Col className="estimate-col">
-                             <b> Discount%</b>
+                             <b>% Disc. </b>
                              </Col>
                              <Col className="estimate-col">
-                             <b> Discount$</b>
+                             <b>$ Disc. </b>
                              </Col>
                              <Col className="estimate-col">
                               <b></b>

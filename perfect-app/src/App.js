@@ -25,17 +25,18 @@ import {
   DropdownMenu,
   DropdownItem
 } from "shards-react";
-import NewEstimate from './ActionComponents/NewEstimate/NewEstimate';
+ import Dashboard from "./DebtCollection/Dashboard";
 
 function App() {
   const [user, loading, error]=useAuthState(auth);
   const userIsLogged = !!user ;
-  const sideBarElements = ["Estimate", "Program", "Record", "Admin", "Staff"];
+  const sideBarElements = ["Estimate", "Program", "Record", "Admin", "Staff", "2BPAID"];
   const [fetchedItems, setFetchedItems] = useState([]);
   const [current, setCurrent] = useState(sideBarElements[0]); 
   const [validCustomer, setValidCustomer] = useState({});
-  console.log(validCustomer, "here it is");
   const [reviewList, setReviewList] = useState({});
+  // const rafael = user.email ==="rafael@perfectb.com";
+
 
  
 
@@ -117,6 +118,10 @@ function App() {
             {current==="Record" &&
             <>
               <Record fnCurrent={setCurrent} fnReviewList={setReviewList}/>
+            </>}
+            {current==="2BPAID" &&
+            <>
+              <Dashboard fnCurrent={setCurrent} fnReviewList={setReviewList}/>
             </>}
             </div>
         </div>

@@ -29,7 +29,7 @@ const RecordCard = ({estimate, fnHandleEdit}) => {
     const perfectID = estimate.perfectID;
     const invoiceFlag = estimate.estimateType ==="invoice";
     const programFlag = estimate.saveDetail !== "simple";
-    const rafael = user.email ==="rafael@perfectb.com";
+    const rafael = true;
     
 
     console.log(paymentCycles, "apasdfasdf")

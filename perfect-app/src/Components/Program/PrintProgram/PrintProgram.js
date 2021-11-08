@@ -60,7 +60,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Treatments</h4>
               </Col>
               <Col>
-                <h4>Quanity</h4>
+                <h4>Quantity</h4>
               </Col>
             </Row>
             {pItems.map(
@@ -83,7 +83,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Products</h4>
               </Col>
               <Col>
-                <h4>Quanity</h4>
+                <h4>Quantity</h4>
               </Col>
             </Row>
             {pItems.map(
