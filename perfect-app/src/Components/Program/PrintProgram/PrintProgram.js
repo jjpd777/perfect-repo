@@ -151,18 +151,27 @@ class ComponentToPrint extends React.Component {
         <div className="download-app-left">
         <div>
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRu9GF9ONvZnHXLa6Qt4VLxZkbmyvNT0NomZg&usqp=CAU"
+              src="https://drive.google.com/uc?id=1SzEyDAtCBmZo59IjXIdMyvU-vMB87n6_"
               alt="qr-code"
             ></img>
           </div>
           <p className="italic"> Download your Patient Portal</p>
+        </div>
+        <div className="download-app-center">
+        <div>
+            <img
+              src="https://drive.google.com/uc?id=1AB3HQBetrp38h--Mz_Oyfsyy1Ifk5sZ-"
+              alt="qr-code"
+            ></img>
+          </div>
+          <p className="italic"> Download our social media</p>
        
         </div>
         <div className="download-app">
           <p className="italic"> Download the Perfect B App</p>
           <div>
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRu9GF9ONvZnHXLa6Qt4VLxZkbmyvNT0NomZg&usqp=CAU"
+              src="https://drive.google.com/uc?id=1Jw-yljrG1I-IiiJrdKdXIqEdTwzBNciS"
               alt="qr-code"
             ></img>
           </div>
@@ -171,6 +180,7 @@ class ComponentToPrint extends React.Component {
     );
   }
 }
+//
 
 class Example extends React.Component {
   render() {

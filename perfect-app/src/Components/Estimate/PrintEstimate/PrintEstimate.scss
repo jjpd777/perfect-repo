@@ -214,3 +214,16 @@ $input-height: 60px;
     margin-right: 1rem;
   }
 }
+
+.download-app-center {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  padding-left: 25rem;
+  margin-bottom: -4rem;
+
+  img {
+    width: 50px;
+    margin-right: 1rem;
+  }
+}
