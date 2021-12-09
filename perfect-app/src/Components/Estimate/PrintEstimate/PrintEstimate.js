@@ -178,7 +178,7 @@ class ComponentToPrint extends React.Component {
               alt="qr-code"
             ></img>
           </div>
-          <p className="italic"> Download our social media</p>
+          <p className="italic"> Stay updated on Social Media</p>
        
         </div>
         <div className="download-app">

@@ -206,24 +206,21 @@ function Program({ listItems,reviewItems, fnReviewList }) {
                         </Row>
                         <Row>
                             <Col>
-                            <FormInput type="number" className="program-variables-input" value={programVariables.downPayment}
+                            <FormInput  className="program-variables-input" value={programVariables.downPayment}
                         onChange={(e) => { setProgramVariables({...programVariables, downPayment:e.target.value})}} />
                             </Col>
                             <Col>
                             <FormInput className="program-variables-input" 
                                value={programVariables.disc.discountPercent}
-                               type="number"
                                onChange={(e) => { setProgramVariables({...programVariables, disc: updateDiscountCorrect(e.target.value, true)}) }} />
                             </Col>
                             <Col>
                             <FormInput className="program-variables-input" 
                                value={programVariables.disc.discountAmount}
-                               type="number"
                                onChange={(e) => { setProgramVariables({...programVariables, disc: updateDiscountCorrect(e.target.value, false)}) }} />
                             </Col>
                             <Col>
                             <FormInput className="program-variables-input" value={programVariables.terms}
-                                type="number"
                                 onChange={(e) => { setProgramVariables({...programVariables, terms:e.target.value}) }} />
                             </Col>
                         </Row>

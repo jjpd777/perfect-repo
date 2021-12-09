@@ -131,10 +131,10 @@ function EstimateItems({ props, fn }) {
                                 </div>
                             </Col>
                             <Col className="col-name-money" >
-                                <FormInput className="units-edit" value={moneyFormatter.format(x.itemPriceUnit)}
+                                <FormInput className="units-edit" plainText={true} value={moneyFormatter.format(x.itemPriceUnit)}
                                 onChange={(e) => { lookForPriceUpdate(x, e.target.value) }} />
                             </Col>
-                            <Col className="col-name"><FormInput type="number" className="units-edit" value={x.itemNumSess}
+                            <Col className="col-name"><FormInput className="units-edit" value={x.itemNumSess}
                                 onChange={(e) => { lookForSessUpdate(x, e.target.value) }} />
                             </Col>
                             <Col className="col-name" ><FormInput className="units-edit" value={x.discObject.discountPercent}
