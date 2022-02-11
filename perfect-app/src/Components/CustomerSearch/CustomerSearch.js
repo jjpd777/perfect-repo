@@ -67,7 +67,7 @@ function CustomerSearch({ fnSetCustomer, record }) {
             </div>
             {true &&<div className="search-customer-box">
                 {(!newCustomer || record) ? (
-                <div className="searchable-names">
+                <>
                 <div className="search-user-2">
                     <Container>
                         <Row>
@@ -86,12 +86,12 @@ function CustomerSearch({ fnSetCustomer, record }) {
                    
                 </div>
 
-                <div className="searched-names">
+                <div className="searched-options">
                     {searched.map((c) => <>
                         <Button className="customer-options" onClick={() => { setCurrentCustomer(c);  }}>{c.customerName +" "+ c.customerLast}</Button>
                     </>)}
                 </div>
-            </div>
+            </>
                 )
                     : (
                         <div className="search-user-2">

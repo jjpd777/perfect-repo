@@ -131,6 +131,12 @@ export const complexDiscountTable = {
     "Lab Tests" :{
         "range" : piQo4(),
     },
+    "Morpheus8" : {
+        "range" : piQo4()
+    },
+    "Treatment Programs" : {
+        "range" : piQo4()
+    },
 };
 
 export const updateDiscountCorrect = (val, percent)=>{
