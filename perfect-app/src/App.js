@@ -30,7 +30,7 @@ import {
 function App() {
   const [user, loading, error]=useAuthState(auth);
   const userIsLogged = !!user ;
-  const sideBarElements = ["Estimate", "Program", "Record", "Admin", "Staff", "2BPAID"];
+  const sideBarElements = ["Basic", "Builder", "Record", "Admin", "Staff", "Coming Soon"];
   const [fetchedItems, setFetchedItems] = useState([]);
   const [current, setCurrent] = useState(sideBarElements[0]); 
   const [validCustomer, setValidCustomer] = useState({});
@@ -93,7 +93,7 @@ function App() {
             <ItemSelection listItems={fetchedItems} staff={false}/>
           </div> */}
           <div className="current-action-box">
-          {current==="Estimate" &&
+          {current==="Basic" &&
             <>
               <Estimate 
                 listItems={fetchedItems}
@@ -101,7 +101,7 @@ function App() {
                 fnReviewList={setReviewList}
               />
             </>}
-            {current==="Program" &&
+            {current==="Builder" &&
             <>
               <Program 
                 listItems={fetchedItems}
@@ -121,7 +121,7 @@ function App() {
             <>
               <Record fnCurrent={setCurrent} fnReviewList={setReviewList}/>
             </>}
-            {current==="2BPAID" &&
+            {current==="Coming Soon" &&
             <>
               <Dashboard fnCurrent={setCurrent} fnReviewList={setReviewList}/>
             </>}

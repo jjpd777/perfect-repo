@@ -31,10 +31,10 @@ const aestheticMedicine = ()=>{
 const productFn = ()=>{
     var x =[[0,0]];
     for (var i=1;i<1000; i++){
-        if(i<3){x.push([i,0.95])}
-        else if(i<6){x.push([i,0.9])}
+        if(i<3){x.push([i,1])}
+        else if(i<6){x.push([i,1])}
         else {
-            x.push([i,0.85])
+            x.push([i,1])
         };
     };
     return x;
@@ -187,7 +187,8 @@ export const chooseComplexDiscount =(s, programItems)=>{
 
     const quickFix = s==="product" ? "product" : s;
     const units = Number(countedCategories[quickFix]);
-    return complexDiscountTable[s].range.find(x=> x[0]===units)[1];
+    const which_discount = complexDiscountTable[s] ? complexDiscountTable[s].range.find(x=> x[0]===units)[1] :  complexDiscountTable["Aesthetic Medicine"].range.find(x=> x[0]===units)[1];
+    return which_discount;
 };
 
 export const computeItemsSubTotal = (programItems)=>{

@@ -7,7 +7,9 @@ import {computeBalanceTotal} from "../UtilsEstimate";
 import "./PrintEstimate.scss";
 import { Container, Row, Col, Button } from "shards-react";
 import CustomerSearch from "../../CustomerSearch/CustomerSearch";
-
+import QR1 from "../../../images/reqr.jpeg";
+import QR2 from "../../../images/qr2.jpeg";
+import QR3 from "../../../images/qr3.jpeg";
 
 
 class ComponentToPrint extends React.Component {
@@ -40,10 +42,10 @@ class ComponentToPrint extends React.Component {
         <div className="perfect-b-header">
           <img src={perfectIcon} />
           <div className="header-detail">
-            <strong> Perfect B Med Spa</strong>
+            <strong> Perfect B Aesthetic Medicine</strong>
             <p>perfectb.com</p>
             <p>(786)502-2260</p>
-            <p>IG: @perfectbmedspa</p>
+            <p>IG: @perfectbmed</p>
           </div>
           <div className="customer-details">
             <div className="customer-details-item">
@@ -60,14 +62,11 @@ class ComponentToPrint extends React.Component {
             </div>
           </div>
         </div>
-        <h1 className="program-title">{cust.customerName}'s Estimate</h1>
+        <h1 className="program-title">{cust.customerName}'s Quote</h1>
         <div className="recommendations">
-          <p>
-            The following recommendations are created by Perfect B in order to
-            achieve patient's desired goals in the most efficient manner. All
-            recommendations are made considering the best technology available
-            in the market and following local, state and federal health
-            regulations.
+        <p>
+          The following treatment is created by Perfect B to achieve patient's desired goals and improve conditions most efficiently.
+         All treatments are performed using the best technology available in the market and following local, state, and federal health regulations.
           </p>
         </div>
         <div className="center-table">
@@ -77,7 +76,7 @@ class ComponentToPrint extends React.Component {
                 <h4>Treatments/Products</h4>
               </Col>
               <Col>
-                <h4>Price/Session</h4>
+                <h4>Price/Visit</h4>
               </Col>
               <Col>
                 <h4>Quantity</h4>
@@ -136,7 +135,7 @@ class ComponentToPrint extends React.Component {
               <div className="dark-gray">{moneyFormatter.format(pBdown.downPayment)} </div>
             </div>
             <div className="totals-item bold">
-              <div> Finance Interests</div>
+              <div> Finance Interest</div>
               <div className="light-gray">{"0%"} </div>
             </div>
           </div>
@@ -165,27 +164,27 @@ class ComponentToPrint extends React.Component {
         <div className="download-app-left">
         <div>
             <img
-              src="https://drive.google.com/uc?id=1SzEyDAtCBmZo59IjXIdMyvU-vMB87n6_"
+              src={QR2}
               alt="qr-code"
             ></img>
           </div>
-          <p className="italic"> Download your Patient Portal</p>
+          <p className="italic"> Evaluate payment options</p>
         </div>
         <div className="download-app-center">
         <div>
             <img
-              src="https://drive.google.com/uc?id=1AB3HQBetrp38h--Mz_Oyfsyy1Ifk5sZ-"
+              src={QR3}
               alt="qr-code"
             ></img>
           </div>
-          <p className="italic"> Stay updated on Social Media</p>
+          <p className="italic"> Replenish your products</p>
        
         </div>
         <div className="download-app">
-          <p className="italic"> Download the Perfect B App</p>
+        <p className="italic"> Rewards Lottery</p>
           <div>
             <img
-              src="https://drive.google.com/uc?id=1Jw-yljrG1I-IiiJrdKdXIqEdTwzBNciS"
+              src={QR1}
               alt="qr-code"
             ></img>
           </div>

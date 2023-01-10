@@ -40,10 +40,10 @@ function Record({ fnCurrent, fnReviewList }) {
       fnReviewList(revItems);
 
       if(estimate.saveDetail ==="simple"){
-        fnCurrent("Estimate");
+        fnCurrent("Basic");
       }else{
 
-        fnCurrent("Program");
+        fnCurrent("Builder");
 
       }
     }

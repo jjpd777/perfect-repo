@@ -32,7 +32,7 @@ const remarksInitial = {
     validUntil: ""
 };
 const initialState = {
-    downPayment: "30",
+    downPayment: "14.285",
     terms:6,
     disc:{
         type: "percent",
@@ -186,7 +186,7 @@ function Program({ listItems,reviewItems, fnReviewList }) {
                  {resetCustomer && revFlag&& <CustomerSearch fnSetCustomer={setCurrentCustomer} record={false} />}
             {resetCustomer && <ItemSelection listItems={listItems} staff={false} fnItems={setProgramItems}/>}
               <div className="program-header">
-                    <h2>Program Estimate for {currentCustomer.customerName}</h2>
+                    <h2>Treatment Quote for {currentCustomer.customerName}</h2>
                 </div>
               <div className="program-variables-box">
                     <Container>
