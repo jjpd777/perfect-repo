@@ -72,6 +72,8 @@ function App() {
             <SideNav props={sideBarElements} currentPage={setCurrent}
             fnReview={setReviewList}
             >  </SideNav>
+            <br></br>
+            <br></br>
             <div>
               <div className="plain-text">
             <h3>{user.email}</h3>

@@ -1,6 +1,6 @@
 import React from 'react';
 import './SideNav.scss';
-import logo from '../images/perfectb.png';
+import logo from '../images/caremonda.png';
 
 import {
     Button,
