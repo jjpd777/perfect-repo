@@ -57,7 +57,6 @@ function App() {
 
   return (
     <div className="App">
-      <Button onClick ={WriteMonday}> Monday </Button>
       <div className="main-box">
         {(!userIsLogged) ?(
           <div className="login-redirect">
