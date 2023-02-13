@@ -18,6 +18,7 @@ import Estimate from "./Components/Estimate/Estimate";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Record from "./Components/Record/Record";
 import {isObjectEmpty} from "./Utils/ObjectVarious";
+import WriteMonday from "./Components/Monday";
 import {
   Button,
   Dropdown,
@@ -56,6 +57,7 @@ function App() {
 
   return (
     <div className="App">
+      <Button onClick ={WriteMonday}> Monday </Button>
       <div className="main-box">
         {(!userIsLogged) ?(
           <div className="login-redirect">

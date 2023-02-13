@@ -10,12 +10,12 @@ const items = [
         name: "Rafael", email: "rafael@gmail.com"
     }
 ]
-const createRecord = async ( item) => {
+export default async function createRecord () {
   try {
     const response = await axios.post(
       `https://api.monday.com/v2/boards/sales-lol/items`,
       {
-        item,
+        items,
       },
       {
         headers: {
