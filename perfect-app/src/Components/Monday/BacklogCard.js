@@ -14,7 +14,7 @@ function getCurrentTimeAndDateForMondayAPI() {
   
 
 const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
-  const [status, setStatus] = useState("Processed");
+  const [status, setStatus] = useState("Follow-up");
   const customer = invoiceMonday.customerObject;
   const timestamp = invoiceMonday.timestamp;
   const tt = getCurrentTimeAndDateForMondayAPI();
@@ -58,7 +58,7 @@ const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
           <Text strong>Status: </Text>
           <Select defaultValue={status} onChange={handleChange}>
             <Option value="Processed">Processed</Option>
-            <Option value="Follow-Up">Follow-Up</Option>
+            <Option value="Follow-up">Follow-Up</Option>
             <Option value="Discard">Discard</Option>
           </Select>
         </Col>
