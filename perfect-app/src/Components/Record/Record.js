@@ -15,7 +15,6 @@ import {
     FormInput, Button, FormRadio, Container, Row, Col, Dropdown, DropdownToggle,
     DropdownMenu, DropdownItem, Card, CardBody, CardTitle, CardSubtitle, CardHeader
 } from "shards-react";
-import { createEstimateFunction, updateEstimateFunction, createCustomerFunction } from "../../UtilsFirebase/Database";
 
 import {deconstructItems} from "./Deconstruct";
 import PrintEstimate from "../Estimate/PrintEstimate/PrintEstimate";

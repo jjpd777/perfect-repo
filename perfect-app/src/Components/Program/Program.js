@@ -43,7 +43,7 @@ const initialState = {
 };
 
 
-function Program({ listItems,reviewItems, fnReviewList }) {
+function Program({ listItems,reviewItems, fnReviewList, setBacklogEstimates }) {
     const revFlag = isObjectEmpty(reviewItems);
 
     const [programItems, setProgramItems] = useState([]);
@@ -134,8 +134,11 @@ function Program({ listItems,reviewItems, fnReviewList }) {
                 console.log(pathToItem, "PATH TO ESTIMATE")
             }else{
                 createEstimateFunction(item, customerFirebase.customerPhone)
-                .then(()=> {setInsertedDB(true); 
-                    if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
+                .then(()=> {
+                    setInsertedDB(true); 
+                    if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);
+                    setBacklogEstimates(currentItems => [...currentItems, item]);
+                });
             }
 
         } catch (e) {

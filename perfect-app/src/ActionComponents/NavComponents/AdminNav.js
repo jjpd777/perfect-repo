@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import InsertItem from "./InsertItem";
-import NewProgramBuilder from "./NewProgramBuilder";
 import {
     FormInput, Button
   } from "shards-react";

@@ -6,6 +6,9 @@ import "shards-ui/dist/css/shards.min.css";
 import SideNav from "./Navigation/SideNav";
 import Login from "./Navigation/Login";
 import Register from "./Navigation/Register";
+import { Drawer } from "antd";
+import BacklogCard from './Components/Monday/BacklogCard';
+
 import { useAuthState } from "react-firebase-hooks/auth";
 import {currentFullDate} from "./Utils/DateTimeUtils"
 import { auth, logout} from "./UtilsFirebase/Authentication";
@@ -31,13 +34,23 @@ import {
 function App() {
   const [user, loading, error]=useAuthState(auth);
   const userIsLogged = !!user ;
-  const sideBarElements = ["Basic", "Builder", "Record", "Admin", "Staff", "Coming Soon"];
+  const sideBarElements = ["Basic", "Builder", "Record", "Admin", "Staff", "Pending"];
   const [fetchedItems, setFetchedItems] = useState([]);
   const [current, setCurrent] = useState(sideBarElements[0]); 
   const [validCustomer, setValidCustomer] = useState({});
   const [reviewList, setReviewList] = useState({});
   // const rafael = user.email ==="rafael@perfectb.com";
+  const [visible, setVisible] = useState(false);
+  const [backlogEstimates, setBacklogEstimates] = useState([]);
+  console.log(backlogEstimates, "These are the backlog estimates")
 
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const hideDrawer = () => {
+    setVisible(false);
+  };
 
  
 
@@ -58,6 +71,20 @@ function App() {
   return (
     <div className="App">
       <div className="main-box">
+        <Drawer
+        title="Information"
+        placement="right"
+        closable={true}
+        onClose={hideDrawer}
+        visible={visible}
+      >
+        {backlogEstimates.map( estimate =>{
+          const customer = estimate.customerObject;
+         return <BacklogCard   invoiceMonday = {estimate}/>
+        })}
+        <br></br>
+        <Button onClick={()=>{hideDrawer()}}> Close </Button>
+      </Drawer>
         {(!userIsLogged) ?(
           <div className="login-redirect">
         <Router>
@@ -72,6 +99,8 @@ function App() {
           <div className="nav-bar">
             <SideNav props={sideBarElements} currentPage={setCurrent}
             fnReview={setReviewList}
+            setToastVisible = {setVisible}
+            backlogEstimates ={backlogEstimates}
             >  </SideNav>
             <br></br>
             <br></br>
@@ -100,6 +129,8 @@ function App() {
                 listItems={fetchedItems}
                 reviewItems ={reviewList}
                 fnReviewList={setReviewList}
+                setBacklogEstimates = {setBacklogEstimates}
+
               />
             </>}
             {current==="Builder" &&
@@ -108,6 +139,7 @@ function App() {
                 listItems={fetchedItems}
                 reviewItems = {reviewList}
                 fnReviewList = {setReviewList}
+                setBacklogEstimates = {setBacklogEstimates}
               />
             </>}
             {current==="Admin" &&
@@ -122,10 +154,7 @@ function App() {
             <>
               <Record fnCurrent={setCurrent} fnReviewList={setReviewList}/>
             </>}
-            {current==="Coming Soon" &&
-            <>
-              <Dashboard fnCurrent={setCurrent} fnReviewList={setReviewList}/>
-            </>}
+         
             </div>
         </div>
         )}

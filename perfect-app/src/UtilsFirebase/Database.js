@@ -44,8 +44,11 @@ export const createProgramFunction = (data) => {
 };
 ///////
 
-export const createEstimateFunction = (data, customerPhone) => {
-    return generateEntry(data, ESTIMATE_PATH+"/"+customerPhone+"/");
+export const createEstimateFunction = async(data, customerPhone) => {
+    var ref = db.ref( ESTIMATE_PATH+"/"+customerPhone+"/").push();
+    var insertionData = data; insertionData.id = ref.key;
+    await ref.set(insertionData);
+    return insertionData;
 };
 
 export const updateEstimateFunction = (data,id)=>{

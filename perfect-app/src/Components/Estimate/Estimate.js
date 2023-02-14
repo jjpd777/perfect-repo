@@ -22,7 +22,7 @@ import {isObjectEmpty} from "../../Utils/ObjectVarious";
 import {computeBalanceTotal} from "./UtilsEstimate";
 import {programObjectBuilder, structureCustomer} from "../SharedUtils";
 
-function Estimate({ listItems, reviewItems, fnReviewList }) {
+function Estimate({ listItems, reviewItems, fnReviewList, setBacklogEstimates }) {
     const revFlag = isObjectEmpty(reviewItems);
     const [programItems, setProgramItems] = useState([]);
     const voidState = {};
@@ -72,7 +72,7 @@ function Estimate({ listItems, reviewItems, fnReviewList }) {
     console.log("PROGRAM ITEMS FAM", programItems)
     console.log(currentCustomer);
 
-    const insertProgramEstimate = () => {
+    const insertProgramEstimate = async() => {
         const customerFirebase = structureCustomer(currentCustomer);
         
         const item = {
@@ -101,9 +101,14 @@ function Estimate({ listItems, reviewItems, fnReviewList }) {
                 })
                 console.log(pathToItem, "PATH TO ESTIMATE")
             }else{
-                createEstimateFunction(item, customerFirebase.customerPhone)
-                .then(()=> {setInsertedDB(true); 
-                    if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);});
+                const insertionData = await createEstimateFunction(item, customerFirebase.customerPhone);
+
+                if(currentCustomer.isNewCustomer)createCustomerFunction(customerFirebase);
+
+                console.log("OBJECT KEY FROM THJE INSERTION TO BACKLOG 7777", insertionData);
+                setInsertedDB(true); 
+                setBacklogEstimates(currentItems => [...currentItems, insertionData]);
+
             }
 
   
@@ -182,26 +187,6 @@ function Estimate({ listItems, reviewItems, fnReviewList }) {
             { saveBool &&
             <>
             <div className="invoice-radio-box">
-             {/* <FormRadio
-                    inline
-                    className="radio-choices"
-                    checked={invoiceEstimate === "estimate"}
-                    onChange={() => {
-                        setInvoiceEstimate("estimate");
-                    }}
-                >
-                    <h3>estimate</h3>
-                </FormRadio>
-                <FormRadio
-                    inline
-                    className="radio-choices"
-                    checked={invoiceEstimate === "invoice"}
-                    onChange={() => {
-                        setInvoiceEstimate("invoice");
-                    }}
-                >
-                    <h3>invoice</h3>
-                </FormRadio> */}
                 <div className="additional-remarks">
                 <h3>Additional remarks</h3>
                 <FormInput
