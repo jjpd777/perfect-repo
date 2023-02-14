@@ -80,7 +80,7 @@ function App() {
       >
         {backlogEstimates.map( estimate =>{
           const customer = estimate.customerObject;
-         return <BacklogCard   invoiceMonday = {estimate}/>
+         return <BacklogCard   invoiceMonday = {estimate} setBacklogEstimates={setBacklogEstimates}/>
         })}
         <br></br>
         <Button onClick={()=>{hideDrawer()}}> Close </Button>

@@ -4,9 +4,20 @@ import {insertMonday} from '../../Components/Monday/index';
 const { Text } = Typography;
 const { Option } = Select;
 
-const InvoiceCard = ({ invoiceMonday }) => {
+function getCurrentTimeAndDateForMondayAPI() {
+    const now = new Date();
+    const date = now.toISOString().substring(0, 10);
+    const time = now.toTimeString().substring(0, 5);
+  
+    return `${date}`;
+  }
+  
+
+const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
   const [status, setStatus] = useState("Processed");
   const customer = invoiceMonday.customerObject;
+  const timestamp = invoiceMonday.timestamp;
+  const tt = getCurrentTimeAndDateForMondayAPI();
   const full_name = `${customer.customerName} ${customer.customerLast}`;
 
 
@@ -17,7 +28,8 @@ const InvoiceCard = ({ invoiceMonday }) => {
 
   const handleClick = () => {
     console.log("hi");
-    insertMonday(full_name, status, invoiceMonday.programTotal)
+    insertMonday(full_name, status, invoiceMonday.programTotal, tt);
+    setBacklogEstimates( backlog => backlog.filter( i => i.id!== invoiceMonday.id))
   };
 
   return (

@@ -2,19 +2,19 @@ import axios from 'axios';
 
 const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjIwOTg1Mjc4OCwidWlkIjoxMjM1MTE2MCwiaWFkIjoiMjAyMi0xMi0xNlQxNDoxNDowMS4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6NTU0OTk4OCwicmduIjoidXNlMSJ9.o73_nLLPlmYf2nxrGbrfJxSJOUm5KJ_dgVxfzFjx65s';
 
-export  async function insertMonday(customer_name, label, totalCost ) {
+export  async function insertMonday(customer_name, label, totalCost, timestamp ) {
   const mutation1 = `
     mutation {
       create_item(
         board_id: 3970694330,
         item_name: "${customer_name}",
         column_values: "{
-          \\"text0\\": \\"Juan, te llevo una vida en programación\\",
+          \\"text0\\": \\"\\",
           \\"color\\": {
             \\"label\\": \\"${label}\\"
           },
           \\"date\\": {
-            \\"date\\": \\"1997-07-16\\"
+            \\"date\\": \\"${timestamp}\\"
           },
           \\"numeric\\": \\"${totalCost}\\",
           \\"text54\\": \\"+1434-987-6365\\",
