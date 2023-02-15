@@ -12,6 +12,22 @@ function getCurrentTimeAndDateForMondayAPI() {
     return `${date}`;
   }
   
+  function cleanString(str) {
+    // Convert the string to lowercase
+    str = str.toLowerCase();
+    
+    // Remove non-letter, non-number characters using a regular expression
+    str = str.replace(/[^a-z0-9]/g, "");
+    
+    return str;
+  }
+function parseItemsString(x){
+    const keys = Object.keys(x);
+    let monday_insertion = "";
+    keys.map( i => monday_insertion+= cleanString(x[i].itemName) +"," );
+    console.log(monday_insertion, "Monday insertion")
+    return monday_insertion;
+}
 
 const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
   const [status, setStatus] = useState("Follow-up");
@@ -19,7 +35,9 @@ const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
   const timestamp = invoiceMonday.timestamp;
   const tt = getCurrentTimeAndDateForMondayAPI();
   const full_name = `${customer.customerName} ${customer.customerLast}`;
-
+  const itemsString = parseItemsString(invoiceMonday.programItems);
+  const created_by = customer.createdBy;
+  const phone = invoiceMonday.perfectId
 
 
   const handleChange = (value) => {
@@ -28,7 +46,7 @@ const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
 
   const handleClick = () => {
     console.log("hi");
-    insertMonday(full_name, status, invoiceMonday.programTotal, tt);
+    insertMonday(full_name, status, invoiceMonday.programTotal, tt, itemsString,created_by,phone);
     setBacklogEstimates( backlog => backlog.filter( i => i.id!== invoiceMonday.id))
   };
 

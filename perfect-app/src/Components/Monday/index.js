@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjIwOTg1Mjc4OCwidWlkIjoxMjM1MTE2MCwiaWFkIjoiMjAyMi0xMi0xNlQxNDoxNDowMS4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6NTU0OTk4OCwicmduIjoidXNlMSJ9.o73_nLLPlmYf2nxrGbrfJxSJOUm5KJ_dgVxfzFjx65s';
 
-export  async function insertMonday(customer_name, label, totalCost, timestamp ) {
+export  async function insertMonday(customer_name, label, totalCost, timestamp, product_items, created_by, phone ) {
   const mutation1 = `
     mutation {
       create_item(
@@ -17,8 +17,9 @@ export  async function insertMonday(customer_name, label, totalCost, timestamp )
             \\"date\\": \\"${timestamp}\\"
           },
           \\"numeric\\": \\"${totalCost}\\",
-          \\"text54\\": \\"+1434-987-6365\\",
-          \\"text7\\": \\"rafael@perfectb.com\\"
+          \\"text29\\": \\"${product_items}\\",
+          \\"text54\\": \\"${phone}\\",
+          \\"text7\\": \\"juan@gmail.com}\\"
         }"
       ) {
         id
