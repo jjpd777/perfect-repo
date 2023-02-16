@@ -36,9 +36,12 @@ const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
   const tt = getCurrentTimeAndDateForMondayAPI();
   const full_name = `${customer.customerName} ${customer.customerLast}`;
   const itemsString = parseItemsString(invoiceMonday.programItems);
-  const created_by = customer.createdBy;
-  const phone = invoiceMonday.perfectId
-
+  const created_by = invoiceMonday.createdBy;
+  const patient_email = customer.customerEmail;
+  const phone = customer.customerPhone;
+  const programTot = invoiceMonday.programTotal;
+  const downP = invoiceMonday.paymentBreakdown.downPayment;
+  const remarks = invoiceMonday.remarks.footerNotes;
 
   const handleChange = (value) => {
     setStatus(value);
@@ -46,7 +49,7 @@ const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
 
   const handleClick = () => {
     console.log("hi");
-    insertMonday(full_name, status, invoiceMonday.programTotal, tt, itemsString,created_by,phone);
+    insertMonday(full_name, status, programTot, tt, itemsString,created_by,phone, patient_email, downP, remarks);
     setBacklogEstimates( backlog => backlog.filter( i => i.id!== invoiceMonday.id))
   };
 

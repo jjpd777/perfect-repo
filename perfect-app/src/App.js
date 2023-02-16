@@ -54,7 +54,7 @@ function App() {
 
  
 
-  
+  console.log("Backlog record", backlogEstimates);
   useEffect(() => {
     const ref = readItemsFunction();
     const refVal = ref.on('value', function (snapshot) {
