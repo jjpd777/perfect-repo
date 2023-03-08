@@ -4,6 +4,7 @@ import {
 } from "shards-react";
 import { createCustomerFunction, readCustomersFunction } from "../../UtilsFirebase/Database";
 import "../Design.scss";
+//
 
 function CustomerSearch({ fnSetCustomer, record }) {
     const [searchInput, setSearchInput] = useState("");
