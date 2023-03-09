@@ -9,7 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import "../Design.scss";
 import {isObjectEmpty} from "../../Utils/ObjectVarious";
-
+import { insertMonday } from "../Monday";
 import { auth, logout} from "../../UtilsFirebase/Authentication";
 import {parseForFirebase} from "../../Utils/FirebaseParser";
 import { currentFullDate, currentUnixDate,perfectbUniqueID } from "../../Utils/DateTimeUtils";

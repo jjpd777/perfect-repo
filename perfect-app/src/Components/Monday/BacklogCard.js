@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Typography, Row, Col, Select, Button } from "antd";
 import {insertMonday} from '../../Components/Monday/index';
 const { Text } = Typography;
@@ -47,10 +47,13 @@ const InvoiceCard = ({ invoiceMonday, setBacklogEstimates }) => {
     setStatus(value);
   };
 
-  const handleClick = () => {
-    console.log("hi");
+  useEffect(()=>{
     insertMonday(full_name, status, programTot, tt, itemsString,created_by,phone, patient_email, downP, remarks);
     setBacklogEstimates( backlog => backlog.filter( i => i.id!== invoiceMonday.id))
+  },[])
+  const handleClick = () => {
+    console.log("hi");
+   
   };
 
   return (

@@ -20,7 +20,7 @@ return (
     }else{
       currentPage(x)
     }
-   }}>{x } {backlogEstimates.length>0 && x==="Pending" && `(${backlogEstimates.length})`} 
+   }}>{x } 
    </Button>)}
    </div>
 </div>

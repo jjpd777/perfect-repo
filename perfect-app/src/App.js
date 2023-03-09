@@ -34,7 +34,7 @@ import {
 function App() {
   const [user, loading, error]=useAuthState(auth);
   const userIsLogged = !!user ;
-  const sideBarElements = ["Basic", "Builder", "Record", "Admin", "Staff", "Pending"];
+  const sideBarElements = ["Basic", "Builder", "Record", "Admin", "Staff"];
   const [fetchedItems, setFetchedItems] = useState([]);
   const [current, setCurrent] = useState(sideBarElements[0]); 
   const [validCustomer, setValidCustomer] = useState({});
@@ -71,20 +71,10 @@ function App() {
   return (
     <div className="App">
       <div className="main-box">
-        <Drawer
-        title="Information"
-        placement="right"
-        closable={true}
-        onClose={hideDrawer}
-        visible={visible}
-      >
-        {backlogEstimates.map( estimate =>{
-          const customer = estimate.customerObject;
+      {backlogEstimates.map( estimate =>{
+
          return <BacklogCard   invoiceMonday = {estimate} setBacklogEstimates={setBacklogEstimates}/>
         })}
-        <br></br>
-        <Button onClick={()=>{hideDrawer()}}> Close </Button>
-      </Drawer>
         {(!userIsLogged) ?(
           <div className="login-redirect">
         <Router>
